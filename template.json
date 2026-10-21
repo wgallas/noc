@@ -631,6 +631,7 @@
       "effetSpecial": "",
       "portee": "",
       "improvisee": {
+        "active": false,
         "mode": "contact",
         "degats": 0
       }

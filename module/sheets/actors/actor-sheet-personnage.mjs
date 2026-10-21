@@ -306,6 +306,8 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
       const item = this.actor.items.get(itemId);
       // objet usuel, document administratif, armure : le clic sur le nom ouvre sa fiche
       if (["objetusuel", "document administratif", "armure"].includes(item?.type)) return item.sheet.render(true);
+      // outil : fenêtre d'attaque seulement s'il peut servir d'arme improvisée
+      if (item?.type === "outil" && !item.system.improvisee?.active) return item.sheet.render(true);
       this.actor.rollItem(itemId);
     })
 

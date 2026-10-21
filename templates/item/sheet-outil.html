@@ -63,6 +63,12 @@
 
     <h3 class="titre-section">Arme improvisée</h3>
     <div class="form-group">
+      <h4>utilisable comme arme</h4>
+      <input name="system.improvisee.active" type="checkbox" data-dtype="Boolean"
+        {{checked document.system.improvisee.active}}>
+    </div>
+    {{#if document.system.improvisee.active}}
+    <div class="form-group">
       <h4>type</h4>
       <select name="system.improvisee.mode">
         <option value="contact" {{#ifequal document.system.improvisee.mode "contact"}}selected{{/ifequal}}>Contact</option>
@@ -83,6 +89,7 @@
       </span>
       </span>
     </div>
+    {{/if}}
     <div class="form-group">
       <h4>effet spécial</h4>
       {{editor document.system.effetSpecial target="system.effetSpecial"

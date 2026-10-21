@@ -670,7 +670,7 @@ export class nocActor extends Actor {
       // valeurs calculées (formule de dégâts, texte des traits), absentes de la copie brute
       arme.system.degats = item.system.degats
       arme.system.traits = item.system.traits
-    } else if (item?.type == "outil") {
+    } else if (item?.type == "outil" && item.system.improvisee?.active) {
       const imp = item.system.improvisee ?? {}
       const distance = imp.mode === "distance"
       const n = Number(imp.degats) || 0
