@@ -2631,3 +2631,59 @@ div.noc.sheet .archetype-rouage {
         flex: 0 0 auto;
     }
 }
+
+// Personnages en sommeil
+div.noc.sheet .bandeau-sommeil {
+    margin: 2px 0;
+    padding: 2px 6px;
+    font-size: 12px;
+    text-align: center;
+    background: rgba(60, 60, 90, 0.35);
+    border: 1px dashed #5c5c5c;
+}
+
+div.noc.sheet label.case-reserve {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.panneau-mj details.sommeil {
+    margin: 4px 0;
+
+    summary {
+        cursor: pointer;
+        opacity: 0.75;
+        font-style: italic;
+    }
+
+    .ligne-sommeil {
+        align-items: center;
+        gap: 6px;
+        padding: 1px 4px;
+        opacity: 0.75;
+
+        img {
+            flex: 0 0 22px;
+            width: 22px;
+            height: 22px;
+            border: none;
+        }
+
+        .nom {
+            flex: 1 1 auto;
+        }
+
+        .raison {
+            flex: 0 0 auto;
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        a {
+            flex: 0 0 auto;
+        }
+    }
+}

@@ -4,6 +4,7 @@
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
+import { raisonSommeil } from "../../sommeil.mjs";
 import NOCContact from "../../ContactClass.js";
 import { choisirTheme, libelleTalent } from "../../archetypes.mjs";
 import { choisirQualite, descriptionQualite, enregistrerQualite } from "../../qualites.mjs";
@@ -254,6 +255,8 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
   _preparePersonnageItems(context) {
     this.checkArchetype();
     this.prepareArchetype(context);
+    context.sommeil = raisonSommeil(this.actor);
+    context.isGM = game.user.isGM;
     context.cabales = this.actor.cabalesActeurs.map(c => ({
       id: c.id, nom: c.name, bloc: c.system.bloc, coordonnes: c.system.coordonnes, societe: c.system.societeEcran
     }));

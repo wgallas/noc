@@ -54,6 +54,15 @@ export function registerNocSettings() {
 
     // setting pour Fiel et menace
     // bibliothèque des effets de Fiel (vide = liste par défaut)
+    game.settings.register("noc", "dossierArchives", {
+        name: "Dossier d'archives des personnages",
+        hint: "Les personnages rangés dans ce dossier d'acteurs (ou ses sous-dossiers) sont « en sommeil » : ils n'apparaissent plus parmi les cibles du panneau du MJ.",
+        scope: 'world',
+        config: true,
+        type: String,
+        default: "Archives",
+        onChange: () => { if (ui.nocPanneauMJ?.rendered) ui.nocPanneauMJ.render(); }
+    })
     game.settings.register("noc", "bibliothequeFiel", {
         scope: 'world',
         config: false,

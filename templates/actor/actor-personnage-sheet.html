@@ -201,6 +201,14 @@
 							value="{{actor.name}}"
 						>
 					</div>
+					{{#if sommeil}}
+					<div class="bandeau-sommeil">En sommeil ({{#ifequal sommeil "reserve"}}en réserve{{else}}dossier d'archives{{/ifequal}}) : absent du panneau du MJ</div>
+					{{/if}}
+					{{#if @root.isGM}}
+					<label class="case-reserve" data-tooltip="Retire ce personnage des cibles du panneau du MJ, sans le supprimer">
+						<input type="checkbox" name="flags.noc.enReserve" data-dtype="Boolean" {{checked actor.flags.noc.enReserve}}> En réserve
+					</label>
+					{{/if}}
 					{{#if (or actor.flags.noc.fatigue actor.flags.noc.bouleversement)}}
 					<div class="etats-actifs">
 						{{#if actor.flags.noc.fatigue}}<span class="etat" data-tooltip="−1 à tous les talents jusqu'au prochain moment de calme">Fatigué</span>{{/if}}

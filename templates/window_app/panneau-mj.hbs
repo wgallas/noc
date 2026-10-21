@@ -17,9 +17,24 @@
       {{#each personnages as |p|}}
       {{> ligneCibleMJ p}}
       {{else}}
-      <p>Aucun personnage dans le monde.</p>
+      <p>Aucun personnage actif.</p>
       {{/each}}
     </div>
+    {{#if endormis.length}}
+    <details class="sommeil" {{#if sommeilOuvert}}open{{/if}}>
+      <summary>En sommeil ({{endormis.length}})</summary>
+      <div class="liste-sommeil">
+        {{#each endormis as |p|}}
+        <div class="ligne-sommeil flexrow">
+          <img src="{{p.img}}" alt="">
+          <span class="nom">{{p.nom}}</span>
+          <span class="raison">{{p.raison}}</span>
+          <a data-action="reveiller" data-uuid="{{p.uuid}}" data-tooltip="Réactiver"><i class="fa-solid fa-sun"></i></a>
+        </div>
+        {{/each}}
+      </div>
+    </details>
+    {{/if}}
     <h3 class="flexrow">
       <span>Sur la scène (PNJ, rouages, créatures, Autres)</span>
       <a data-action="toutCocher" data-tous="1" data-groupe="adversaires" data-tooltip="tout cocher"><i class="fa-solid fa-square-check"></i></a>

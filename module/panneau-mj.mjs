@@ -3,6 +3,7 @@
  * Fenêtre réservée au MJ (ApplicationV2), ouverte depuis la barre d'outils.
  */
 
+import { raisonSommeil, reveiller } from "./sommeil.mjs";
 import { bibliotheque, effetParId, effetsActifs } from "./fiel/bibliotheque.mjs";
 import { ouvrirBibliothequeFiel } from "./fiel/editeur-bibliotheque.mjs";
 
@@ -205,7 +206,8 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       bibliotheque: () => ouvrirBibliothequeFiel(),
       leverEtat: PanneauMJ.#onLeverEtat,
       etapeMJ: PanneauMJ.#onEtapeMJ,
-      toutCocher: PanneauMJ.#onToutCocher
+      toutCocher: PanneauMJ.#onToutCocher,
+      reveiller: PanneauMJ.#onReveiller
     }
   };
 
@@ -220,11 +222,19 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
   /** effet choisi (non encore appliqué) pour chaque niveau de Menace */
   choix = {};
   categorie = "";
+  /** liste des personnages en sommeil dépliée ? */
+  sommeilOuvert = false;
   /** onglet affiché : "individus" ou "fiel" */
   onglet = "individus";
 
+  /** Personnages actifs (hors sommeil) */
   _personnages() {
-    return game.actors.filter(a => a.type === "personnage");
+    return game.actors.filter(a => a.type === "personnage" && !raisonSommeil(a));
+  }
+
+  /** Personnages en sommeil (case « En réserve » ou dossier d'archives) */
+  _endormis() {
+    return game.actors.filter(a => a.type === "personnage" && raisonSommeil(a));
   }
 
   /**
@@ -259,6 +269,8 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
   async _prepareContext() {
     const personnages = this._personnages();
     if (this.cibles === null) this.cibles = new Set(personnages.map(a => a.uuid));
+    // un personnage mis en sommeil n'est plus une cible
+    for (const a of this._endormis()) this.cibles.delete(a.uuid);
     const fiel = etatFiel();
     const biblio = bibliotheque();
     const categories = [...new Set(biblio.map(e => e.categorie || "Sans catégorie"))];
@@ -281,6 +293,11 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
     }
     return {
       personnages: personnages.map(a => this._ligne(a, a.name, a.img)),
+      endormis: this._endormis().map(a => ({
+        uuid: a.uuid, nom: a.name, img: a.img,
+        raison: raisonSommeil(a) === "reserve" ? "en réserve" : "dossier d'archives"
+      })),
+      sommeilOuvert: this.sommeilOuvert,
       adversaires: this._adversaires().map(x => this._ligne(x.actor, x.nom, x.img)),
       perditions: Object.entries(PERDITIONS).map(([cle, d]) => ({ cle, label: d.label, reduction: d.reduction?.label, points: this.points[cle] ?? 1 })),
       reductions: this.reductions,
@@ -305,6 +322,7 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       html.querySelectorAll("a.onglet-lien, div.onglet-mj").forEach(el =>
         el.classList.toggle("actif", el.dataset.onglet === this.onglet));
     }));
+    html.querySelector("details.sommeil")?.addEventListener("toggle", ev => { this.sommeilOuvert = ev.currentTarget.open; });
     html.querySelector("input.reductions")?.addEventListener("change", ev => { this.reductions = ev.currentTarget.checked; });
     html.querySelectorAll("select.choix-effet").forEach(sel => sel.addEventListener("change", ev => {
       this.choix[ev.currentTarget.dataset.niveau] = ev.currentTarget.value;
@@ -389,6 +407,14 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     }
     await message(`${libelles[etat]} levé`, lignes.length ? lignes : ["Aucun personnage concerné"]);
+    this.render();
+  }
+
+  static async #onReveiller(event, target) {
+    const actor = fromUuidSync(target.dataset.uuid);
+    if (!actor) return;
+    await reveiller(actor);
+    this.cibles.add(actor.uuid);
     this.render();
   }
 
