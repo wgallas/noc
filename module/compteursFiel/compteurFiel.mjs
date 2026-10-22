@@ -1,4 +1,5 @@
 import effetFielCreator from "./effetFielCreator.mjs";
+import { plancherFiel } from "../cabale.mjs";
 
 export default class CompteurFiel extends FormApplication {
     constructor(settings) {
@@ -72,7 +73,8 @@ export default class CompteurFiel extends FormApplication {
     }
     caclculMenace() {
         let oldValue = this.object.menace
-        this.object.gouttes = Math.max(0, Math.min(35, this.object.gouttes));
+        // Noirceur des cabales : le Fiel ne descend pas sous 1, 2 ou 3 gouttes
+        this.object.gouttes = Math.max(plancherFiel(), Math.min(35, this.object.gouttes));
         this.object.menace = Math.trunc(this.object.gouttes / 5);
         // nouvelle Menace : le MJ choisit l'effet de Fiel dans son panneau
         if (oldValue < this.object.menace && game.user.isGM) {

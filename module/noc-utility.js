@@ -1,6 +1,7 @@
 import { soinDuJet, demanderSoin } from "./soins.mjs";
 import { calculerBlessures, ciblesActuelles, messageMJCibles } from "./combat-blessures.mjs";
 import { traitsEnCombat } from "./armes.mjs";
+import { depenserCabale, bonusCabale } from "./cabale.mjs";
 /* -------------------------------------------- */
 
 /* -------------------------------------------- */
@@ -221,7 +222,9 @@ export class nocUtility {
   static async computeFinalResult(rollData) {
     let actor = game.actors.get(rollData.actorId);
 
-    rollData.niveauFinal = rollData.talent.niveau + rollData.nbSuccess + ((rollData.useVecu) ? 1 : 0) + rollData.nbBonusCollaboratif
+    rollData.bonusCabale = bonusCabale(rollData)
+    rollData.bonusCabaleTexte = `${rollData.bonusCabale > 0 ? "+" : ""}${rollData.bonusCabale}`
+    rollData.niveauFinal = rollData.talent.niveau + rollData.nbSuccess + ((rollData.useVecu || rollData.useVecuCabale) ? 1 : 0) + rollData.nbBonusCollaboratif + rollData.bonusCabale
     // un niveau requis de 0 est un vrai niveau requis : la réussite est calculée
     rollData.aNiveauRequis = rollData.niveauFinalRequis !== undefined && rollData.niveauFinalRequis !== null && rollData.niveauFinalRequis !== "";
     if (rollData.aNiveauRequis) {
@@ -297,7 +300,7 @@ export class nocUtility {
     }
 
     // Jetde base
-    rollData.nbDesTotal = rollData.nbDesDomaine + rollData.nbDesCabale + ((rollData.useEspoir) ? 3 : 0);
+    rollData.nbDesTotal = rollData.nbDesDomaine + (Number(rollData.nbDesCabale) || 0) + ((rollData.useEspoir || rollData.useEspoirCabale) ? 3 : 0);
     rollData.formula = `${rollData.nbDesTotal}d10cs>=8`
     let myRoll = await new Roll(rollData.formula, actor.system).roll()
     await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode"))
@@ -321,16 +324,8 @@ export class nocUtility {
     rollData.roll = myRoll
     rollData.nbSuccess = rollData.roll.total
 
-    // Consume cabale dice if used
-    if (rollData.nbDesCabale > 0 && rollData.cabaleData && rollData.domaineId) {
-      let cabale = game.actors.get(rollData.cabaleData.id);
-      if (cabale) {
-        let newValue = Math.max(0, cabale.system.domaines[rollData.domaineId].value - rollData.nbDesCabale);
-        let updateData = {};
-        updateData[`system.domaines.${rollData.domaineId}.value`] = newValue;
-        await cabale.update(updateData);
-      }
-    }
+    // Dés de Domaine, points d'Atouts, Espoir et Vécu pris à la cabale
+    await depenserCabale(rollData)
 
     await this.computeFinalResult(rollData)
 

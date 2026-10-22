@@ -85,6 +85,15 @@
       {{#if useVecu}}
         <li>Un point de Vécu a été utilisé</li>
       {{/if}}
+      {{#if bonusCabale}}
+        <li>Cabale {{cabaleData.name}} (Atouts) : {{bonusCabaleTexte}}</li>
+      {{/if}}
+      {{#if useEspoirCabale}}
+        <li>Un point d'Espoir de la cabale a été utilisé</li>
+      {{/if}}
+      {{#if useVecuCabale}}
+        <li>Un point de Vécu de la cabale a été utilisé</li>
+      {{/if}}
       <li>Gouttes de Fiel ajoutées : {{nbFiel}}</li>
       <li style="font-weight: bold; color: var(--color-text);">Nombre de succès : {{nbSuccess}}</li>
       <li class="rollResult">Niveau final obtenu : <strong>{{niveauFinal}}</strong></li>

@@ -39,17 +39,6 @@
 					<input type="text" name="system.reseau" value="{{actor.system.reseau}}">
 				</div>
 				<div class="form-group">
-					<div class="flexcol">
-						<div>qualités :
-							<i class="fas fa-add" data-action="add-qualite"></i>
-						</div>
-						{{#each actor.system.qualites.liste as |qualite index|}}
-							{{qualite}}
-						{{/each}}
-					</div>
-				</div>
-
-				<div class="form-group">
 					<div>progression :</div>
 					<input type="number" name="system.progression" value="{{actor.system.progression}}">
 				</div>
@@ -64,79 +53,118 @@
 
 			</div>
 			<div class="cabale-stats flexcol">
-				<!-- DOMAINES ET TALENTS -->
+				<div class="cabale-bilan">
+					<span class="{{#if depassement}}alerte{{/if}}" data-tooltip="Nombre d'Atouts différents au niveau 1 ou plus : Standing + 3">Atouts possédés : {{atoutsPossedes}} / {{limiteAtouts}} (Standing {{standing}})</span>
+					{{#if atoutsInutilisables}}<span class="alerte">Dégradation 5 ou plus : Atouts inutilisables jusqu'à réparation</span>{{/if}}
+				</div>
+
+				<!-- DOMAINES (réserves de dés) ET ATOUTS -->
 				<div class="stats rouage">
-					{{#each actor.system.domaines as |domaine domaineId|}}
-						<div class="domaine {{domaineId}}">
+					{{#each domainesCabale as |d|}}
+						<div class="domaine {{d.cle}}">
 							<h3 class="flexrow">
-								<span class="domaine-niveau" data-key="system.domaines.{{domaineId}}.value">{{domaine.value}}
-									<span class="domaine-control">
+								<span class="domaine-niveau" data-key="system.domaines.{{d.cle}}.value">{{d.score}}
+									<span class="domaine-ctrl">
 										<a class="fas fa-add"></a>
 										<a class="fas fa-minus"></a>
 									</span>
 								</span>
-								<span>{{domaine.label}}</span>
+								<span>{{d.label}}</span>
 							</h3>
-							{{#each ../actor.system.talents as |groupTalent talentGroupName|}}
-								{{#ifequal talentGroupName domaineId}}
-									{{#each groupTalent as |talent talentId|}}
-										<div class="flexrow">
-											<span class="talent-niveau" data-key="system.talents.{{talentGroupName}}.{{talentId}}.niveau">{{talent.niveau}}
-												<span class="talent-control">
-													<a class="fas fa-add"></a>
-													<a class="fas fa-minus"></a>
-												</span>
-											</span>
-											<a class="rollable roll-talent" data-action="rollTalent" data-talent-id="{{talentId}}" data-domaine-id="{{domaineId}}">
-												<label for="{{talent.label}}">{{talent.label}}</label>
-											</a>
-										</div>
-									{{/each}}
-								{{/ifequal}}
+							<div class="des-cabale" data-tooltip="Dés de Destin à la disposition des membres, rechargés au début de chaque scénario">
+								<span>dés</span>
+								<a class="restant-ctrl" data-groupe="domaines" data-cle="{{d.cle}}" data-ecart="-1"><i class="fas fa-minus"></i></a>
+								<span class="compte {{#unless d.restant}}vide{{/unless}}">{{d.restant}} / {{d.score}}</span>
+								<a class="restant-ctrl" data-groupe="domaines" data-cle="{{d.cle}}" data-ecart="1"><i class="fas fa-plus"></i></a>
+							</div>
+							{{#each d.atouts as |a|}}
+								<div class="atout flexrow {{#if a.faille}}faille{{/if}}">
+									<span class="talent-niveau" data-key="system.talents.{{a.domaine}}.{{a.cle}}.niveau">{{a.niveau}}
+										<span class="atout-ctrl">
+											<a class="fas fa-add"></a>
+											<a class="fas fa-minus"></a>
+										</span>
+									</span>
+									<span class="atout-nom" data-tooltip="{{a.tooltip}}">{{a.label}}{{#if a.support}} <i class="fas fa-toolbox"></i>{{/if}}</span>
+									{{#if a.aPoints}}
+										<span class="points-atout" data-tooltip="Points restants, rechargés au début de chaque scénario">
+											<a class="restant-ctrl" data-groupe="atouts" data-cle="{{a.cle}}" data-ecart="-1"><i class="fas fa-minus"></i></a>
+											<span class="compte {{#unless a.restant}}vide{{/unless}}">{{a.restant}}/{{a.points}}</span>
+											<a class="restant-ctrl" data-groupe="atouts" data-cle="{{a.cle}}" data-ecart="1"><i class="fas fa-plus"></i></a>
+										</span>
+									{{/if}}
+								</div>
 							{{/each}}
 						</div>
 					{{/each}}
 				</div>
 
-				<!-- RESERVES ET PERDITIONS -->
+				<!-- RESERVES COMMUNES -->
 				<div class="rouage-reserves cabale-jauges">
-					{{#each actor.system.reserves as |reserve reserveId|}}
-					{{#ifnotequal reserveId "faveurs"}}
-						<div class="reserve {{reserveId}}">
-							<h4>{{reserve.label}}
-								<a class="setMax" data-tooltip="ajuster le max" data-reserve-name="{{reserve.label}}" data-reserve-property="system.reserves.{{reserveId}}.max">
-									<i class="fas fa-cog"></i>
-								</a>
-							</h4>
+					{{#each reservesCabale as |reserve|}}
+						<div class="reserve {{reserve.cle}}">
+							<h4 data-tooltip="{{reserve.tooltip}}">{{reserve.label}} <span class="source">({{reserve.source}})</span></h4>
 							{{#repeat 10}}
-								<input type="checkbox" data-reserve-value="{{@index}}" data-reserve-property="system.reserves.{{reserveId}}.value" class="
+								<input type="checkbox" data-reserve-value="{{@index}}" data-reserve-property="system.reserves.{{reserve.cle}}.value" class="
 									{{#ifequal @index 4}}step{{/ifequal}}
 									{{#ifequal @index 7}}step{{/ifequal}}
 									{{#ifequal @index 9}}step{{/ifequal}}
 									{{#ifgteq @index reserve.max }}unavailable{{/ifgteq}}
 									" {{#ifgt reserve.value @index}} checked {{/ifgt}}/>
 							{{/repeat}}
+							{{#if (eq reserve.cle "vecu")}}
+								<div class="vecu-achats-ligne" data-tooltip="Taille de la réserve achetée avec la progression (3 points par niveau)">
+									achats :
+									<a class="vecu-achats" data-ecart="-1"><i class="fas fa-minus"></i></a>
+									{{@root.vecuAchats}}
+									<a class="vecu-achats" data-ecart="1"><i class="fas fa-plus"></i></a>
+								</div>
+							{{/if}}
 						</div>
-					{{/ifnotequal}}
 					{{/each}}
-					{{#each actor.system.perditions as |perdition perditionId|}}
-						<div class="reserve perdition {{perditionId}}">
-							<h4>{{perdition.label}}
-								<a class="setMax" data-tooltip="ajuster le max" data-reserve-name="{{perdition.label}}" data-reserve-property="system.perditions.{{perditionId}}.max">
-									<i class="fas fa-cog"></i>
-								</a>
-							</h4>
+				</div>
+
+				<!-- JAUGES DE DOMMAGES -->
+				<div class="rouage-reserves cabale-jauges">
+					{{#each jaugesCabale as |perdition|}}
+						<div class="reserve perdition {{perdition.cle}}">
+							<h4>{{perdition.label}}</h4>
 							{{#repeat 10}}
-								<input type="checkbox" data-reserve-value="{{@index}}" data-reserve-property="system.perditions.{{perditionId}}.value" class="
+								<input type="checkbox" data-reserve-value="{{@index}}" data-reserve-property="system.perditions.{{perdition.cle}}.value" class="
 									{{#ifequal @index 4}}step{{/ifequal}}
 									{{#ifequal @index 7}}step{{/ifequal}}
 									{{#ifequal @index 9}}step{{/ifequal}}
 									{{#ifgteq @index perdition.max }}unavailable{{/ifgteq}}
 									" {{#ifgt perdition.value @index}} checked {{/ifgt}}/>
 							{{/repeat}}
+							{{#if perdition.statut.label}}
+								<p class="etat-jauge"><strong>{{perdition.statut.label}}</strong> : {{perdition.statut.description}}</p>
+							{{/if}}
+							{{#if (eq perdition.cle "blessures")}}{{#if @root.fortifications}}
+								<div class="fortifications-ligne" data-tooltip="Réduisent la Dégradation subie, puis perdent 1 point ; regagnés quand la Dégradation est entièrement réparée">
+									Fortifications :
+									<a class="restant-ctrl" data-groupe="fortifications" data-ecart="-1"><i class="fas fa-minus"></i></a>
+									{{@root.fortifications.restant}} / {{@root.fortifications.niveau}}
+									<a class="restant-ctrl" data-groupe="fortifications" data-ecart="1"><i class="fas fa-plus"></i></a>
+								</div>
+							{{/if}}{{/if}}
 						</div>
 					{{/each}}
 				</div>
+				{{#if editable}}
+					<button type="button" class="dommages-cabale"><i class="fa-solid fa-burst"></i> Dommages de la cabale…</button>
+				{{/if}}
+
+				{{#if failles.length}}
+					<div class="failles-cabale">
+						<h4>failles</h4>
+						<ul>
+							{{#each failles as |f|}}
+								<li><strong>{{f.label}}</strong> : {{f.faille}}</li>
+							{{/each}}
+						</ul>
+					</div>
+				{{/if}}
 			</div>
 		</div>
 		<div class="tab members flexcol" data-group="primary" data-tab="members">

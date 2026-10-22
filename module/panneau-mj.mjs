@@ -8,6 +8,7 @@ import { ouvrirPapier } from "./bureau.mjs";
 import { raisonSommeil, reveiller } from "./sommeil.mjs";
 import { bibliotheque, effetParId, effetsActifs } from "./fiel/bibliotheque.mjs";
 import { ouvrirBibliothequeFiel } from "./fiel/editeur-bibliotheque.mjs";
+import { plancherFiel, traqueCabales, infligerCabale, rechargerCabales } from "./cabale.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -29,7 +30,8 @@ const nombre = v => Number(v) || 0;
 export async function fixerFiel(gouttes) {
   const fiel = foundry.utils.deepClone(game.settings.get("noc", "compteurFiel") ?? {});
   const avant = { gouttes: nombre(fiel.gouttes), menace: nombre(fiel.menace) };
-  fiel.gouttes = Math.max(0, Math.min(35, Math.round(nombre(gouttes))));
+  // Noirceur des cabales : le Fiel ne descend pas sous 1, 2 ou 3 gouttes
+  fiel.gouttes = Math.max(plancherFiel(), Math.min(35, Math.round(nombre(gouttes))));
   fiel.menace = Math.trunc(fiel.gouttes / 5);
   await game.settings.set("noc", "compteurFiel", fiel);
   if (ui.compteur) {
@@ -87,7 +89,9 @@ export async function activerEffet(niveau, effet, heros) {
   const lignes = [];
   for (const imm of copie.immediats ?? []) {
     if (imm.type === "perdition") {
+      const avant = new Map(heros.map(a => [a, nombre(a.system.perditions?.[imm.cle]?.value)]));
       for (const a of heros) lignes.push(await modifierPerdition(a, imm.cle, Math.abs(nombre(imm.valeur)), { soigner: nombre(imm.valeur) < 0, reduire: imm.reduction !== false }));
+      if (imm.cle === "traque" && nombre(imm.valeur) > 0) lignes.push(...await traqueCabales(variations(avant, "traque")));
     } else if (imm.type === "reserve") {
       for (const a of heros) {
         const r = a.system.reserves?.[imm.cle];
@@ -112,12 +116,8 @@ export async function activerEffet(niveau, effet, heros) {
       const cabales = new Map();
       for (const a of heros) for (const c of a.cabalesActeurs ?? []) cabales.set(c.id, c);
       for (const c of cabales.values()) {
-        const p = c.system.perditions?.[imm.cle];
-        if (!p) continue;
-        const avant = nombre(p.value);
-        const apres = Math.max(nombre(p.min), Math.min(nombre(p.max) || 10, avant + nombre(imm.valeur)));
-        if (apres !== avant) await c.update({ [`system.perditions.${imm.cle}.value`]: apres });
-        lignes.push(`${c.name} — ${p.label} : ${avant} → ${apres}`);
+        const ligne = await infligerCabale(c, imm.cle, nombre(imm.valeur), { reduire: imm.reduction !== false });
+        if (ligne) lignes.push(ligne);
       }
     } else if (imm.type === "menace") {
       const { avant, apres } = await fixerFiel(etatFiel().gouttes + 5 * nombre(imm.valeur));
@@ -164,6 +164,11 @@ async function message(titre, lignes, { public: estPublic = false, texte = "" } 
 /* -------------------------------------------- */
 /*  Actions sur les acteurs                      */
 /* -------------------------------------------- */
+
+/** Points réellement subis par chaque acteur depuis les valeurs notées avant */
+function variations(avant, perdition) {
+  return new Map([...avant.entries()].map(([a, v]) => [a, nombre(a.system.perditions?.[perdition]?.value) - v]));
+}
 
 /** Modifie une perdition ; renvoie une ligne de compte rendu */
 async function modifierPerdition(actor, perdition, points, { soigner = false, reduire = true } = {}) {
@@ -359,8 +364,12 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
   async _perditions(perdition, soigner) {
     const points = this.points[perdition] ?? 1;
     const lignes = [];
-    for (const a of this._cibles()) lignes.push(await modifierPerdition(a, perdition, points, { soigner, reduire: this.reductions }));
+    const cibles = this._cibles();
+    const avant = new Map(cibles.map(a => [a, nombre(a.system.perditions?.[perdition]?.value)]));
+    for (const a of cibles) lignes.push(await modifierPerdition(a, perdition, points, { soigner, reduire: this.reductions }));
     if (!lignes.length) return;
+    // Traque subie par la moitié au moins des membres d'une cabale : la cabale en encaisse autant
+    if (perdition === "traque" && !soigner) lignes.push(...await traqueCabales(variations(avant, "traque")));
     await message(`${soigner ? "Soins" : "Perdition"} : ${PERDITIONS[perdition].label} ${soigner ? "−" : "+"}${points}`, lignes);
     this.render();
   }
@@ -378,7 +387,10 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
     const cible = { calme: g - 1, seance: g - 5, scenario: 0 }[etape];
     const titres = { calme: "Moment de calme", seance: "Début de séance", scenario: "Début de scénario" };
     const { avant, apres } = await fixerFiel(cible);
-    await message(`${titres[etape]} (Loi)`, [`Gouttes : ${avant.gouttes} → ${apres.gouttes}`, `Menace : ${avant.menace} → ${apres.menace}`]);
+    const lignes = [`Gouttes : ${avant.gouttes} → ${apres.gouttes}`, `Menace : ${avant.menace} → ${apres.menace}`];
+    // début de scénario : dés de Domaine, points d'Atouts et réserves des cabales rechargés
+    if (etape === "scenario") lignes.push(...await rechargerCabales());
+    await message(`${titres[etape]} (Loi)`, lignes);
     this.render();
   }
 
@@ -467,6 +479,17 @@ export function enregistrerSuiviMenace() {
   // la liste des cibles suit la scène et les jetons
   const rafraichir = () => { if (ui.nocPanneauMJ?.rendered) ui.nocPanneauMJ.render(); };
   for (const h of ["canvasReady", "createToken", "deleteToken", "updateToken", "updateActor", "createItem", "updateItem", "deleteItem"]) Hooks.on(h, rafraichir);
+  // Noirceur d'une cabale (ou changement de membres) : le Fiel remonte au minimum imposé
+  Hooks.on("updateActor", async (actor, changes) => {
+    if (game.users.activeGM?.id !== game.user.id) return;
+    const noirceur = actor.type === "cabale" && foundry.utils.hasProperty(changes, "system.perditions.noirceur");
+    const membres = actor.type === "personnage" && foundry.utils.hasProperty(changes, "system.cabales");
+    if (!noirceur && !membres) return;
+    const plancher = plancherFiel();
+    if (etatFiel().gouttes >= plancher) return;
+    const { avant, apres } = await fixerFiel(plancher);
+    await message("Noirceur de la cabale", [`Le Fiel ne peut plus descendre sous ${plancher} goutte${plancher > 1 ? "s" : ""}.`, `Gouttes : ${avant.gouttes} → ${apres.gouttes}`]);
+  });
   Hooks.on("updatedFiel", async () => {
     if (!game.user.isGM) return;
     await arreterEffetsAuDessus(etatFiel().menace);

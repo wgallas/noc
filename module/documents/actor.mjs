@@ -11,6 +11,7 @@ import { appliquerEtats } from "../panneau-mj.mjs";
 import { jetonParDefaut } from "../jetons.mjs";
 import { appliquerPerditions, valeursAvant, seuilsFranchis } from "../perditions.mjs";
 import { appliquerEffetsFiel, aggravationsActives } from "../fiel/bibliotheque.mjs";
+import { preparerCabale, cabalesPourJet, seuilsCabale, divisionDuPersonnage } from "../cabale.mjs";
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -111,6 +112,15 @@ export class nocActor extends Actor {
         foundry.utils.setProperty(changed, `flags.noc.soins.${cle}`, 0);
       }
     }
+    if (this.type === "cabale") {
+      if (foundry.utils.hasProperty(changed, "system.perditions")) options.nocCabaleAvant = valeursAvant(this);
+      // Dégradation entièrement réparée : les Fortifications retrouvent tout leur niveau
+      const degradation = foundry.utils.getProperty(changed, "system.perditions.blessures.value");
+      if (degradation !== undefined && Number(degradation) <= (Number(this._source.system.perditions?.blessures?.min) || 0)) {
+        foundry.utils.setProperty(changed, "system.depenses.fortifications", 0);
+      }
+      return;
+    }
     if (this.type !== "personnage") return;
     // valeurs des jauges avant modification : seuils franchis traités après la mise à jour
     if (foundry.utils.hasProperty(changed, "system.perditions")) options.nocPerditionsAvant = valeursAvant(this);
@@ -130,6 +140,9 @@ export class nocActor extends Actor {
   async _onUpdate(update, options, user) {
     if (user == game.user._id && this.type == "personnage" && options.nocPerditionsAvant) {
       await seuilsFranchis(this, options.nocPerditionsAvant);
+    }
+    if (user == game.user._id && this.type == "cabale" && options.nocCabaleAvant) {
+      await seuilsCabale(this, options.nocCabaleAvant);
     }
 
     super._onUpdate(update, options, user);
@@ -202,6 +215,7 @@ export class nocActor extends Actor {
     appliquerEtats(this);
     appliquerPerditions(this);
     appliquerEffetsFiel(this);
+    preparerCabale(this);
 
     this._preparePersonnageData();
     this._prepareRouageData();
@@ -486,9 +500,17 @@ export class nocActor extends Actor {
     const nombre = v => Number(v) || 0;
 
     if (etape === "calme") {
+      // Division de la cabale : 5 → pas d'Espoir ; 8 → ni Espoir ni Trauma ; 10 → ni Espoir, Trauma, Noirceur
+      const division = divisionDuPersonnage(this);
+      const bloques = new Set(division.palier >= 10 ? ["espoir", "trauma", "noirceur"] : division.palier >= 8 ? ["espoir", "trauma"] : division.palier >= 5 ? ["espoir"] : []);
+      const raison = division.cabale ? `Division de la cabale ${division.cabale.name} (${division.palier})` : "";
       for (const perd of ["blessures", "trauma", "traque", "noirceur"]) {
         const p = s.perditions?.[perd];
         if (!p) continue;
+        if (bloques.has(perd) && nombre(p.value) > nombre(p.min)) {
+          lignes.push(`${p.label} : pas de récupération — ${raison}`);
+          continue;
+        }
         const valeur = nombre(p.value);
         const nouvelle = Math.max(nombre(p.min), valeur - 1);
         if (nouvelle !== valeur) {
@@ -501,7 +523,8 @@ export class nocActor extends Actor {
         lignes.push("Fatigue : levée");
       }
       const espoir = s.reserves.espoir;
-      const gain = Math.max(0, 1 + nombre(s.talents?.ame?.extase?.niveau));
+      const gain = bloques.has("espoir") ? 0 : Math.max(0, 1 + nombre(s.talents?.ame?.extase?.niveau));
+      if (bloques.has("espoir")) lignes.push(`Espoir : pas de récupération — ${raison}`);
       const nouvelEspoir = Math.min(nombre(espoir.max), nombre(espoir.value) + gain);
       if (nouvelEspoir !== nombre(espoir.value)) {
         maj["system.reserves.espoir.value"] = nouvelEspoir;
@@ -624,17 +647,18 @@ export class nocActor extends Actor {
       cabaleData: null
     }
 
-    // Cabales du personnage : la première est proposée par défaut, les autres au choix
-    if (this.type === "personnage") {
-      rollData.cabales = this.cabalesActeurs.map(cabale => ({
-        id: cabale.id,
-        name: cabale.name,
-        domaines: foundry.utils.duplicate(cabale.system.domaines)
-      }));
-      rollData.cabaleData = rollData.cabales[0] ?? null;
-    }
 
     return rollData;
+  }
+  /** Cabales du personnage et ce qu'elles offrent pour ce jet (la première est proposée par défaut) */
+  _ressourcesCabale(rollData, domaineId, talentId) {
+    rollData.cabales = cabalesPourJet(this, domaineId, talentId)
+    rollData.cabaleData = rollData.cabales[0] ?? null
+    rollData.cabaleDomaine = rollData.cabaleData?.domaines?.[domaineId] ? foundry.utils.duplicate(rollData.cabaleData.domaines[domaineId]) : null
+    rollData.atoutsCabale = {}
+    rollData.uniteCabale = 0
+    rollData.useEspoirCabale = false
+    rollData.useVecuCabale = false
   }
   /* -------------------------------------------- */
   clearInitiative() {
@@ -663,10 +687,7 @@ export class nocActor extends Actor {
     rollData.talent = foundry.utils.duplicate(this.system.talents[domaineId][talentId])
     rollData.talentId = talentId
 
-    // Add cabale domain if available
-    if (rollData.cabaleData && rollData.cabaleData.domaines[domaineId]) {
-      rollData.cabaleDomaine = foundry.utils.duplicate(rollData.cabaleData.domaines[domaineId]);
-    }
+    this._ressourcesCabale(rollData, domaineId, talentId)
 
     this.startRoll(rollData)
   }
@@ -717,10 +738,7 @@ export class nocActor extends Actor {
       rollData.modSupplement = 0
       rollData.niveauFinalRequis = rollData.niveauBase + rollData.modMaitrise
 
-      // Add cabale domain if available
-      if (rollData.cabaleData && rollData.cabaleData.domaines['action']) {
-        rollData.cabaleDomaine = foundry.utils.duplicate(rollData.cabaleData.domaines['action']);
-      }
+      this._ressourcesCabale(rollData, 'action', 'combat')
 
       this.startRoll(rollData)
     } else {

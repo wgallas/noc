@@ -360,7 +360,7 @@
             "niveau": 0
           },
           "vehicules": {
-            "label": "véhicules",
+            "label": "véhicule",
             "checked": false,
             "niveau": 0
           },
@@ -458,7 +458,7 @@
             "niveau": 0
           },
           "legendes": {
-            "label": "légendes",
+            "label": "légende",
             "checked": false,
             "niveau": 0
           }
@@ -488,7 +488,13 @@
         "effectId": ""
       },
       "progression": 0,
-      "regressions": []
+      "regressions": [],
+      "vecuAchats": 0,
+      "depenses": {
+        "domaines": {},
+        "atouts": {},
+        "fortifications": 0
+      }
     },
     "rouage": {
       "templates": [
