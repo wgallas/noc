@@ -100,6 +100,16 @@
       {{/unless}}
     </ul>
 
+    {{#if soin}}
+      <div class="bloc-soin">
+        <p>{{soin.label}} : jusqu'à <strong>{{soin.niveau}}</strong> point{{#ifequal soin.niveau 1}}{{else}}s{{/ifequal}} retiré{{#ifequal soin.niveau 1}}{{else}}s{{/ifequal}}</p>
+        {{#each soin.cibles as |c|}}
+          <a class="appliquer-soin bouton-soin" data-uuid="{{c.actorUuid}}"><i class="fa-solid fa-hand-holding-medical"></i> {{c.nom}}</a>
+        {{/each}}
+        <a class="appliquer-soin bouton-soin" data-uuid=""><i class="fa-solid fa-crosshairs"></i> Cible actuelle</a>
+      </div>
+    {{/if}}
+
     {{#if (eq mode "arme")}}
     {{#if aNiveauRequis}}
       <div class="resultat-combat">

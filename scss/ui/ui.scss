@@ -727,3 +727,29 @@ li.chat-message .nocRoll .resultat-combat {
         }
     }
 }
+
+// Message de jet : soin, apaisement, purification
+li.chat-message .nocRoll .bloc-soin {
+    margin-top: 6px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    text-align: center;
+
+    p {
+        margin: 2px 0 4px;
+    }
+
+    a.bouton-soin {
+        display: inline-block;
+        margin: 2px;
+        padding: 2px 8px;
+        border: 1px solid #5c5c5c;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+    }
+}

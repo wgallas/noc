@@ -1,3 +1,4 @@
+import { appliquerSoin } from "./soins.mjs";
 import { objetDieu } from "./objectDieu.mjs";
 
 
@@ -34,6 +35,12 @@ export class SocketManager {
                 this.launchSocket("dispayDroplet", {})
                 ui.compteur.gouttePlus(socketMsg.data.qt)
                 break;
+            case "appliquerSoin": {
+                if (!game.users.activeGM?.isSelf) return;
+                const actor = await fromUuid(socketMsg.data.actorUuid);
+                if (actor) await appliquerSoin(actor, socketMsg.data.talent, socketMsg.data.niveau, socketMsg.data.soignant);
+                break;
+            }
             case "renderCompteur":
                 ui.compteur.render(true);
                 break;

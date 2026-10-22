@@ -104,6 +104,13 @@ export class nocActor extends Actor {
   async _preUpdate(changed, options, user) {
     const allowed = await super._preUpdate(changed, options, user);
     if (allowed === false) return false;
+    // nouvelle perte dans une jauge : le personnage peut de nouveau être soigné / apaisé / purifié
+    for (const [cle, p] of Object.entries(changed.system?.perditions ?? {})) {
+      if (p?.value === undefined) continue;
+      if (Number(p.value) > (Number(this._source.system?.perditions?.[cle]?.value) || 0)) {
+        foundry.utils.setProperty(changed, `flags.noc.soins.${cle}`, 0);
+      }
+    }
     if (this.type !== "personnage") return;
     // valeurs des jauges avant modification : seuils franchis traités après la mise à jour
     if (foundry.utils.hasProperty(changed, "system.perditions")) options.nocPerditionsAvant = valeursAvant(this);
@@ -654,6 +661,7 @@ export class nocActor extends Actor {
     rollData.domaineId = domaineId
     rollData.domaine = foundry.utils.duplicate(this.system.domaines[domaineId])
     rollData.talent = foundry.utils.duplicate(this.system.talents[domaineId][talentId])
+    rollData.talentId = talentId
 
     // Add cabale domain if available
     if (rollData.cabaleData && rollData.cabaleData.domaines[domaineId]) {

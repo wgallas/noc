@@ -1,3 +1,4 @@
+import { soinDuJet, demanderSoin } from "./soins.mjs";
 import { calculerBlessures, ciblesActuelles, messageMJCibles } from "./combat-blessures.mjs";
 import { traitsEnCombat } from "./armes.mjs";
 /* -------------------------------------------- */
@@ -43,6 +44,20 @@ export class nocUtility {
 
   /* -------------------------------------------- */
   static async chatListeners(html) {
+
+    // soin / apaisement / purification depuis le message d'un jet
+    html.querySelectorAll('a.appliquer-soin').forEach((element) => {
+      element.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const rollData = this.getRollDataFromMessage(event);
+        const soin = rollData?.soin;
+        if (!soin) return;
+        const uuid = event.currentTarget.dataset.uuid;
+        const cibles = uuid ? [fromUuidSync(uuid)] : Array.from(game.user.targets ?? []).map(t => t.actor);
+        if (!cibles.filter(Boolean).length) return ui.notifications.warn("Ciblez d'abord le personnage à aider (touche T).");
+        for (const actor of cibles.filter(Boolean)) await demanderSoin(actor, soin.talent, soin.niveau, rollData.alias || game.actors.get(rollData.actorId)?.name || "");
+      });
+    });
 
     html.querySelectorAll('.roll-dice-bonus').forEach((element) => {
       element.addEventListener('click', (event) => {
@@ -213,6 +228,10 @@ export class nocUtility {
       rollData.margin = Number(rollData.niveauFinal) - Number(rollData.niveauFinalRequis)
       rollData.isReussite = (rollData.margin >= 0)
     }
+
+    // Soins / Apaisement / Lumière : niveau obtenu et cibles possibles
+    rollData.soin = soinDuJet(rollData);
+    if (rollData.soin) rollData.soin.cibles = ciblesActuelles();
 
     // Attaque réussie : dégâts de l'arme, effet quantique, rappel des traits
     if (rollData.mode === "arme" && rollData.arme && rollData.isReussite) {
