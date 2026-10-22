@@ -32,6 +32,7 @@ import { migrerArchetypes } from "./archetypes.mjs";
 import { migrerQualites } from "./qualites.mjs";
 import { migrerCreatures } from "./creatures.mjs";
 import { migrerAutres, migrerJauges } from "./autres.mjs";
+import { migrerPerditions } from "./perditions.mjs";
 import { migrerArmures } from "./armures.mjs";
 import { migrerArmes } from "./armes.mjs";
 import { migrerJetons, enregistrerJetons, enregistrerStatutMort } from "./jetons.mjs";
@@ -225,6 +226,7 @@ Hooks.once("ready", async function () {
   await migrerArmes();
   await migrerJetons();
   await migrerJauges();
+  await migrerPerditions();
 
   objetDieu.init();
 

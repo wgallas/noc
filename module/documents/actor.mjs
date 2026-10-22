@@ -9,6 +9,7 @@ import { appliquerAutre } from "../autres.mjs";
 import { appliquerArmures } from "../armures.mjs";
 import { appliquerEtats } from "../panneau-mj.mjs";
 import { jetonParDefaut } from "../jetons.mjs";
+import { appliquerPerditions, valeursAvant, seuilsFranchis } from "../perditions.mjs";
 import { appliquerEffetsFiel, aggravationsActives } from "../fiel/bibliotheque.mjs";
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
@@ -104,6 +105,8 @@ export class nocActor extends Actor {
     const allowed = await super._preUpdate(changed, options, user);
     if (allowed === false) return false;
     if (this.type !== "personnage") return;
+    // valeurs des jauges avant modification : seuils franchis traités après la mise à jour
+    if (foundry.utils.hasProperty(changed, "system.perditions")) options.nocPerditionsAvant = valeursAvant(this);
     const aggravations = aggravationsActives();
     const aggravees = [];
     for (const cle of Object.keys(aggravations)) {
@@ -118,9 +121,8 @@ export class nocActor extends Actor {
   }
 
   async _onUpdate(update, options, user) {
-    console.log('onupdate', user)
-    if (user == game.user._id && this.type == "personnage" && update.system?.perditions) {
-      await this.checkPerditions(update)
+    if (user == game.user._id && this.type == "personnage" && options.nocPerditionsAvant) {
+      await seuilsFranchis(this, options.nocPerditionsAvant);
     }
 
     super._onUpdate(update, options, user);
@@ -191,6 +193,7 @@ export class nocActor extends Actor {
     appliquerAutre(this);
     appliquerArmures(this);
     appliquerEtats(this);
+    appliquerPerditions(this);
     appliquerEffetsFiel(this);
 
     this._preparePersonnageData();
