@@ -34,7 +34,7 @@ export async function appliquerSoin(actor, talent, niveau, soignant) {
   const apres = Math.max(min, avant - points);
   let texte;
   if (points <= 0) {
-    texte = `${actor.name} a déjà reçu un meilleur niveau (${deja}) : pas d'effet supplémentaire.`;
+    texte = `${actor.name} a déjà été aidé à un niveau égal ou supérieur (${deja}) : pas d'effet supplémentaire.`;
   } else {
     await actor.update({
       [`system.perditions.${def.perdition}.value`]: apres,
