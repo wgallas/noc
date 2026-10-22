@@ -1,0 +1,25 @@
+<div class="papier-administratif {{#if validite.perime}}perime{{/if}}">
+  <div class="papier-entete">
+    <span class="papier-administration">Administration du Bloc — Bureau</span>
+    <span class="papier-numero">N° {{numero}}</span>
+  </div>
+  <div class="papier-type">{{type}}</div>
+  <div class="papier-nom">{{nom}}</div>
+  <table class="papier-champs">
+    <tr><th>Titulaire</th><td>{{titulaire}}</td></tr>
+    <tr><th>Bénéficiaires</th><td>{{#each beneficiaires as |b|}}{{b}}{{#unless @last}}, {{/unless}}{{else}}—{{/each}}</td></tr>
+    {{#each lignes as |l|}}<tr><th>{{l.label}}</th><td>{{l.valeur}}</td></tr>{{/each}}
+    <tr><th>Rang du document</th><td>{{rangDocument}}</td></tr>
+    {{#if delivre}}
+    <tr><th>Délivré</th><td>cycle {{delivre.cycle}}{{#if delivre.par}}, à la demande de {{delivre.par}}{{/if}}</td></tr>
+    {{/if}}
+    {{#if validite}}
+    <tr><th>Validité</th><td>{{#if validite.perime}}expiré{{else}}{{validite.restants}} cycle(s) restant(s) sur {{validite.duree}}{{/if}}</td></tr>
+    {{/if}}
+  </table>
+  {{#if specificites}}<div class="papier-specificites">{{{specificites}}}</div>{{/if}}
+  <div class="papier-pied">
+    <span class="papier-tampon {{#if validite.perime}}tampon-perime{{/if}}">{{#if validite.perime}}PÉRIMÉ{{else}}{{#if delivre}}VALIDÉ{{else}}NON DÉLIVRÉ{{/if}}{{/if}}</span>
+    <span class="papier-signature">Signature de l'agent : ______________</span>
+  </div>
+</div>

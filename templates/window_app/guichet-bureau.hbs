@@ -1,0 +1,49 @@
+<div class="guichet">
+  <p class="guichet-intro">Annexe administrative — demande présentée par <strong>{{acteur}}</strong> (Rang {{calc.rangBase}})</p>
+
+  <div class="form-group">
+    <h4>formulaire</h4>
+    <select name="system.formulaire" class="choix-formulaire">
+      {{selectOptions formulaires selected=choix.formulaire}}
+    </select>
+  </div>
+  <p class="description-formulaire">{{descriptionFormulaire}}</p>
+
+  <div class="budget-bureau">
+    <div class="bilan-valeur">
+      <span class="bilan-chiffre">{{budget}}</span>
+      <span class="bilan-label">Niveaux de Bureau obtenus</span>
+      <span class="budget-controles">
+        <a data-action="budget" data-ecart="1" data-tooltip="+1"><i class="fas fa-plus"></i></a>
+        <a data-action="budget" data-ecart="-1" data-tooltip="−1"><i class="fas fa-minus"></i></a>
+      </span>
+    </div>
+    <div class="bilan-valeur {{#if blocage}}insuffisant{{/if}}">
+      <span class="bilan-chiffre">{{restant}}</span>
+      <span class="bilan-label">Niveaux restants à dépenser</span>
+    </div>
+  </div>
+  <p class="aide-budget">
+    <button type="button" data-action="jetBureau"><i class="fa-solid fa-dice-d10"></i> Lancer le jet de Bureau (niveau {{niveauBureau}})</button>
+    {{#if jetObtenu}}<span class="note-cout">Budget repris du dernier jet de Bureau.</span>{{else}}<span class="note-cout">Le niveau final du jet devient le budget (ajustable avec +/−).</span>{{/if}}
+  </p>
+
+  {{> "systems/noc/templates/item/parts/document-bilan.hbs"}}
+
+  <div class="form-group">
+    <h4>nom du document</h4>
+    <input name="nom" type="text" value="{{nom}}">
+  </div>
+  <div class="form-group stacked">
+    <h4>spécificités (contexte, motif…)</h4>
+    <textarea name="texte" rows="3">{{texte}}</textarea>
+  </div>
+
+  {{> "systems/noc/templates/item/parts/document-options.hbs"}}
+
+  {{#if blocage}}<p class="avertissement-rang">{{blocage}}</p>{{/if}}
+  <div class="guichet-boutons flexrow">
+    <button type="button" data-action="valider" {{#if blocage}}disabled{{/if}}><i class="fa-solid fa-stamp"></i> Faire tamponner</button>
+    <button type="button" data-action="annuler"><i class="fa-solid fa-xmark"></i> Annuler</button>
+  </div>
+</div>

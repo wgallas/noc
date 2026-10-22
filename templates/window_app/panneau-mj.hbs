@@ -3,6 +3,7 @@
   <nav class="onglets-mj flexrow">
     <a class="onglet-lien {{#if (eq onglet "individus")}}actif{{/if}}" data-onglet="individus"><i class="fa-solid fa-users"></i> Individus et perditions</a>
     <a class="onglet-lien {{#if (eq onglet "fiel")}}actif{{/if}}" data-onglet="fiel"><i class="fa-solid fa-droplet"></i> Menace et effets de Fiel</a>
+    <a class="onglet-lien {{#if (eq onglet "bureau")}}actif{{/if}}" data-onglet="bureau"><i class="fa-solid fa-stamp"></i> Bureau</a>
   </nav>
 
   <div class="onglet-mj {{#if (eq onglet "individus")}}actif{{/if}}" data-onglet="individus">
@@ -133,6 +134,29 @@
       <button type="button" data-action="leverEtat" data-etat="fatigue">Lever la fatigue</button>
       <button type="button" data-action="leverEtat" data-etat="bouleversement">Lever l'ancien bouleversement</button>
     </div>
+  </section>
+  </div>
+  <div class="onglet-mj {{#if (eq onglet "bureau")}}actif{{/if}}" data-onglet="bureau">
+  <section class="bloc">
+    <h3 class="flexrow">
+      <span>Registre du Bureau — cycle {{cycle}}</span>
+      <button type="button" data-action="nouveauCycle" data-tooltip="Passer au cycle suivant : les documents vieillissent d'un cycle"><i class="fa-solid fa-calendar-plus"></i> Nouveau cycle</button>
+    </h3>
+    {{#if registre.length}}
+    <table class="registre-bureau">
+      <tr><th>Document</th><th>Titulaire</th><th>Bénéficiaires</th><th>Validité</th></tr>
+      {{#each registre as |d|}}
+      <tr class="{{#if d.perime}}perime{{/if}}">
+        <td><a data-action="ouvrirDocument" data-uuid="{{d.uuid}}">{{d.nom}}</a><br><small>{{d.type}} · {{d.numero}}</small></td>
+        <td>{{d.titulaire}}</td>
+        <td><small>{{d.beneficiaires}}</small></td>
+        <td>{{#if d.perime}}périmé{{else}}{{d.restants}} cycle(s){{/if}}</td>
+      </tr>
+      {{/each}}
+    </table>
+    {{else}}
+    <p class="aide">Aucun document délivré. Les Héros en demandent depuis leur fiche (inventaire, « Demander un formulaire »).</p>
+    {{/if}}
   </section>
   </div>
 </div>

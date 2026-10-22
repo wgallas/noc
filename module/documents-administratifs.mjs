@@ -164,3 +164,131 @@ export function calculerDocument(item) {
   calc.heures = 3 + 2 * effets.length;
   return calc;
 }
+
+/* -------------------------------------------- */
+/*  Documents délivrés : numéro, papier, validité */
+/* -------------------------------------------- */
+
+const PREFIXES = { port: "AP", acces: "AA", sortie: "AS", requisition: "RQ", mandat: "MI", signalement: "FS", autre: "DA" };
+
+/** Numéro de série administratif, ex. « AP-37K-0412 » */
+export function numeroDocument(type) {
+  const lettres = "ABCDEFGHJKLMNPRSTUVXZ";
+  const hasard = n => Math.floor(Math.random() * n);
+  const milieu = `${hasard(90) + 10}${lettres[hasard(lettres.length)]}`;
+  return `${PREFIXES[type] ?? "DA"}-${milieu}-${String(hasard(10000)).padStart(4, "0")}`;
+}
+
+/** Cycle courant du monde (avancé par le bouton « Nouveau cycle » du MJ) */
+export function cycleCourant() {
+  try { return nombre(game.settings.get("noc", "cycleCourant")); } catch (e) { return 0; }
+}
+
+export function estDelivre(item) {
+  return item?.type === "document administratif" && item.system?.statut === "delivre";
+}
+
+/** Validité d'un document délivré : { duree, restants, perime } (null sinon) */
+export function validite(item) {
+  if (!estDelivre(item)) return null;
+  const duree = Math.max(1, nombre(item.system.duree) || 1);
+  const restants = nombre(item.system.delivre?.cycle) + duree - cycleCourant();
+  return { duree, restants: Math.max(0, restants), perime: restants <= 0 };
+}
+
+/** Bénéficiaires non vides */
+export function nomsBeneficiaires(system) {
+  return listeBeneficiaires(system).map(n => n.trim()).filter(Boolean);
+}
+
+/** Données d'affichage du « papier » d'un document */
+export function donneesPapier(item) {
+  const c = calculerDocument(item);
+  const s = item.system;
+  const lignes = [];
+  const ajouter = (label, valeur) => { if (valeur !== undefined && valeur !== null && valeur !== "") lignes.push({ label, valeur }); };
+  switch (c.type) {
+    case "port":
+      ajouter("Objet autorisé", s.port?.objet || "—");
+      ajouter("Limité (X)", c.limiteX);
+      break;
+    case "acces":
+      ajouter("Zone", ZONES_ACCES[s.acces?.zone ?? 1]);
+      ajouter("Motif", s.acces?.motif);
+      ajouter("Circulation", [s.acces?.nonLimite ? "non limitée à un secteur" : "secteurs définis", s.acces?.sansSurveillance ? "sans surveillance" : "sous surveillance"].join(", "));
+      break;
+    case "sortie":
+      ajouter("Zone", ZONES_SORTIE[nombre(s.sortie?.zone) === 4 ? 4 : 3]);
+      ajouter("Séjour", DUREES_SORTIE[s.sortie?.duree]?.label.replace(/\s*\(.*\)/, ""));
+      ajouter("Motif", s.sortie?.motif);
+      if (s.sortie?.exoneration) ajouter("Examens de sortie", "exonéré");
+      break;
+    case "requisition":
+      ajouter("Ressource", MODES_REQUISITION[s.requisition?.mode || "objet"]);
+      ajouter("Détail", s.requisition?.detail);
+      if ((s.requisition?.mode || "objet") === "objet") ajouter("Valeur maximale", c.valeurMax);
+      if (s.requisition?.mode === "capital") ajouter("Capital", c.capital);
+      if (s.requisition?.mode === "expert") ajouter("Niveau de l'expert", c.niveauExpert);
+      if (s.requisition?.mode === "escorte") ajouter("Gardes Noirs", c.gardes);
+      break;
+    case "mandat":
+      ajouter("Sujet", s.mandat?.sujet);
+      ajouter("Secteur", s.mandat?.secteur);
+      ajouter("Niveau d'autorité", c.autorite);
+      ajouter("Citoyens visés", c.citoyens);
+      break;
+    case "signalement":
+      ajouter("Citoyen visé", s.signalement?.cible);
+      ajouter("Prise d'effet", c.delai);
+      if (s.signalement?.bonusStatut) ajouter("Confrontation", "+1 au Domaine Statut");
+      break;
+  }
+  const v = validite(item);
+  return {
+    uuid: item.uuid,
+    nom: item.name,
+    type: FORMULAIRES[c.type].label,
+    numero: s.numero || "—",
+    titulaire: item.actor?.name ?? s.delivre?.par ?? "",
+    beneficiaires: nomsBeneficiaires(s),
+    lignes,
+    specificites: s.description || "",
+    rangDocument: c.rangDocument,
+    delivre: estDelivre(item) ? { cycle: nombre(s.delivre?.cycle), par: s.delivre?.par || "" } : null,
+    validite: v
+  };
+}
+
+/** Tous les documents délivrés du monde (acteurs du monde) */
+export function documentsDelivres() {
+  return game.actors.contents.flatMap(a => a.itemTypes?.["document administratif"] ?? []).filter(estDelivre);
+}
+
+/** Documents dont un personnage est bénéficiaire sans en être le titulaire */
+export function documentsRecus(actor) {
+  const nom = String(actor?.name ?? "").trim().toLowerCase();
+  if (!nom) return [];
+  return documentsDelivres().filter(d => d.actor?.id !== actor.id
+    && nomsBeneficiaires(d.system).some(n => n.toLowerCase() === nom));
+}
+
+/** MJ : passe au cycle suivant et signale les documents qui viennent d'expirer */
+export async function nouveauCycle() {
+  if (!game.user.isGM) return;
+  const cycle = cycleCourant() + 1;
+  await game.settings.set("noc", "cycleCourant", cycle);
+  const expires = documentsDelivres().filter(d => {
+    const fin = nombre(d.system.delivre?.cycle) + Math.max(1, nombre(d.system.duree) || 1);
+    return fin === cycle;
+  });
+  const lignes = expires.map(d => {
+    const rappel = d.system.formulaire === "requisition"
+      ? " — à restituer (sinon 1 séquelle de Traque par tranche de 2 niveaux de valeur perdus)" : "";
+    return `<li><strong>${d.name}</strong> (${d.system.numero || "—"}), détenu par ${d.actor?.name ?? "?"}${rappel}</li>`;
+  }).join("");
+  await ChatMessage.create({
+    content: `<div class="nocRoll"><h4>Cycle ${cycle}</h4>${expires.length
+      ? `<p>Documents arrivés à expiration :</p><ul>${lignes}</ul>` : "<p>Aucun document n'arrive à expiration.</p>"}</div>`,
+    speaker: ChatMessage.getSpeaker({ alias: "Bureau" })
+  });
+}

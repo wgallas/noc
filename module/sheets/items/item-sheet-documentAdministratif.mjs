@@ -1,7 +1,8 @@
 import {
   FORMULAIRES, ZONES_ACCES, ZONES_SORTIE, DUREES_SORTIE, MODES_REQUISITION, NUISANCES,
-  calculerDocument, listeBeneficiaires
+  calculerDocument, listeBeneficiaires, estDelivre, donneesPapier
 } from "../../documents-administratifs.mjs";
+import { presenterDocument, nomsPJ } from "../../bureau.mjs";
 
 export class nocItemSheetDocumentAdministratif extends foundry.appv1.sheets.ItemSheet {
 
@@ -34,6 +35,13 @@ export class nocItemSheetDocumentAdministratif extends foundry.appv1.sheets.Item
     context.nuisances = NUISANCES;
     context.beneficiaires = context.calc.beneficiaires.map((nom, index) => ({ nom, index, numero: index + 1, supprimable: index >= 2 }));
     const s = this.item.system;
+    context.s = s;
+    context.pjs = nomsPJ();
+    context.isGM = game.user.isGM;
+    // document délivré : affiché comme un papier, verrouillé (sauf si le MJ le déverrouille)
+    context.verrouille = estDelivre(this.item) && !s.deverrouille;
+    context.delivreDeverrouille = estDelivre(this.item) && s.deverrouille;
+    if (estDelivre(this.item)) context.papier = donneesPapier(this.item);
     context.choix = {
       formulaire: context.calc.type,
       zoneAcces: String(s.acces?.zone ?? 1),
@@ -47,6 +55,11 @@ export class nocItemSheetDocumentAdministratif extends foundry.appv1.sheets.Item
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
+    html.find("a.presenter-document").click(() => presenterDocument(this.item));
+    if (game.user.isGM) {
+      html.find("a.deverrouiller-document").click(() => this.item.update({ "system.deverrouille": true }));
+      html.find("a.reverrouiller-document").click(() => this.item.update({ "system.deverrouille": false }));
+    }
     if (!this.isEditable) return;
 
     // boutons +/- : data-champ = chemin, data-min = minimum (0 par défaut)

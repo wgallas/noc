@@ -5,6 +5,8 @@
  * @extends {ActorSheet}
  */
 import { raisonSommeil } from "../../sommeil.mjs";
+import { ouvrirGuichet, ouvrirPapier } from "../../bureau.mjs";
+import { documentsRecus, validite } from "../../documents-administratifs.mjs";
 import NOCContact from "../../ContactClass.js";
 import { choisirTheme, libelleTalent } from "../../archetypes.mjs";
 import { choisirQualite, descriptionQualite, enregistrerQualite } from "../../qualites.mjs";
@@ -256,6 +258,9 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
     this.checkArchetype();
     this.prepareArchetype(context);
     context.sommeil = raisonSommeil(this.actor);
+    context.documentsRecus = this.actor.type === "personnage" ? documentsRecus(this.actor).map(d => ({
+      uuid: d.uuid, nom: d.name, titulaire: d.actor?.name ?? "", perime: !!validite(d)?.perime
+    })) : [];
     context.isGM = game.user.isGM;
     context.cabales = this.actor.cabalesActeurs.map(c => ({
       id: c.id, nom: c.name, bloc: c.system.bloc, coordonnes: c.system.coordonnes, societe: c.system.societeEcran
@@ -332,6 +337,8 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
 
     html.find(".addQuality").click(this.addQuality.bind(this))
     html.find(".changerTheme").click(this.changerTheme.bind(this))
+    html.find("a.guichet-bureau-bouton").click(() => ouvrirGuichet(this.actor))
+    html.find("a.ouvrir-papier").click(ev => ouvrirPapier(ev.currentTarget.dataset.uuid))
     html.find("a.basculerJauges").click(this.basculerJauges.bind(this))
     html.find(".deleteQuality").click(this.deleteQuality.bind(this))
 

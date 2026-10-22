@@ -753,3 +753,22 @@ li.chat-message .nocRoll .bloc-soin {
         }
     }
 }
+
+// Document présenté dans le chat
+li.chat-message .nocRoll.papier-chat {
+    .papier-intro {
+        margin: 0 0 4px;
+    }
+
+    .papier-administratif {
+        padding: 6px 8px;
+
+        .papier-nom {
+            font-size: 15px;
+        }
+
+        .papier-tampon {
+            font-size: 13px;
+        }
+    }
+}

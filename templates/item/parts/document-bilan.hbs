@@ -1,0 +1,22 @@
+    {{#if calc.formulaire}}
+    <div class="bilan-document">
+      <div class="bilan-valeur {{#if calc.rangInsuffisant}}insuffisant{{/if}}">
+        <span class="bilan-chiffre">{{calc.rangDocument}}</span>
+        <span class="bilan-label">Rang du document</span>
+      </div>
+      <div class="bilan-valeur">
+        <span class="bilan-chiffre">{{calc.niveauxBureau}}</span>
+        <span class="bilan-label">Niveaux de Bureau investis</span>
+      </div>
+    </div>
+    {{#if calc.effets.length}}
+    <ul class="effets-bureau">
+      {{#each calc.effets as |e|}}<li>{{e.label}} : {{e.niveaux}} niveau{{#ifequal e.niveaux 1}}{{else}}x{{/ifequal}}</li>{{/each}}
+    </ul>
+    {{/if}}
+    {{#if calc.rangInsuffisant}}
+    <p class="avertissement-rang">Le Rang du Héros ({{calc.rang}}) est inférieur au Rang du document : augmentez-le ci-dessous (2 niveaux de Bureau par point).</p>
+    {{/if}}
+    <p class="obtention">Obtention : {{calc.heures}} heures de démarches dans une Annexe · efficace {{calc.duree}} cycle{{#ifequal calc.duree 1}}{{else}}s{{/ifequal}}</p>
+    {{/if}}
+

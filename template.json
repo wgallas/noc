@@ -735,6 +735,16 @@
         "cible": "",
         "bonusStatut": false,
         "priseRapide": false
+      },
+      "statut": "brouillon",
+      "numero": "",
+      "deverrouille": false,
+      "delivre": {
+        "cycle": 0,
+        "par": "",
+        "budget": 0,
+        "niveaux": 0,
+        "heures": 0
       }
     }
   }

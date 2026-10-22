@@ -3,6 +3,8 @@
  * Fenêtre réservée au MJ (ApplicationV2), ouverte depuis la barre d'outils.
  */
 
+import { cycleCourant, documentsDelivres, donneesPapier, nouveauCycle } from "./documents-administratifs.mjs";
+import { ouvrirPapier } from "./bureau.mjs";
 import { raisonSommeil, reveiller } from "./sommeil.mjs";
 import { bibliotheque, effetParId, effetsActifs } from "./fiel/bibliotheque.mjs";
 import { ouvrirBibliothequeFiel } from "./fiel/editeur-bibliotheque.mjs";
@@ -207,7 +209,9 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       leverEtat: PanneauMJ.#onLeverEtat,
       etapeMJ: PanneauMJ.#onEtapeMJ,
       toutCocher: PanneauMJ.#onToutCocher,
-      reveiller: PanneauMJ.#onReveiller
+      reveiller: PanneauMJ.#onReveiller,
+      nouveauCycle: PanneauMJ.#onNouveauCycle,
+      ouvrirDocument: PanneauMJ.#onOuvrirDocument
     }
   };
 
@@ -298,6 +302,12 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
         raison: raisonSommeil(a) === "reserve" ? "en réserve" : "dossier d'archives"
       })),
       sommeilOuvert: this.sommeilOuvert,
+      cycle: cycleCourant(),
+      registre: documentsDelivres().map(d => {
+        const p = donneesPapier(d);
+        return { uuid: d.uuid, nom: d.name, numero: p.numero, type: p.type, titulaire: p.titulaire,
+          beneficiaires: p.beneficiaires.join(", "), restants: p.validite?.restants ?? 0, perime: !!p.validite?.perime };
+      }).sort((a, b) => Number(a.perime) - Number(b.perime) || a.restants - b.restants),
       adversaires: this._adversaires().map(x => this._ligne(x.actor, x.nom, x.img)),
       perditions: Object.entries(PERDITIONS).map(([cle, d]) => ({ cle, label: d.label, reduction: d.reduction?.label, points: this.points[cle] ?? 1 })),
       reductions: this.reductions,
@@ -410,6 +420,15 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
+  static async #onNouveauCycle() {
+    await nouveauCycle();
+    this.render();
+  }
+
+  static #onOuvrirDocument(event, target) {
+    ouvrirPapier(target.dataset.uuid);
+  }
+
   static async #onReveiller(event, target) {
     const actor = fromUuidSync(target.dataset.uuid);
     if (!actor) return;
@@ -447,7 +466,7 @@ export function enregistrerSuiviMenace() {
       </label>`);
   // la liste des cibles suit la scène et les jetons
   const rafraichir = () => { if (ui.nocPanneauMJ?.rendered) ui.nocPanneauMJ.render(); };
-  for (const h of ["canvasReady", "createToken", "deleteToken", "updateToken", "updateActor"]) Hooks.on(h, rafraichir);
+  for (const h of ["canvasReady", "createToken", "deleteToken", "updateToken", "updateActor", "createItem", "updateItem", "deleteItem"]) Hooks.on(h, rafraichir);
   Hooks.on("updatedFiel", async () => {
     if (!game.user.isGM) return;
     await arreterEffetsAuDessus(etatFiel().menace);

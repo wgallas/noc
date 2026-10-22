@@ -1,0 +1,10 @@
+<div class="papier-fenetre">
+  {{#if papier}}
+  {{> "systems/noc/templates/item/parts/document-papier.hbs" papier}}
+  <div class="actions-papier flexrow">
+    <a data-action="presenter"><i class="fa-solid fa-hand-holding"></i> Présenter</a>
+  </div>
+  {{else}}
+  <p>Ce document n'est plus accessible.</p>
+  {{/if}}
+</div>
