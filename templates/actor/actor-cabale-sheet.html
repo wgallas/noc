@@ -39,8 +39,46 @@
 					<input type="text" name="system.reseau" value="{{actor.system.reseau}}">
 				</div>
 				<div class="form-group">
-					<div>progression :</div>
-					<input type="number" name="system.progression" value="{{actor.system.progression}}">
+					<div>archétype :</div>
+					<span class="archetype-cabale">{{#if actor.system.archetype}}{{actor.system.archetype}}{{else}}—{{/if}}</span>
+				</div>
+
+				<div class="gestion-cabale">
+					<h4>progression</h4>
+					<div class="progression-cabale" data-tooltip="1 point par mois entre deux aventures ; 3 points pour un achat">
+						<a class="progression-moins"><i class="fas fa-minus"></i></a>
+						<span class="valeur">{{actor.system.progression}}</span>
+						<a class="progression-plus"><i class="fas fa-plus"></i></a>
+						<span>point{{#ifgt actor.system.progression 1}}s{{/ifgt}}</span>
+					</div>
+					{{#if editable}}
+						<div class="boutons-gestion">
+							<button type="button" data-gestion="depenser" data-tooltip="3 points : Atout +1, Domaine +1, réserve de Vécu +1 ou une séquelle réparée">Dépenser 3 points…</button>
+							<button type="button" data-gestion="don" data-tooltip="Un Héros sacrifie ses propres points de progression">Don d'un Héros…</button>
+							<button type="button" data-gestion="intermede" data-tooltip="Entre deux aventures : 1 point par mois, une régression tous les 6 mois">Intermède…</button>
+						</div>
+
+						<h4>entretien</h4>
+						<div class="boutons-gestion">
+							<button type="button" data-gestion="reparer" data-tooltip="Par quart : 1 + Artisanat du Héros + Atelier">Réparer…</button>
+							<button type="button" data-gestion="soupcons" data-tooltip="Par quart : 1 + Façade du Héros">Lever les soupçons…</button>
+							<button type="button" data-gestion="noirceur" data-tooltip="−1 Noirceur par semaine sans en subir">Décontaminer…</button>
+							{{#if isGM}}<button type="button" data-gestion="division" data-tooltip="Fin d'une scène d'esprit de corps : Division −1 à −3 (la Loi)">Esprit de corps…</button>{{/if}}
+						</div>
+
+						<h4>création</h4>
+						<div class="boutons-gestion">
+							<button type="button" data-gestion="creation" data-tooltip="Archétype ou création libre, puis personnalisation">Assistant de création…</button>
+							<button type="button" data-gestion="apport" data-tooltip="+1 à un Atout lié à un Talent du Héros à 2 ou plus, contre une séquelle de Traque">Apport d'un Héros…</button>
+						</div>
+					{{/if}}
+					{{#if regressions.length}}
+						<details class="regressions-cabale">
+							<summary>régressions ({{regressions.length}})</summary>
+							<ul>{{#each regressions as |r|}}<li>{{r.atout}} (mois {{r.mois}})</li>{{/each}}</ul>
+						</details>
+					{{/if}}
+					<p class="mois-ecoules">Mois écoulés entre les aventures : {{actor.system.moisEcoules}}</p>
 				</div>
 				<div class="description">
 					<h2>description</h2>

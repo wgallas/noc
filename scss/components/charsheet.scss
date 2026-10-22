@@ -3065,3 +3065,93 @@ div.noc.sheet.actor.cabale .cabale-stats {
         cursor: pointer;
     }
 }
+
+
+// Fiche de cabale : progression, entretien, création
+div.noc.sheet.actor.cabale .gestion-cabale {
+    font-size: 12px;
+
+    h4 {
+        margin: 6px 0 2px;
+    }
+
+    .progression-cabale {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .valeur {
+            min-width: 24px;
+            height: 22px;
+            line-height: 22px;
+            border-radius: 50%;
+            border: 1px solid black;
+            background-color: white;
+            color: black;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        a {
+            font-size: 8px;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 50%;
+            color: white;
+            background-color: #5c5c5c;
+            cursor: pointer;
+        }
+    }
+
+    .boutons-gestion {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+
+        button {
+            flex: 1 1 45%;
+            font-size: 11px;
+            line-height: 1.3;
+            padding: 2px 4px;
+        }
+    }
+
+    .regressions-cabale ul {
+        margin: 2px 0;
+        padding-left: 16px;
+    }
+
+    .mois-ecoules {
+        font-style: italic;
+        opacity: 0.8;
+        margin: 4px 0 0;
+    }
+}
+
+.gestion-cabale-dialog .gestion-cabale-form {
+    fieldset {
+        margin: 4px 0;
+        padding: 2px 6px;
+    }
+
+    .notes {
+        font-size: 11px;
+        font-style: italic;
+    }
+
+    input[type="checkbox"] {
+        -webkit-appearance: checkbox !important;
+        appearance: auto !important;
+        width: 14px;
+        height: 14px;
+        box-shadow: none !important;
+        filter: none !important;
+
+        &::after {
+            content: none !important;
+            display: none !important;
+        }
+    }
+}

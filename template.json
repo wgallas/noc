@@ -489,6 +489,9 @@
       },
       "progression": 0,
       "regressions": [],
+      "archetype": "",
+      "apports": [],
+      "moisEcoules": 0,
       "vecuAchats": 0,
       "depenses": {
         "domaines": {},

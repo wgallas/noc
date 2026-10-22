@@ -1,5 +1,6 @@
 import { nocActorSheetPersonnage } from "./actor-sheet-personnage.mjs";
 import { ATOUTS, RESERVES_CABALE, JAUGES_CABALE, membresCabale, infligerCabale } from "../../cabale.mjs";
+import { assistantCreation, apportHeros, entretien, semainesSansNoirceur, espritDeCorps, depenserProgression, donProgression, intermede } from "../../cabale-gestion.mjs";
 
 const nombre = v => Number(v) || 0;
 const TYPES = {
@@ -147,6 +148,8 @@ export class nocActorSheetCabale extends nocActorSheetPersonnage {
     context.depassement = s.atoutsPossedes > s.limiteAtouts;
     context.failles = s.failles ?? [];
     context.atoutsInutilisables = s.atoutsInutilisables;
+    context.regressions = [...(s.regressions ?? [])].reverse();
+    context.isGM = game.user.isGM;
   }
   /* -------------------------------------------- */
 
@@ -183,6 +186,14 @@ export class nocActorSheetCabale extends nocActorSheetPersonnage {
         this.actor.update({ "system.vecuAchats": valeur });
       });
       html.find('button.dommages-cabale').click(() => this._dommages());
+      // création, entretien et progression
+      const actions = {
+        creation: assistantCreation, apport: apportHeros,
+        reparer: c => entretien(c, "reparer"), soupcons: c => entretien(c, "soupcons"),
+        noirceur: semainesSansNoirceur, division: espritDeCorps,
+        depenser: depenserProgression, don: donProgression, intermede
+      };
+      html.find('button[data-gestion]').click(ev => actions[ev.currentTarget.dataset.gestion]?.(this.actor));
     }
     let membersImages = html.find('div.img');
     for (let el of membersImages) { this.randomRotate(el) }

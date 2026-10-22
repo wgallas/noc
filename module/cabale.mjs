@@ -304,21 +304,26 @@ export function bonusCabale(rollData) {
 /*  Début de scénario                            */
 /* -------------------------------------------- */
 
-/** Recharge dés de Domaine, points d'Atouts et réserves de toutes les cabales */
+/** Recharge dés de Domaine, points d'Atouts et réserves d'une cabale ; renvoie true si quelque chose a changé */
+export async function rechargerCabale(cabale) {
+  const s = cabale.system;
+  const maj = {};
+  for (const cle of Object.keys(s.domaines ?? {})) if (nombre(s.depenses?.domaines?.[cle])) maj[`system.depenses.domaines.${cle}`] = 0;
+  for (const cle of Object.keys(ATOUTS)) if (nombre(s.depenses?.atouts?.[cle])) maj[`system.depenses.atouts.${cle}`] = 0;
+  for (const cle of Object.keys(RESERVES_CABALE)) {
+    const r = s.reserves?.[cle];
+    if (r && nombre(cabale._source.system.reserves?.[cle]?.value) !== nombre(r.max)) maj[`system.reserves.${cle}.value`] = nombre(r.max);
+  }
+  if (!Object.keys(maj).length) return false;
+  await cabale.update(maj);
+  return true;
+}
+
+/** Recharge toutes les cabales (début de scénario) */
 export async function rechargerCabales() {
   const lignes = [];
   for (const cabale of game.actors.filter(a => a.type === "cabale")) {
-    const s = cabale.system;
-    const maj = {};
-    for (const cle of Object.keys(s.domaines ?? {})) if (nombre(s.depenses?.domaines?.[cle])) maj[`system.depenses.domaines.${cle}`] = 0;
-    for (const cle of Object.keys(ATOUTS)) if (nombre(s.depenses?.atouts?.[cle])) maj[`system.depenses.atouts.${cle}`] = 0;
-    for (const cle of Object.keys(RESERVES_CABALE)) {
-      const r = s.reserves?.[cle];
-      if (r && nombre(cabale._source.system.reserves?.[cle]?.value) !== nombre(r.max)) maj[`system.reserves.${cle}.value`] = nombre(r.max);
-    }
-    if (!Object.keys(maj).length) continue;
-    await cabale.update(maj);
-    lignes.push(`${cabale.name} : dés de Domaine, Atouts et réserves rechargés`);
+    if (await rechargerCabale(cabale)) lignes.push(`${cabale.name} : dés de Domaine, Atouts et réserves rechargés`);
   }
   return lignes;
 }
