@@ -3155,3 +3155,77 @@ div.noc.sheet.actor.cabale .gestion-cabale {
         }
     }
 }
+
+
+// Fenêtres ApplicationV2 sur papier (guichet du Bureau, document délivré) :
+// le thème sombre de Foundry y met du texte clair, illisible sur le fond papier
+.application.noc.guichet-bureau,
+.application.noc.papier-document {
+    --color-text-primary: #231b15;
+    --color-text-secondary: #4a3d32;
+    --color-text-subtle: #5a4c40;
+    --color-text-emphatic: #000;
+    --color-form-label: #231b15;
+    --color-form-hint: #5a4c40;
+    --color-text-hyperlink: #5b1f12;
+    color: #231b15;
+
+    .window-content {
+        color: #231b15;
+        text-shadow: none;
+    }
+
+    .window-content p,
+    .window-content label,
+    .window-content li,
+    .window-content span,
+    .window-content a:not(.button) {
+        text-shadow: none;
+    }
+
+    .guichet-intro,
+    p.description-formulaire,
+    p.regle-specifique,
+    p.obtention,
+    p.regle-generale,
+    span.note-cout,
+    .bilan-valeur,
+    .bilan-label,
+    .bilan-chiffre,
+    ul.effets-bureau,
+    ul.nuisances,
+    .form-group label {
+        color: #231b15;
+    }
+
+    p.description-formulaire,
+    span.note-cout,
+    p.obtention,
+    p.regle-generale {
+        color: #4a3d32;
+        opacity: 1;
+    }
+
+    .bilan-valeur {
+        background: rgba(255, 250, 240, 0.55);
+        border-color: #5c4a3c;
+
+        &.insuffisant,
+        &.insuffisant .bilan-chiffre,
+        &.insuffisant .bilan-label {
+            color: #8a1c1c;
+            border-color: #8a1c1c;
+        }
+    }
+
+    .budget-controles a,
+    a.ajouter-beneficiaire,
+    a.retirer-beneficiaire {
+        color: #5b1f12;
+    }
+
+    p.avertissement-rang {
+        color: #8a1c1c;
+        font-weight: bold;
+    }
+}
