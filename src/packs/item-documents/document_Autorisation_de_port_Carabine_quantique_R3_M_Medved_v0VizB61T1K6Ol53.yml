@@ -1,0 +1,55 @@
+name: 'Autorisation de port : Carabine quantique R3-M Medvěd'
+type: document administratif
+img: systems/noc/asset/default_icons/document_administratif.webp
+system:
+  description: '<p>Autorisation de port d''arme permanente, possédée dès la création du personnage. Arme autorisée : Carabine quantique R3-M Medvěd (Limité 3).</p>'
+  formulaire: 'port'
+  beneficiaires:
+    - ''
+    - ''
+  duree: 1
+  permanent: true
+  rangFixe: 3
+  rangSup: 0
+  port:
+    objet: 'Carabine quantique R3-M Medvěd'
+    bonusX: 0
+  acces:
+    zone: 1
+    motif: ''
+    nonLimite: false
+    sansSurveillance: false
+  sortie:
+    zone: 3
+    duree: 'formulaire'
+    motif: ''
+    exoneration: false
+  requisition:
+    mode: 'objet'
+    detail: ''
+  mandat:
+    sujet: ''
+    secteur: ''
+    bonusAutorite: 0
+    bonusCitoyens: 0
+  signalement:
+    cible: ''
+    bonusStatut: false
+    priseRapide: false
+  statut: 'brouillon'
+  numero: ''
+  deverrouille: false
+  tempsObtention: 3
+  effetsDeBureau: ''
+  rangNecessaire: 3
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '13.351'
+_id: v0VizB61T1K6Ol53
+folder: wr0z6xTu0ljueiRQ
+sort: 759000
+ownership:
+  default: 0
+_key: '!items!v0VizB61T1K6Ol53'

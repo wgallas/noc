@@ -1,0 +1,55 @@
+name: 'Autorisation de port : Pistolet mitrailleur A17 Havran'
+type: document administratif
+img: systems/noc/asset/default_icons/document_administratif.webp
+system:
+  description: '<p>Autorisation de port d''arme permanente, possédée dès la création du personnage. Arme autorisée : Pistolet mitrailleur A17 Havran (Limité 2).</p>'
+  formulaire: 'port'
+  beneficiaires:
+    - ''
+    - ''
+  duree: 1
+  permanent: true
+  rangFixe: 2
+  rangSup: 0
+  port:
+    objet: 'Pistolet mitrailleur A17 Havran'
+    bonusX: 0
+  acces:
+    zone: 1
+    motif: ''
+    nonLimite: false
+    sansSurveillance: false
+  sortie:
+    zone: 3
+    duree: 'formulaire'
+    motif: ''
+    exoneration: false
+  requisition:
+    mode: 'objet'
+    detail: ''
+  mandat:
+    sujet: ''
+    secteur: ''
+    bonusAutorite: 0
+    bonusCitoyens: 0
+  signalement:
+    cible: ''
+    bonusStatut: false
+    priseRapide: false
+  statut: 'brouillon'
+  numero: ''
+  deverrouille: false
+  tempsObtention: 3
+  effetsDeBureau: ''
+  rangNecessaire: 2
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '13.351'
+_id: wlEuEWD21DQKyomc
+folder: wr0z6xTu0ljueiRQ
+sort: 455000
+ownership:
+  default: 0
+_key: '!items!wlEuEWD21DQKyomc'
