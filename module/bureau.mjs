@@ -14,9 +14,17 @@ const PAPIER = "systems/noc/templates/item/parts/document-papier.hbs";
 const nombre = v => Number(v) || 0;
 const echapper = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-/** Noms des personnages joueurs actifs (pour la liste des bénéficiaires) */
+/**
+ * Noms des personnages des joueurs (pour la liste des bénéficiaires) : personnages attribués
+ * à un joueur ou dont un joueur est explicitement propriétaire. Les personnages qui
+ * n'appartiennent qu'au MJ (ou aux joueurs seulement par la permission par défaut) et
+ * les personnages en sommeil sont exclus. Tous les joueurs voient la même liste.
+ */
 export function nomsPJ() {
-  return game.actors.filter(a => a.type === "personnage" && a.hasPlayerOwner && !raisonSommeil(a))
+  const proprietaire = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+  const joueurs = game.users.filter(u => !u.isGM);
+  const estPJ = a => joueurs.some(u => u.character?.id === a.id || (a.ownership?.[u.id] ?? 0) >= proprietaire);
+  return game.actors.filter(a => a.type === "personnage" && estPJ(a) && !raisonSommeil(a))
     .map(a => a.name).sort((a, b) => a.localeCompare(b));
 }
 
