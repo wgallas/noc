@@ -468,6 +468,9 @@
 						data-item-type="{{type}}"
 					></a>
 				</h3>
+				{{#if guichet}}{{#if @root.editable}}
+					<div class="guichet-ligne"><a class="guichet-bureau-bouton" data-tooltip="Demander un formulaire au Bureau"><i class="fa-solid fa-stamp"></i> Demander un formulaire</a></div>
+				{{/if}}{{/if}}
 				{{#each objets as |item index|}}
 					<li
 						class="flexrow item flexcol ability
@@ -548,8 +551,7 @@
 					{{> listeObjets titre="Armure" type="armure" objets=actor.itemTypes.armure}}
 				</div>
 				<div class="inventaire-colonne">
-					{{> listeObjets titre="Documents administratifs" type="document administratif" objets=(lookup actor.itemTypes "document administratif")}}
-{{#if editable}}<a class="guichet-bureau-bouton" data-tooltip="Demander un formulaire au Bureau"><i class="fa-solid fa-stamp"></i> Demander un formulaire</a>{{/if}}
+					{{> listeObjets titre="Documents administratifs" type="document administratif" objets=(lookup actor.itemTypes "document administratif") guichet=true}}
 {{#if documentsRecus.length}}
 <div class="documents-recus">
   <h4>Documents reçus</h4>
