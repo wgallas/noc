@@ -42,7 +42,7 @@
 								<span>{{d.label}}</span>
 							</h3>
 							<div class="des-cabale" data-tooltip="Dés de Destin à la disposition des membres, rechargés au début de chaque scénario">
-								<span>dés</span>
+								<span>Dés</span>
 								<a class="restant-ctrl" data-groupe="domaines" data-cle="{{d.cle}}" data-ecart="-1"><i class="fas fa-minus"></i></a>
 								<span class="compte {{#unless d.restant}}vide{{/unless}}">{{d.restant}} / {{d.score}}</span>
 								<a class="restant-ctrl" data-groupe="domaines" data-cle="{{d.cle}}" data-ecart="1"><i class="fas fa-plus"></i></a>
@@ -84,7 +84,7 @@
 							{{/repeat}}
 							{{#if (eq reserve.cle "vecu")}}
 								<div class="vecu-achats-ligne" data-tooltip="Taille de la réserve achetée avec la progression (3 points par niveau)">
-									achats :
+									Achats :
 									<a class="vecu-achats" data-ecart="-1"><i class="fas fa-minus"></i></a>
 									{{@root.vecuAchats}}
 									<a class="vecu-achats" data-ecart="1"><i class="fas fa-plus"></i></a>
@@ -127,7 +127,7 @@
 
 				{{#if failles.length}}
 					<div class="failles-cabale">
-						<h4>failles</h4>
+						<h4>Failles</h4>
 						<ul>
 							{{#each failles as |f|}}
 								<li><strong>{{f.label}}</strong> : {{f.faille}}</li>
@@ -142,7 +142,7 @@
 		<div class="tab gestion" data-group="primary" data-tab="gestion">
 			<div class="gestion-cabale">
 				<section class="carte-gestion">
-					<h3>création</h3>
+					<h3>Création</h3>
 					<p class="aide">Archétype ou création libre, puis personnalisation (+1 à un Atout, −1 à un autre). Chaque Héros peut ensuite apporter une fois +1 à un Atout lié à un de ses Talents à 2 ou plus, contre une séquelle de Traque.</p>
 					{{#if editable}}
 						<button type="button" data-gestion="creation"><i class="fa-solid fa-wand-magic-sparkles"></i> Assistant de création…</button>
@@ -151,7 +151,7 @@
 				</section>
 
 				<section class="carte-gestion">
-					<h3>progression</h3>
+					<h3>Progression</h3>
 					<div class="progression-cabale" data-tooltip="Points accordés par la Loi : boutons + et −">
 						<a class="progression-moins"><i class="fas fa-minus"></i></a>
 						<span class="valeur">{{actor.system.progression}}</span>
@@ -167,14 +167,14 @@
 					<p class="mois-ecoules">Mois écoulés entre les aventures : {{actor.system.moisEcoules}}</p>
 					{{#if regressions.length}}
 						<details class="regressions-cabale">
-							<summary>régressions ({{regressions.length}})</summary>
+							<summary>Régressions ({{regressions.length}})</summary>
 							<ul>{{#each regressions as |r|}}<li>{{r.atout}} (mois {{r.mois}})</li>{{/each}}</ul>
 						</details>
 					{{/if}}
 				</section>
 
 				<section class="carte-gestion">
-					<h3>entretien</h3>
+					<h3>Entretien</h3>
 					<p class="aide">Réparer : 1 + Artisanat du Héros + Atelier par quart. Lever les soupçons : 1 + Façade par quart. Entre deux scénarios, 1 point de progression d'un Héros retire tout.</p>
 					{{#if editable}}
 						<button type="button" data-gestion="reparer"><i class="fa-solid fa-hammer"></i> Réparer (Dégradation)…</button>
@@ -190,13 +190,13 @@
 		{{!-- Description : coordonnées et texte libre --}}
 		<div class="tab description" data-group="primary" data-tab="description">
 			<div class="cabale-identite">
-				<div class="form-group"><label>bloc</label><input type="text" name="system.bloc" value="{{actor.system.bloc}}"></div>
-				<div class="form-group"><label>coordonnées</label><input type="text" name="system.coordonnes" value="{{actor.system.coordonnes}}"></div>
-				<div class="form-group"><label>société écran</label><input type="text" name="system.societeEcran" value="{{actor.system.societeEcran}}"></div>
-				<div class="form-group"><label>réseau</label><input type="text" name="system.reseau" value="{{actor.system.reseau}}"></div>
+				<div class="form-group"><label>Bloc</label><input type="text" name="system.bloc" value="{{actor.system.bloc}}"></div>
+				<div class="form-group"><label>Coordonnées</label><input type="text" name="system.coordonnes" value="{{actor.system.coordonnes}}"></div>
+				<div class="form-group"><label>Société écran</label><input type="text" name="system.societeEcran" value="{{actor.system.societeEcran}}"></div>
+				<div class="form-group"><label>Réseau</label><input type="text" name="system.reseau" value="{{actor.system.reseau}}"></div>
 			</div>
 			<div class="description">
-				<h3>description</h3>
+				<h3>Description</h3>
 				{{editor actor.system.description target="system.description" button=true editable=editable engine="prosemirror" collaborate=false}}
 			</div>
 		</div>
