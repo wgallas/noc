@@ -1,0 +1,13 @@
+name: Autorisations de port d'armes
+type: Item
+description: ''
+folder: null
+sorting: a
+sort: 0
+color: null
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '13.351'
+_id: wr0z6xTu0ljueiRQ
+_key: '!folders!wr0z6xTu0ljueiRQ'

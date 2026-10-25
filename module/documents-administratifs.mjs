@@ -97,19 +97,21 @@ export function calculerDocument(item) {
   const beneficiaires = listeBeneficiaires(s);
   const rangBase = rangDuPorteur(item);
   const rangSup = nombre(s.rangSup);
-  const rang = rangBase + rangSup;
-  const duree = Math.max(1, nombre(s.duree) || 1);
-  // formulaire possédé à la création du personnage : durée permanente, sans coût de durée
+  // formulaire possédé à la création du personnage : durée permanente, sans coût de durée,
+  // et Rang du document fixe (indépendant du Rang de son porteur)
   const permanent = !!s.permanent;
+  const rangFixe = permanent ? nombre(s.rangFixe) : 0;
+  const rang = rangFixe > 0 ? rangFixe : rangBase + rangSup;
+  const duree = Math.max(1, nombre(s.duree) || 1);
 
   // Effets de Bureau : [libellé, niveaux]
   const effets = [];
   const ajouter = (label, niveaux) => { if (niveaux > 0) effets.push({ label, niveaux }); };
-  ajouter(`Outrepasser son Rang (+${rangSup})`, 2 * rangSup);
+  if (!permanent) ajouter(`Outrepasser son Rang (+${rangSup})`, 2 * rangSup);
   if (!permanent) ajouter(`Durée (+${duree - 1} cycle${duree > 2 ? "s" : ""})`, duree - 1);
   ajouter(`Bénéficiaires (+${Math.max(0, beneficiaires.length - 2)})`, Math.max(0, beneficiaires.length - 2));
 
-  const calc = { type, rangBase, rangSup, rang, duree, permanent, beneficiaires, porteur: !!item.actor };
+  const calc = { type, rangBase, rangSup, rang, duree, permanent, rangFixe: rangFixe > 0, beneficiaires, porteur: !!item.actor };
   let rangDocument = rang;
 
   switch (type) {
@@ -160,7 +162,7 @@ export function calculerDocument(item) {
 
   calc.formulaire = type !== "autre";
   calc.rangDocument = rangDocument;
-  calc.rangInsuffisant = calc.formulaire && rang < rangDocument;
+  calc.rangInsuffisant = calc.formulaire && !permanent && rang < rangDocument;
   calc.effets = effets;
   calc.niveauxBureau = effets.reduce((t, e) => t + e.niveaux, 0);
   calc.heures = 3 + 2 * effets.length;

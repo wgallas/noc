@@ -749,6 +749,7 @@
       "numero": "",
       "deverrouille": false,
       "permanent": false,
+      "rangFixe": 0,
       "delivre": {
         "cycle": 0,
         "par": "",

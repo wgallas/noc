@@ -39,6 +39,18 @@
     {{/if}}
 
     <div class="form-group">
+      {{#if calc.permanent}}
+      <h4>rang du document</h4>
+      <span class="compteur-niveau">{{calc.rang}}
+        {{#if editable}}
+        <span class="compteur-controls">
+          <a class="fas fa-add compteur-plus" data-champ="system.rangFixe" data-min="1"></a>
+          <a class="fas fa-minus compteur-moins" data-champ="system.rangFixe" data-min="1"></a>
+        </span>
+        {{/if}}
+      </span>
+      <span class="note-cout">fixe, quel que soit le Rang du porteur</span>
+      {{else}}
       <h4>rang du héros</h4>
       <span class="compteur-niveau">{{calc.rang}}
         {{#if editable}}
@@ -49,6 +61,7 @@
         {{/if}}
       </span>
       <span class="note-cout">{{#if calc.porteur}}Rang {{calc.rangBase}}{{else}}sans porteur : Rang 1{{/if}} ; +2 niveaux par point au-delà</span>
+      {{/if}}
     </div>
 
     <h3 class="titre-section">{{lookup formulaires calc.type}}</h3>

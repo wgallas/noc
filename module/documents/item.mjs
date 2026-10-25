@@ -1,6 +1,6 @@
 import { conversionArme, deriverArme } from "../armes.mjs";
 import { conversionArchetype } from "../archetypes.mjs";
-import { numeroDocument } from "../documents-administratifs.mjs";
+import { numeroDocument, calculerDocument } from "../documents-administratifs.mjs";
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -33,6 +33,16 @@ export class nocItem extends Item {
       this.prepareArmeData();
     }
   }
+  /** Document passé en durée permanente : son Rang actuel devient son Rang fixe */
+  async _preUpdate(changed, options, user) {
+    const allowed = await super._preUpdate(changed, options, user);
+    if (allowed === false) return false;
+    if (this.type === "document administratif" && changed.system?.permanent === true
+      && !this._source.system.permanent && !Number(this._source.system.rangFixe)) {
+      foundry.utils.setProperty(changed, "system.rangFixe", calculerDocument(this).rang);
+    }
+  }
+
   async _onUpdate(update, options, userId) {
 
     // Les archétypes et thèmes n'utilisent plus d'effets actifs :
