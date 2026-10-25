@@ -3342,3 +3342,60 @@ div.noc.sheet.actor.cabale .gestion-cabale {
         }
     }
 }
+
+
+// Cases à cocher des fiches d'objets et du guichet : case claire et vide, coche foncée une fois cochée
+// (remplace le carré noir à coche orange du thème de Foundry)
+div.noc.item.sheet section.window-content input[type="checkbox"],
+.application.noc.guichet-bureau .window-content input[type="checkbox"] {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    position: relative;
+    flex: 0 0 16px;
+    width: 16px !important;
+    height: 16px !important;
+    max-width: 16px;
+    max-height: 16px;
+    min-width: 16px;
+    margin: 0 4px 0 0;
+    padding: 0;
+    border: 1px solid #3a2e25 !important;
+    border-radius: 3px !important;
+    background: rgba(255, 250, 240, 0.85) !important;
+    box-shadow: none !important;
+    outline: none;
+    cursor: pointer;
+    font-size: 0;
+
+    &::before {
+        content: none !important;
+        display: none !important;
+    }
+
+    &::after {
+        content: "" !important;
+        display: none;
+        position: absolute;
+        left: 4px;
+        top: 0;
+        width: 5px;
+        height: 10px;
+        border: solid #231b15;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        background: none;
+    }
+
+    &:checked::after {
+        display: block !important;
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 2px rgba(91, 31, 18, 0.5) !important;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+}
