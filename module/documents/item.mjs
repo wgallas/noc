@@ -1,5 +1,6 @@
 import { conversionArme, deriverArme } from "../armes.mjs";
 import { conversionArchetype } from "../archetypes.mjs";
+import { numeroDocument } from "../documents-administratifs.mjs";
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -57,6 +58,10 @@ export class nocItem extends Item {
     if (this.type === "archetype") {
       const conv = conversionArchetype(this.toObject()) ?? {};
       this.updateSource({ ...conv, effects: [] });
+    }
+    // Formulaire déposé dans un inventaire : il reçoit un numéro de série s'il n'en a pas
+    if (this.type === "document administratif" && this.parent && !this._source.system.numero) {
+      this.updateSource({ "system.numero": numeroDocument(this._source.system.formulaire) });
     }
   }
 

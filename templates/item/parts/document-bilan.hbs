@@ -17,6 +17,6 @@
     {{#if calc.rangInsuffisant}}
     <p class="avertissement-rang">Le Rang du Héros ({{calc.rang}}) est inférieur au Rang du document : augmentez-le ci-dessous (2 niveaux de Bureau par point).</p>
     {{/if}}
-    <p class="obtention">Obtention : {{calc.heures}} heures de démarches dans une Annexe · efficace {{calc.duree}} cycle{{#ifequal calc.duree 1}}{{else}}s{{/ifequal}}</p>
+    <p class="obtention">Obtention : {{calc.heures}} heures de démarches dans une Annexe · {{#if calc.permanent}}durée permanente{{else}}efficace {{calc.duree}} cycle{{#ifequal calc.duree 1}}{{else}}s{{/ifequal}}{{/if}}</p>
     {{/if}}
 

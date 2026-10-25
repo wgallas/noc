@@ -3,7 +3,7 @@
  * Fenêtre réservée au MJ (ApplicationV2), ouverte depuis la barre d'outils.
  */
 
-import { cycleCourant, documentsDelivres, donneesPapier, nouveauCycle } from "./documents-administratifs.mjs";
+import { cycleCourant, documentsEnVigueur, donneesPapier, nouveauCycle } from "./documents-administratifs.mjs";
 import { ouvrirPapier } from "./bureau.mjs";
 import { raisonSommeil, reveiller } from "./sommeil.mjs";
 import { bibliotheque, effetParId, effetsActifs } from "./fiel/bibliotheque.mjs";
@@ -308,11 +308,12 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       })),
       sommeilOuvert: this.sommeilOuvert,
       cycle: cycleCourant(),
-      registre: documentsDelivres().map(d => {
+      registre: documentsEnVigueur().map(d => {
         const p = donneesPapier(d);
         return { uuid: d.uuid, nom: d.name, numero: p.numero, type: p.type, titulaire: p.titulaire,
-          beneficiaires: p.beneficiaires.join(", "), restants: p.validite?.restants ?? 0, perime: !!p.validite?.perime };
-      }).sort((a, b) => Number(a.perime) - Number(b.perime) || a.restants - b.restants),
+          beneficiaires: p.beneficiaires.join(", "), restants: p.validite?.restants ?? 0, perime: !!p.validite?.perime,
+          permanent: p.permanent };
+      }).sort((a, b) => Number(a.perime) - Number(b.perime) || (a.permanent ? 9999 : a.restants) - (b.permanent ? 9999 : b.restants)),
       adversaires: this._adversaires().map(x => this._ligne(x.actor, x.nom, x.img)),
       perditions: Object.entries(PERDITIONS).map(([cle, d]) => ({ cle, label: d.label, reduction: d.reduction?.label, points: this.points[cle] ?? 1 })),
       reductions: this.reductions,

@@ -38,10 +38,19 @@ export class nocItemSheetDocumentAdministratif extends foundry.appv1.sheets.Item
     context.s = s;
     context.pjs = nomsPJ();
     context.isGM = game.user.isGM;
-    // document délivré : affiché comme un papier, verrouillé (sauf si le MJ le déverrouille)
-    context.verrouille = estDelivre(this.item) && !s.deverrouille;
-    context.delivreDeverrouille = estDelivre(this.item) && s.deverrouille;
-    if (estDelivre(this.item)) context.papier = donneesPapier(this.item);
+    // Affichage « papier » :
+    // - document délivré par le guichet : verrouillé (seul le MJ peut le déverrouiller) ;
+    // - autre document dans un inventaire : papier par défaut, bouton Modifier pour passer en édition ;
+    // - document hors inventaire (onglet Objets, compendium) : édition par défaut, bouton Voir le papier.
+    const delivre = estDelivre(this.item);
+    const edition = this._edition ?? !this.item.actor;
+    context.delivre = delivre;
+    context.verrouille = delivre ? !s.deverrouille : !edition;
+    context.delivreDeverrouille = delivre && s.deverrouille;
+    context.basculable = !delivre;
+    context.papier = donneesPapier(this.item);
+    // durée permanente : seulement depuis la fiche de l'objet (pas depuis le guichet)
+    context.permanentPossible = true;
     context.choix = {
       formulaire: context.calc.type,
       zoneAcces: String(s.acces?.zone ?? 1),
@@ -56,6 +65,10 @@ export class nocItemSheetDocumentAdministratif extends foundry.appv1.sheets.Item
   activateListeners(html) {
     super.activateListeners(html);
     html.find("a.presenter-document").click(() => presenterDocument(this.item));
+    html.find("a.basculer-edition").click(() => {
+      this._edition = !(this._edition ?? !this.item.actor);
+      this.render(false);
+    });
     if (game.user.isGM) {
       html.find("a.deverrouiller-document").click(() => this.item.update({ "system.deverrouille": true }));
       html.find("a.reverrouiller-document").click(() => this.item.update({ "system.deverrouille": false }));

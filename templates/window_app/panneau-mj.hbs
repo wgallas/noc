@@ -150,7 +150,7 @@
         <td><a data-action="ouvrirDocument" data-uuid="{{d.uuid}}">{{d.nom}}</a><br><small>{{d.type}} · {{d.numero}}</small></td>
         <td>{{d.titulaire}}</td>
         <td><small>{{d.beneficiaires}}</small></td>
-        <td>{{#if d.perime}}périmé{{else}}{{d.restants}} cycle(s){{/if}}</td>
+        <td>{{#if d.permanent}}permanent{{else}}{{#if d.perime}}périmé{{else}}{{d.restants}} cycle(s){{/if}}{{/if}}</td>
       </tr>
       {{/each}}
     </table>

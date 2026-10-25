@@ -748,6 +748,7 @@
       "statut": "brouillon",
       "numero": "",
       "deverrouille": false,
+      "permanent": false,
       "delivre": {
         "cycle": 0,
         "par": "",

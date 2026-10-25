@@ -99,15 +99,17 @@ export function calculerDocument(item) {
   const rangSup = nombre(s.rangSup);
   const rang = rangBase + rangSup;
   const duree = Math.max(1, nombre(s.duree) || 1);
+  // formulaire possédé à la création du personnage : durée permanente, sans coût de durée
+  const permanent = !!s.permanent;
 
   // Effets de Bureau : [libellé, niveaux]
   const effets = [];
   const ajouter = (label, niveaux) => { if (niveaux > 0) effets.push({ label, niveaux }); };
   ajouter(`Outrepasser son Rang (+${rangSup})`, 2 * rangSup);
-  ajouter(`Durée (+${duree - 1} cycle${duree > 2 ? "s" : ""})`, duree - 1);
+  if (!permanent) ajouter(`Durée (+${duree - 1} cycle${duree > 2 ? "s" : ""})`, duree - 1);
   ajouter(`Bénéficiaires (+${Math.max(0, beneficiaires.length - 2)})`, Math.max(0, beneficiaires.length - 2));
 
-  const calc = { type, rangBase, rangSup, rang, duree, beneficiaires, porteur: !!item.actor };
+  const calc = { type, rangBase, rangSup, rang, duree, permanent, beneficiaires, porteur: !!item.actor };
   let rangDocument = rang;
 
   switch (type) {
@@ -188,8 +190,19 @@ export function estDelivre(item) {
   return item?.type === "document administratif" && item.system?.statut === "delivre";
 }
 
-/** Validité d'un document délivré : { duree, restants, perime } (null sinon) */
+/** Document permanent (possédé à la création du personnage) */
+export function estPermanent(item) {
+  return item?.type === "document administratif" && !!item.system?.permanent;
+}
+
+/** Document en vigueur : délivré par le Bureau ou permanent */
+export function estEnVigueur(item) {
+  return estDelivre(item) || estPermanent(item);
+}
+
+/** Validité : { permanent } ou { duree, restants, perime } pour un document délivré (null sinon) */
 export function validite(item) {
+  if (estPermanent(item)) return { permanent: true, perime: false, restants: null, duree: null };
   if (!estDelivre(item)) return null;
   const duree = Math.max(1, nombre(item.system.duree) || 1);
   const restants = nombre(item.system.delivre?.cycle) + duree - cycleCourant();
@@ -255,6 +268,8 @@ export function donneesPapier(item) {
     specificites: s.description || "",
     rangDocument: c.rangDocument,
     delivre: estDelivre(item) ? { cycle: nombre(s.delivre?.cycle), par: s.delivre?.par || "" } : null,
+    permanent: estPermanent(item),
+    valide: estEnVigueur(item),
     validite: v
   };
 }
@@ -264,11 +279,16 @@ export function documentsDelivres() {
   return game.actors.contents.flatMap(a => a.itemTypes?.["document administratif"] ?? []).filter(estDelivre);
 }
 
+/** Tous les documents en vigueur du monde : délivrés ou permanents */
+export function documentsEnVigueur() {
+  return game.actors.contents.flatMap(a => a.itemTypes?.["document administratif"] ?? []).filter(estEnVigueur);
+}
+
 /** Documents dont un personnage est bénéficiaire sans en être le titulaire */
 export function documentsRecus(actor) {
   const nom = String(actor?.name ?? "").trim().toLowerCase();
   if (!nom) return [];
-  return documentsDelivres().filter(d => d.actor?.id !== actor.id
+  return documentsEnVigueur().filter(d => d.actor?.id !== actor.id
     && nomsBeneficiaires(d.system).some(n => n.toLowerCase() === nom));
 }
 
@@ -277,7 +297,7 @@ export async function nouveauCycle() {
   if (!game.user.isGM) return;
   const cycle = cycleCourant() + 1;
   await game.settings.set("noc", "cycleCourant", cycle);
-  const expires = documentsDelivres().filter(d => {
+  const expires = documentsDelivres().filter(d => !estPermanent(d)).filter(d => {
     const fin = nombre(d.system.delivre?.cycle) + Math.max(1, nombre(d.system.duree) || 1);
     return fin === cycle;
   });

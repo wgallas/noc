@@ -3716,3 +3716,17 @@ div.noc.sheet.actor.cabale section.window-content {
         }
     }
 }
+
+
+// Document administratif : durée permanente, barre « Voir le papier » en mode édition
+div.noc.item.sheet.document-administratif {
+    span.duree-permanente {
+        font-style: italic;
+        font-weight: bold;
+        margin-left: 8px;
+    }
+
+    .barre-edition {
+        margin: 0 0 6px;
+    }
+}

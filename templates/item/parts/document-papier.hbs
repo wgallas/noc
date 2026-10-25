@@ -14,12 +14,12 @@
     <tr><th>Délivré</th><td>cycle {{delivre.cycle}}{{#if delivre.par}}, à la demande de {{delivre.par}}{{/if}}</td></tr>
     {{/if}}
     {{#if validite}}
-    <tr><th>Validité</th><td>{{#if validite.perime}}expiré{{else}}{{validite.restants}} cycle(s) restant(s) sur {{validite.duree}}{{/if}}</td></tr>
+    <tr><th>Validité</th><td>{{#if validite.permanent}}permanente{{else}}{{#if validite.perime}}expiré{{else}}{{validite.restants}} cycle(s) restant(s) sur {{validite.duree}}{{/if}}{{/if}}</td></tr>
     {{/if}}
   </table>
   {{#if specificites}}<div class="papier-specificites">{{{specificites}}}</div>{{/if}}
   <div class="papier-pied">
-    <span class="papier-tampon {{#if validite.perime}}tampon-perime{{/if}}">{{#if validite.perime}}PÉRIMÉ{{else}}{{#if delivre}}VALIDÉ{{else}}NON DÉLIVRÉ{{/if}}{{/if}}</span>
+    <span class="papier-tampon {{#if validite.perime}}tampon-perime{{/if}}">{{#if validite.perime}}PÉRIMÉ{{else}}{{#if valide}}VALIDÉ{{else}}NON DÉLIVRÉ{{/if}}{{/if}}</span>
     <span class="papier-signature">Signature de l'agent : ______________</span>
   </div>
 </div>

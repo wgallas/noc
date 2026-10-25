@@ -17,6 +17,9 @@
 
     <div class="form-group">
       <h4>durée (cycles)</h4>
+      {{#if calc.permanent}}
+      <span class="duree-permanente">permanente</span>
+      {{else}}
       <span class="compteur-niveau">{{calc.duree}}
         {{#if editable}}
         <span class="compteur-controls">
@@ -26,7 +29,14 @@
         {{/if}}
       </span>
       <span class="note-cout">+1 niveau par cycle supplémentaire</span>
+      {{/if}}
     </div>
+    {{#if permanentPossible}}
+    <div class="form-group case">
+      <label><input name="system.permanent" type="checkbox" data-dtype="Boolean" {{checked s.permanent}} {{#unless editable}}disabled{{/unless}}>
+        Durée permanente (formulaire possédé à la création du personnage)</label>
+    </div>
+    {{/if}}
 
     <div class="form-group">
       <h4>rang du héros</h4>
