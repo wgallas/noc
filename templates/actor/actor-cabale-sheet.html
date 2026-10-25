@@ -1,101 +1,33 @@
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
 
-	{{!-- Sheet Header --}}
+	{{!-- En-tête : image, nom, archétype, bilan --}}
+	<header class="cabale-entete">
+		<img class="profile-img" src="{{actor.img}}" data-edit="img" data-tooltip="{{actor.name}}" height="90" width="90"/>
+		<div class="cabale-entete-infos">
+			<input class="cabale-nom" type="text" name="name" value="{{actor.name}}" placeholder="Nom de la cabale">
+			<div class="cabale-entete-ligne">
+				<span><strong>Archétype :</strong> {{#if actor.system.archetype}}{{actor.system.archetype}}{{else}}— <em>(onglet Gestion : assistant de création)</em>{{/if}}</span>
+				<span class="{{#if depassement}}alerte{{/if}}" data-tooltip="Nombre d'Atouts différents au niveau 1 ou plus : Standing + 3"><strong>Atouts possédés :</strong> {{atoutsPossedes}} / {{limiteAtouts}} (Standing {{standing}})</span>
+				<span><strong>Progression :</strong> {{actor.system.progression}} point{{#ifgt actor.system.progression 1}}s{{/ifgt}}</span>
+				<span><strong>Membres :</strong> {{members.length}}</span>
+			</div>
+			{{#if atoutsInutilisables}}<div class="alerte">Dégradation 5 ou plus : Atouts et réserves inutilisables jusqu'à réparation</div>{{/if}}
+		</div>
+	</header>
 
-
-	{{!-- Sheet Tab Navigation --}}
+	{{!-- Onglets --}}
 	<nav class="sheet-tabs tabs" data-group="primary">
-		{{!-- Default tab is specified in actor-sheet.mjs --}}
+		<a class="item" data-tab="profil">Profil</a>
+		<a class="item" data-tab="gestion">Gestion</a>
 		<a class="item" data-tab="description">Description</a>
 		<a class="item" data-tab="members">Membres</a>
 	</nav>
 
-	{{!-- Sheet Body --}}
 	<section class="sheet-body">
 
-		{{!-- Owned Features Tab --}}
-		<div class="tab principal flexrow" data-group="primary" data-tab="description">
-			<div class="resume flexcol">
-				<img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
-
-				<div class="form-group">
-					<div>nom :</div>
-					<input type="text" name="name" value="{{actor.name}}">
-				</div>
-				<div class="form-group">
-					<div>bloc :</div>
-					<input type="text" name="system.bloc" value="{{actor.system.bloc}}">
-				</div>
-				<div class="form-group">
-					<div>coordonnées :</div>
-					<input type="text" name="system.coordonnes" value="{{actor.system.coordonnes}}">
-				</div>
-				<div class="form-group">
-					<div>societé écran :</div>
-					<input type="text" name="system.societeEcran" value="{{actor.system.societeEcran}}">
-				</div>
-				<div class="form-group">
-					<div>réseau :</div>
-					<input type="text" name="system.reseau" value="{{actor.system.reseau}}">
-				</div>
-				<div class="form-group">
-					<div>archétype :</div>
-					<span class="archetype-cabale">{{#if actor.system.archetype}}{{actor.system.archetype}}{{else}}—{{/if}}</span>
-				</div>
-
-				<div class="gestion-cabale">
-					<h4>progression</h4>
-					<div class="progression-cabale" data-tooltip="1 point par mois entre deux aventures ; 3 points pour un achat">
-						<a class="progression-moins"><i class="fas fa-minus"></i></a>
-						<span class="valeur">{{actor.system.progression}}</span>
-						<a class="progression-plus"><i class="fas fa-plus"></i></a>
-						<span>point{{#ifgt actor.system.progression 1}}s{{/ifgt}}</span>
-					</div>
-					{{#if editable}}
-						<div class="boutons-gestion">
-							<button type="button" data-gestion="depenser" data-tooltip="3 points : Atout +1, Domaine +1, réserve de Vécu +1 ou une séquelle réparée">Dépenser 3 points…</button>
-							<button type="button" data-gestion="don" data-tooltip="Un Héros sacrifie ses propres points de progression">Don d'un Héros…</button>
-							<button type="button" data-gestion="intermede" data-tooltip="Entre deux aventures : 1 point par mois, une régression tous les 6 mois">Intermède…</button>
-						</div>
-
-						<h4>entretien</h4>
-						<div class="boutons-gestion">
-							<button type="button" data-gestion="reparer" data-tooltip="Par quart : 1 + Artisanat du Héros + Atelier">Réparer…</button>
-							<button type="button" data-gestion="soupcons" data-tooltip="Par quart : 1 + Façade du Héros">Lever les soupçons…</button>
-							<button type="button" data-gestion="noirceur" data-tooltip="−1 Noirceur par semaine sans en subir">Décontaminer…</button>
-							{{#if isGM}}<button type="button" data-gestion="division" data-tooltip="Fin d'une scène d'esprit de corps : Division −1 à −3 (la Loi)">Esprit de corps…</button>{{/if}}
-						</div>
-
-						<h4>création</h4>
-						<div class="boutons-gestion">
-							<button type="button" data-gestion="creation" data-tooltip="Archétype ou création libre, puis personnalisation">Assistant de création…</button>
-							<button type="button" data-gestion="apport" data-tooltip="+1 à un Atout lié à un Talent du Héros à 2 ou plus, contre une séquelle de Traque">Apport d'un Héros…</button>
-						</div>
-					{{/if}}
-					{{#if regressions.length}}
-						<details class="regressions-cabale">
-							<summary>régressions ({{regressions.length}})</summary>
-							<ul>{{#each regressions as |r|}}<li>{{r.atout}} (mois {{r.mois}})</li>{{/each}}</ul>
-						</details>
-					{{/if}}
-					<p class="mois-ecoules">Mois écoulés entre les aventures : {{actor.system.moisEcoules}}</p>
-				</div>
-				<div class="description">
-					<h2>description</h2>
-					{{editor actor.system.description
-          target="system.description"
-          button=true editable=editable
-          engine="prosemirror" collaborate=false}}
-				</div>
-
-
-			</div>
+		{{!-- Profil : Domaines, Atouts, réserves, jauges --}}
+		<div class="tab principal profil" data-group="primary" data-tab="profil">
 			<div class="cabale-stats flexcol">
-				<div class="cabale-bilan">
-					<span class="{{#if depassement}}alerte{{/if}}" data-tooltip="Nombre d'Atouts différents au niveau 1 ou plus : Standing + 3">Atouts possédés : {{atoutsPossedes}} / {{limiteAtouts}} (Standing {{standing}})</span>
-					{{#if atoutsInutilisables}}<span class="alerte">Dégradation 5 ou plus : Atouts inutilisables jusqu'à réparation</span>{{/if}}
-				</div>
-
 				<!-- DOMAINES (réserves de dés) ET ATOUTS -->
 				<div class="stats rouage">
 					{{#each domainesCabale as |d|}}
@@ -205,6 +137,70 @@
 				{{/if}}
 			</div>
 		</div>
+
+		{{!-- Gestion : progression, entretien, création --}}
+		<div class="tab gestion" data-group="primary" data-tab="gestion">
+			<div class="gestion-cabale">
+				<section class="carte-gestion">
+					<h3>création</h3>
+					<p class="aide">Archétype ou création libre, puis personnalisation (+1 à un Atout, −1 à un autre). Chaque Héros peut ensuite apporter une fois +1 à un Atout lié à un de ses Talents à 2 ou plus, contre une séquelle de Traque.</p>
+					{{#if editable}}
+						<button type="button" data-gestion="creation"><i class="fa-solid fa-wand-magic-sparkles"></i> Assistant de création…</button>
+						<button type="button" data-gestion="apport"><i class="fa-solid fa-hand-holding-heart"></i> Apport d'un Héros…</button>
+					{{/if}}
+				</section>
+
+				<section class="carte-gestion">
+					<h3>progression</h3>
+					<div class="progression-cabale" data-tooltip="Points accordés par la Loi : boutons + et −">
+						<a class="progression-moins"><i class="fas fa-minus"></i></a>
+						<span class="valeur">{{actor.system.progression}}</span>
+						<a class="progression-plus"><i class="fas fa-plus"></i></a>
+						<span>point{{#ifgt actor.system.progression 1}}s{{/ifgt}} de progression</span>
+					</div>
+					<p class="aide">3 points : Atout +1, Domaine +1, réserve de Vécu +1 ou une séquelle réparée. 1 point par mois entre deux aventures ; une régression tous les 6 mois.</p>
+					{{#if editable}}
+						<button type="button" data-gestion="depenser"><i class="fa-solid fa-cart-shopping"></i> Dépenser 3 points…</button>
+						<button type="button" data-gestion="don"><i class="fa-solid fa-gift"></i> Don de progression d'un Héros…</button>
+						<button type="button" data-gestion="intermede"><i class="fa-solid fa-calendar-days"></i> Intermède (mois écoulés)…</button>
+					{{/if}}
+					<p class="mois-ecoules">Mois écoulés entre les aventures : {{actor.system.moisEcoules}}</p>
+					{{#if regressions.length}}
+						<details class="regressions-cabale">
+							<summary>régressions ({{regressions.length}})</summary>
+							<ul>{{#each regressions as |r|}}<li>{{r.atout}} (mois {{r.mois}})</li>{{/each}}</ul>
+						</details>
+					{{/if}}
+				</section>
+
+				<section class="carte-gestion">
+					<h3>entretien</h3>
+					<p class="aide">Réparer : 1 + Artisanat du Héros + Atelier par quart. Lever les soupçons : 1 + Façade par quart. Entre deux scénarios, 1 point de progression d'un Héros retire tout.</p>
+					{{#if editable}}
+						<button type="button" data-gestion="reparer"><i class="fa-solid fa-hammer"></i> Réparer (Dégradation)…</button>
+						<button type="button" data-gestion="soupcons"><i class="fa-solid fa-user-secret"></i> Lever les soupçons (Traque)…</button>
+						<button type="button" data-gestion="noirceur"><i class="fa-solid fa-sun"></i> Décontaminer (Noirceur)…</button>
+						{{#if isGM}}<button type="button" data-gestion="division"><i class="fa-solid fa-people-group"></i> Esprit de corps (Division, MJ)…</button>{{/if}}
+						<button type="button" class="dommages-cabale"><i class="fa-solid fa-burst"></i> Dommages de la cabale…</button>
+					{{/if}}
+				</section>
+			</div>
+		</div>
+
+		{{!-- Description : coordonnées et texte libre --}}
+		<div class="tab description" data-group="primary" data-tab="description">
+			<div class="cabale-identite">
+				<div class="form-group"><label>bloc</label><input type="text" name="system.bloc" value="{{actor.system.bloc}}"></div>
+				<div class="form-group"><label>coordonnées</label><input type="text" name="system.coordonnes" value="{{actor.system.coordonnes}}"></div>
+				<div class="form-group"><label>société écran</label><input type="text" name="system.societeEcran" value="{{actor.system.societeEcran}}"></div>
+				<div class="form-group"><label>réseau</label><input type="text" name="system.reseau" value="{{actor.system.reseau}}"></div>
+			</div>
+			<div class="description">
+				<h3>description</h3>
+				{{editor actor.system.description target="system.description" button=true editable=editable engine="prosemirror" collaborate=false}}
+			</div>
+		</div>
+
 		<div class="tab members flexcol" data-group="primary" data-tab="members">
 			<p class="members-hint">Glissez ici un personnage depuis l'onglet Acteurs pour l'ajouter à la cabale.</p>
 			<ul class="item-list">

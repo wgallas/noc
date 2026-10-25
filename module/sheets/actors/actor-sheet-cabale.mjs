@@ -22,13 +22,13 @@ export class nocActorSheetCabale extends nocActorSheetPersonnage {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["noc", "sheet", "actor", "cabale"],
-      width: 900,
-      height: 700,
+      width: 920,
+      height: 780,
       dragDrop: [
         { dragSelector: ".item-list .item", dropSelector: null },
       ],
 
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "principal" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "profil" }]
     });
   }
 

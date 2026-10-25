@@ -12,6 +12,7 @@ import { jetonParDefaut } from "../jetons.mjs";
 import { appliquerPerditions, valeursAvant, seuilsFranchis } from "../perditions.mjs";
 import { appliquerEffetsFiel, aggravationsActives } from "../fiel/bibliotheque.mjs";
 import { preparerCabale, cabalesPourJet, seuilsCabale, divisionDuPersonnage } from "../cabale.mjs";
+import { assistantCreation } from "../cabale-gestion.mjs";
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -99,6 +100,15 @@ export class nocActor extends Actor {
       }
       if (Object.keys(updates).length) this.updateSource(updates);
     }
+  }
+
+  /** Nouvelle cabale vierge : l'assistant de création s'ouvre pour celui qui l'a créée */
+  _onCreate(data, options, userId) {
+    super._onCreate(data, options, userId);
+    if (this.type !== "cabale" || userId !== game.user.id) return;
+    const vierge = !this.system.archetype && Object.values(this._source.system.talents ?? {})
+      .every(liste => Object.values(liste ?? {}).every(t => !Number(t.niveau)));
+    if (vierge) setTimeout(() => assistantCreation(this), 400);
   }
 
   /** Effets de Fiel « aggravants » : un héros qui subit au moins 1 point en reçoit 1 de plus */

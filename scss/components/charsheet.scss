@@ -3444,3 +3444,253 @@ div.noc.item.sheet section.window-content input[type="checkbox"],
     white-space: nowrap;
     flex: 0 0 auto;
 }
+
+
+// Fiche de cabale : en-tête, onglets Profil / Gestion / Description / Membres
+div.noc.sheet.actor.cabale section.window-content {
+    max-height: none;
+    height: 100%;
+
+    > form.cabale {
+        height: 100%;
+        max-height: none;
+        display: flex;
+        flex-direction: column;
+    }
+
+    header.cabale-entete {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px;
+        background: url(../asset/images/fondequipement.webp);
+        background-size: cover;
+        border-bottom: 2px solid black;
+
+        img.profile-img {
+            flex: 0 0 90px;
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border: 2px solid black;
+            box-shadow: 0 0 10px black;
+            cursor: pointer;
+        }
+
+        .cabale-entete-infos {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: #1b1813;
+        }
+
+        input.cabale-nom {
+            font-family: "bold";
+            font-size: 26px;
+            height: auto;
+            line-height: 1.2;
+            border: none;
+            background: transparent;
+            color: #1b1813;
+        }
+
+        .cabale-entete-ligne {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 18px;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .alerte {
+            color: #8b0000;
+            font-weight: bold;
+            font-size: 12px;
+        }
+    }
+
+    nav.sheet-tabs {
+        flex: 0 0 auto;
+    }
+
+    section.sheet-body {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: auto;
+        overflow-y: auto;
+
+        div.tab.profil.active {
+            display: block;
+            padding: 8px 10px;
+        }
+
+        div.tab.principal .cabale-stats {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 10px;
+
+            .stats.rouage {
+                flex: 0 0 auto !important;
+                height: auto;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: none;
+                grid-auto-rows: auto;
+                align-content: start;
+                gap: 14px 10px;
+                padding: 6px 4px 0;
+                line-height: 1.2;
+
+                .domaine {
+                    position: relative;
+                    grid-row: auto;
+                    grid-column: auto;
+                    left: unset;
+                    top: unset;
+                    justify-content: flex-start;
+                    gap: 3px;
+                }
+
+                .atout {
+                    line-height: 1.15;
+                    min-height: 22px;
+                    align-items: center;
+
+                    .atout-nom {
+                        font-size: 11px;
+                        white-space: normal;
+                    }
+                }
+
+                .des-cabale {
+                    line-height: 1.2;
+                }
+            }
+
+            .rouage-reserves.cabale-jauges {
+                grid-template-columns: repeat(4, 1fr);
+                align-items: start;
+                margin-top: 0;
+
+                .reserve {
+                    max-width: none;
+                    margin: 3px;
+                    padding: 2px 8px 6px;
+                    line-height: 1.2;
+                }
+            }
+
+            button.dommages-cabale {
+                align-self: center;
+                width: auto;
+                padding: 2px 16px;
+            }
+        }
+
+        div.tab.gestion.active {
+            display: block;
+            padding: 10px;
+        }
+
+        div.tab.description {
+            background: none;
+            height: auto;
+        }
+
+        div.tab.description.active {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+    }
+
+    // Gestion : trois cartes côte à côte
+    .gestion-cabale {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        align-items: start;
+        font-size: 12px;
+
+        .carte-gestion {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 0 10px 10px;
+            background: url(../asset/images/fondmain.webp);
+            background-size: cover;
+            box-shadow: 0 0 20px black;
+            border: 2px solid black;
+            color: #1b1813;
+            line-height: 1.3;
+
+            h3 {
+                margin: 0 -10px 4px;
+                padding: 4px 10px;
+            }
+
+            p.aide {
+                margin: 0 0 4px;
+                font-style: italic;
+                font-size: 11px;
+            }
+
+            button {
+                width: 100%;
+                text-align: left;
+                font-size: 12px;
+                line-height: 1.6;
+                padding: 2px 8px;
+                margin: 0;
+
+                i {
+                    width: 1.4em;
+                    text-align: center;
+                }
+            }
+        }
+
+        .progression-cabale {
+            margin-bottom: 4px;
+        }
+    }
+
+    // Description : coordonnées sur deux colonnes, puis le texte
+    .cabale-identite {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px 16px;
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            label {
+                flex: 0 0 8em;
+                font-weight: bold;
+                color: #1b1813;
+            }
+
+            input {
+                flex: 1 1 auto;
+            }
+        }
+    }
+
+    .tab.description .description {
+        display: flex;
+        flex-direction: column;
+        min-height: 320px;
+
+        .editor {
+            flex: 1 1 auto;
+            min-height: 280px;
+            background: rgba(255, 250, 240, 0.6);
+        }
+    }
+}
