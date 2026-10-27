@@ -1,6 +1,6 @@
 import { nocActorSheetPersonnage } from "./actor-sheet-personnage.mjs";
 import { ATOUTS, RESERVES_CABALE, JAUGES_CABALE, membresCabale, infligerCabale } from "../../cabale.mjs";
-import { assistantCreation, apportHeros, entretien, semainesSansNoirceur, espritDeCorps, depenserProgression, donProgression, intermede } from "../../cabale-gestion.mjs";
+import { assistantCreation, apportHeros, retirerApport, modifierApport, apportsCabale, entretien, semainesSansNoirceur, espritDeCorps, depenserProgression, donProgression, intermede } from "../../cabale-gestion.mjs";
 
 const nombre = v => Number(v) || 0;
 const TYPES = {
@@ -149,6 +149,11 @@ export class nocActorSheetCabale extends nocActorSheetPersonnage {
     context.failles = s.failles ?? [];
     context.atoutsInutilisables = s.atoutsInutilisables;
     context.regressions = [...(s.regressions ?? [])].reverse();
+    // apports des Héros : qui soutient quel Atout (Héros disparu si sa fiche n'existe plus)
+    context.apports = apportsCabale(this.actor).map((x, index) => ({
+      index, nom: x.nom, atout: ATOUTS[x.atout]?.label ?? "Atout non précisé",
+      existe: !!game.actors.get(x.heros)
+    }));
     context.isGM = game.user.isGM;
   }
   /* -------------------------------------------- */
@@ -189,11 +194,12 @@ export class nocActorSheetCabale extends nocActorSheetPersonnage {
       // création, entretien et progression
       const actions = {
         creation: assistantCreation, apport: apportHeros,
+        "retirer-apport": retirerApport, "modifier-apport": modifierApport,
         reparer: c => entretien(c, "reparer"), soupcons: c => entretien(c, "soupcons"),
         noirceur: semainesSansNoirceur, division: espritDeCorps,
         depenser: depenserProgression, don: donProgression, intermede
       };
-      html.find('button[data-gestion]').click(ev => actions[ev.currentTarget.dataset.gestion]?.(this.actor));
+      html.find('[data-gestion]').click(ev => actions[ev.currentTarget.dataset.gestion]?.(this.actor, ev.currentTarget.dataset));
     }
     let membersImages = html.find('div.img');
     for (let el of membersImages) { this.randomRotate(el) }

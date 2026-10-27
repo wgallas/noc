@@ -148,6 +148,20 @@
 						<button type="button" data-gestion="creation"><i class="fa-solid fa-wand-magic-sparkles"></i> Assistant de création…</button>
 						<button type="button" data-gestion="apport"><i class="fa-solid fa-hand-holding-heart"></i> Apport d'un Héros…</button>
 					{{/if}}
+					{{#if apports.length}}
+						<h4>Apports des Héros</h4>
+						<ul class="apports-cabale">
+							{{#each apports as |a|}}
+								<li>
+									<span><strong>{{a.nom}}</strong>{{#unless a.existe}} <em>(disparu)</em>{{/unless}} : {{a.atout}} +1</span>
+									{{#if @root.editable}}
+										{{#if a.existe}}<a data-gestion="modifier-apport" data-index="{{a.index}}" data-tooltip="Soutenir un autre Atout"><i class="fa-solid fa-pen-to-square"></i></a>{{/if}}
+										<a data-gestion="retirer-apport" data-index="{{a.index}}" data-tooltip="Retirer cet apport (mort, départ…)"><i class="fa-solid fa-trash"></i></a>
+									{{/if}}
+								</li>
+							{{/each}}
+						</ul>
+					{{/if}}
 				</section>
 
 				<section class="carte-gestion">

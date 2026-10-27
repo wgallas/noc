@@ -3730,3 +3730,37 @@ div.noc.item.sheet.document-administratif {
         margin: 0 0 6px;
     }
 }
+
+
+// Fiche de cabale : liste des apports des Héros
+div.noc.sheet.actor.cabale .carte-gestion {
+    h4 {
+        margin: 6px 0 2px;
+        color: #1b1813;
+        text-shadow: none;
+        font-size: 12px;
+    }
+
+    ul.apports-cabale {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 0;
+            border-bottom: 1px dotted rgba(0, 0, 0, 0.3);
+
+            span {
+                flex: 1 1 auto;
+            }
+
+            a {
+                flex: 0 0 auto;
+                cursor: pointer;
+            }
+        }
+    }
+}

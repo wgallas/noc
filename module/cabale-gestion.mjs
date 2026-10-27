@@ -180,15 +180,39 @@ export async function assistantCreation(cabale) {
   await annoncer(cabale, "création", lignes);
 }
 
+/**
+ * Apports des Héros enregistrés : [{ heros, atout, nom }].
+ * Les anciens apports (simple identifiant de Héros) n'ont pas d'Atout connu.
+ */
+export function apportsCabale(cabale) {
+  return (cabale.system.apports ?? []).map(x => {
+    if (typeof x === "string") return { heros: x, atout: null, nom: game.actors.get(x)?.name ?? "Héros disparu" };
+    return { heros: x?.heros ?? "", atout: x?.atout ?? null, nom: x?.nom || game.actors.get(x?.heros)?.name || "Héros disparu" };
+  });
+}
+
+/** Atouts qu'un Héros peut soutenir : liés à un de ses Talents à 2 ou plus */
+function atoutsSoutenables(heros) {
+  return Object.entries(ATOUTS).filter(([, def]) => nombre(heros.system.talents?.[def.domaine]?.[def.talent]?.niveau) >= 2)
+    .map(([cle, def]) => ({ cle, def, niveau: nombre(heros.system.talents[def.domaine][def.talent].niveau) }));
+}
+
+/** Un nouvel Atout (0 → 1) dépasserait-il la limite du Standing ? (ancien : Atout qui perd 1 au même moment) */
+function depasseLimite(cabale, cle, ancien = null) {
+  if (cle === "standing" || niveauAtout(cabale, cle) !== 0) return false;
+  const libere = ancien && ancien !== "standing" && niveauAtout(cabale, ancien) === 1 ? 1 : 0;
+  return cabale.system.atoutsPossedes - libere >= cabale.system.limiteAtouts;
+}
+
 /** Apport d'un Héros : +1 à un Atout lié à un de ses Talents à 2 ou plus, contre une séquelle de Traque */
 export async function apportHeros(cabale) {
-  const deja = new Set(cabale.system.apports ?? []);
+  const apports = apportsCabale(cabale);
+  const deja = new Set(apports.map(x => x.heros));
   const choix = [];
   for (const m of membresModifiables(cabale)) {
     if (deja.has(m.id)) continue;
-    for (const [cle, def] of Object.entries(ATOUTS)) {
-      const niveau = nombre(m.system.talents?.[def.domaine]?.[def.talent]?.niveau);
-      if (niveau >= 2) choix.push(`<option value="${m.id}|${cle}">${echapper(m.name)} — ${def.label} (${def.talentLabel} ${niveau}, Atout ${niveauAtout(cabale, cle)})</option>`);
+    for (const { cle, def, niveau } of atoutsSoutenables(m)) {
+      choix.push(`<option value="${m.id}|${cle}">${echapper(m.name)} — ${def.label} (${def.talentLabel} ${niveau}, Atout ${niveauAtout(cabale, cle)})</option>`);
     }
   }
   if (!choix.length) {
@@ -203,10 +227,10 @@ export async function apportHeros(cabale) {
   if (!heros) return;
   if (deja.has(id)) return ui.notifications.warn(`${heros.name} a déjà fait son apport à la cabale.`);
   const avant = niveauAtout(cabale, cle);
-  if (avant === 0 && cle !== "standing" && cabale.system.atoutsPossedes >= cabale.system.limiteAtouts) {
+  if (depasseLimite(cabale, cle)) {
     return ui.notifications.warn(`La cabale possède déjà ${cabale.system.atoutsPossedes} Atouts différents, la limite de son Standing.`);
   }
-  await cabale.update({ [cheminAtout(cle)]: avant + 1, "system.apports": [...deja, id] });
+  await cabale.update({ [cheminAtout(cle)]: avant + 1, "system.apports": [...apports, { heros: id, atout: cle, nom: heros.name }] });
   // séquelle de Traque : un point de Traque qui ne se récupère pas
   const t = heros._source.system.perditions?.traque ?? {};
   const max = nombre(t.max) || 10;
@@ -218,6 +242,79 @@ export async function apportHeros(cabale) {
     `${echapper(heros.name)} apporte +1 en ${ATOUTS[cle].label} (${avant} → ${avant + 1}).`,
     `${echapper(heros.name)} reçoit une séquelle de Traque.`]);
 }
+
+/** Retire l'apport d'un Héros (mort, départ…) : l'Atout perd le niveau apporté */
+export async function retirerApport(cabale, { index } = {}) {
+  const apports = apportsCabale(cabale);
+  const apport = apports[nombre(index)];
+  if (!apport) return;
+  const heros = game.actors.get(apport.heros);
+  const optionsAtout = apport.atout ? "" : `
+    <div class="form-group"><label>Atout qui perd le niveau</label><select name="atout"><option value="">aucun</option>${optionsAtouts({ filtre: cle => niveauAtout(cabale, cle) > -1 })}</select></div>
+    <p class="notes">Cet ancien apport n'indique pas l'Atout concerné : choisissez-le.</p>`;
+  const sequelle = heros && nombre(heros._source.system.perditions?.traque?.min) > 0 ? `
+    <div class="form-group"><label><input type="checkbox" name="sequelle"> Retirer aussi la séquelle de Traque de ${echapper(heros.name)}</label></div>
+    <p class="notes">Par défaut, la séquelle reste : elle représente les risques déjà pris pour la Cabale.</p>` : "";
+  const f = await formulaire(`Retirer un apport : ${cabale.name}`, `
+    <p>Retirer l'apport de <strong>${echapper(apport.nom)}</strong>${apport.atout ? ` (${ATOUTS[apport.atout].label} +1)` : ""} ?</p>
+    ${apport.atout ? `<p class="notes">${ATOUTS[apport.atout].label} : ${niveauAtout(cabale, apport.atout)} → ${niveauAtout(cabale, apport.atout) - 1}.</p>` : ""}
+    ${optionsAtout}${sequelle}`, "Retirer");
+  if (!f) return;
+  const cle = apport.atout ?? f.atout ?? "";
+  const maj = { "system.apports": apports.filter((x, i) => i !== nombre(index)) };
+  const lignes = [`L'apport de ${echapper(apport.nom)} est retiré.`];
+  if (cle && ATOUTS[cle]) {
+    const avant = niveauAtout(cabale, cle);
+    maj[cheminAtout(cle)] = avant - 1;
+    lignes.push(`${ATOUTS[cle].label} : ${avant} → ${avant - 1}.`);
+  }
+  await cabale.update(maj);
+  if (f.sequelle && heros) {
+    const t = heros._source.system.perditions.traque;
+    await heros.update({
+      "system.perditions.traque.min": Math.max(0, nombre(t.min) - 1),
+      "system.perditions.traque.value": Math.max(0, nombre(t.value) - 1)
+    });
+    lignes.push(`${echapper(heros.name)} perd une séquelle de Traque.`);
+  }
+  if (cabale.system.failles?.some(x => x.cle === cle)) lignes.push(`Faille : ${ATOUTS[cle].faille}`);
+  await annoncer(cabale, "apport retiré", lignes);
+}
+
+/** Change l'Atout soutenu par un Héros : le niveau passe de l'ancien Atout au nouveau (pas de nouvelle séquelle) */
+export async function modifierApport(cabale, { index } = {}) {
+  const apports = apportsCabale(cabale);
+  const apport = apports[nombre(index)];
+  const heros = game.actors.get(apport?.heros);
+  if (!apport || !heros) return ui.notifications.warn("Ce Héros n'existe plus : retirez son apport.");
+  const options = atoutsSoutenables(heros).filter(x => x.cle !== apport.atout)
+    .map(({ cle, def, niveau }) => `<option value="${cle}">${def.label} (${def.talentLabel} ${niveau}, Atout ${niveauAtout(cabale, cle)})</option>`).join("");
+  if (!options) return ui.notifications.warn(`${heros.name} n'a pas d'autre Talent à 2 ou plus.`);
+  const f = await formulaire(`Modifier un apport : ${cabale.name}`, `
+    <p>${echapper(heros.name)} soutient ${apport.atout ? `<strong>${ATOUTS[apport.atout].label}</strong>` : "un Atout non précisé"}. Le niveau apporté passe à un autre Atout lié à un de ses Talents à 2 ou plus, sans nouvelle séquelle.</p>
+    <div class="form-group"><label>Nouvel Atout</label><select name="atout">${options}</select></div>
+    ${apport.atout ? "" : `<div class="form-group"><label>Atout qui perd le niveau</label><select name="ancien"><option value="">aucun</option>${optionsAtouts({ filtre: cle => niveauAtout(cabale, cle) > -1 })}</select></div>`}`, "Modifier");
+  if (!f?.atout) return;
+  const ancien = apport.atout ?? f.ancien ?? "";
+  const cle = f.atout;
+  if (depasseLimite(cabale, cle, ancien)) {
+    return ui.notifications.warn(`La cabale possède déjà ${cabale.system.atoutsPossedes} Atouts différents, la limite de son Standing.`);
+  }
+  const maj = {};
+  const lignes = [];
+  if (ancien && ATOUTS[ancien]) {
+    const avant = niveauAtout(cabale, ancien);
+    maj[cheminAtout(ancien)] = avant - 1;
+    lignes.push(`${ATOUTS[ancien].label} : ${avant} → ${avant - 1}.`);
+  }
+  const avant = niveauAtout(cabale, cle);
+  maj[cheminAtout(cle)] = avant + 1;
+  lignes.push(`${ATOUTS[cle].label} : ${avant} → ${avant + 1}.`);
+  maj["system.apports"] = apports.map((x, i) => i === nombre(index) ? { heros: x.heros, atout: cle, nom: heros.name } : x);
+  await cabale.update(maj);
+  await annoncer(cabale, "apport modifié", [`${echapper(heros.name)} soutient désormais ${ATOUTS[cle].label}.`, ...lignes]);
+}
+
 
 /* -------------------------------------------- */
 /*  Entretien                                    */
