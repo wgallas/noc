@@ -7,7 +7,7 @@
 			<input class="cabale-nom" type="text" name="name" value="{{actor.name}}" placeholder="Nom de la cabale">
 			<div class="cabale-entete-ligne">
 				<span><strong>Archétype :</strong> {{#if actor.system.archetype}}{{actor.system.archetype}}{{else}}— <em>(onglet Gestion : assistant de création)</em>{{/if}}</span>
-				<span class="{{#if depassement}}alerte{{/if}}" data-tooltip="Nombre d'Atouts différents au niveau 1 ou plus : Standing + 3"><strong>Atouts possédés :</strong> {{atoutsPossedes}} / {{limiteAtouts}} (Standing {{standing}})</span>
+				<span class="{{#if depassement}}alerte{{/if}}" data-tooltip="Nombre d'Atouts différents au niveau 1 ou plus, sans compter le Standing : Standing + 3"><strong>Atouts possédés :</strong> {{atoutsPossedes}} / {{limiteAtouts}} (Standing {{standing}})</span>
 				<span><strong>Progression :</strong> {{actor.system.progression}} point{{#ifgt actor.system.progression 1}}s{{/ifgt}}</span>
 				<span><strong>Membres :</strong> {{members.length}}</span>
 			</div>

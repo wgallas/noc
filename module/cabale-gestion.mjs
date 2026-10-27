@@ -203,7 +203,7 @@ export async function apportHeros(cabale) {
   if (!heros) return;
   if (deja.has(id)) return ui.notifications.warn(`${heros.name} a déjà fait son apport à la cabale.`);
   const avant = niveauAtout(cabale, cle);
-  if (avant < 1 && cabale.system.atoutsPossedes >= cabale.system.limiteAtouts) {
+  if (avant === 0 && cle !== "standing" && cabale.system.atoutsPossedes >= cabale.system.limiteAtouts) {
     return ui.notifications.warn(`La cabale possède déjà ${cabale.system.atoutsPossedes} Atouts différents, la limite de son Standing.`);
   }
   await cabale.update({ [cheminAtout(cle)]: avant + 1, "system.apports": [...deja, id] });
@@ -322,7 +322,7 @@ export async function depenserProgression(cabale) {
   let ligne;
   if (type === "atout") {
     const avant = niveauAtout(cabale, cle);
-    if (avant === 0 && s.atoutsPossedes >= s.limiteAtouts) {
+    if (avant === 0 && cle !== "standing" && s.atoutsPossedes >= s.limiteAtouts) {
       return ui.notifications.warn(`La cabale possède déjà ${s.atoutsPossedes} Atouts différents, la limite de son Standing (${s.limiteAtouts}). Augmentez d'abord le Standing.`);
     }
     maj[cheminAtout(cle)] = avant + 1;

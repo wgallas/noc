@@ -8,7 +8,7 @@
  * - Réserves communes : Singularité (Observatoire), Espoir (Credo), Vécu (Légende + achats),
  *   Faveurs (2 par Contact du Réseau). Rechargées au début de chaque scénario.
  * - Jauges : Dégradation, Division, Noirceur, Traque, avec leurs effets à 5, 8 et 10.
- * - Standing : nombre d'Atouts différents au niveau 1 ou plus = Standing + 3.
+ * - Standing : nombre d'Atouts différents au niveau 1 ou plus (Standing lui-même non compté) = Standing + 3.
  * - Faille : tout Atout au niveau −1.
  */
 import { raisonSommeil } from "./sommeil.mjs";
@@ -68,7 +68,7 @@ export const ATOUTS = {
     effet: "Trésor et revenus. Plusieurs points peuvent être dépensés à la fois pour préparer Fortune.",
     faille: "Endettée : une dépense de niveau 4 par aventure, sinon un membre perd 1 point de progression" },
   standing: { domaine: "statut", label: "Standing", talent: "rang", talentLabel: "Rang", type: "",
-    effet: "Taille et confort du quartier général ; nombre d'Atouts différents au niveau 1 ou plus : Standing + 3.",
+    effet: "Taille et confort du quartier général ; nombre d'Atouts différents au niveau 1 ou plus (sans compter le Standing) : Standing + 3.",
     faille: "Sans quartier général : réunions chez les membres ou dans des lieux publics" },
   reseau: { domaine: "statut", label: "Réseau", talent: "contact", talentLabel: "Contacts", type: "reserve",
     effet: "Un Contact par niveau, chacun avec 2 Faveurs, à la disposition de tous les membres.",
@@ -178,7 +178,8 @@ export function preparerCabale(actor) {
         t.label = def.label;
         t.def = def;
       }
-      if (t.niveau >= 1) possedes++;
+      // le Standing fixe la limite : il n'est pas compté parmi les Atouts possédés
+      if (t.niveau >= 1 && cle !== "standing") possedes++;
       if (t.niveau <= -1 && def) failles.push({ cle, label: def.label, faille: def.faille });
       if (aPoints(def)) {
         t.points = Math.max(0, t.niveau);
