@@ -143,6 +143,8 @@ html:has(.system-noc) {
 figure#pause {
     bottom: 50vh;
     font-family: 'bold';
+    // police des titres (League Spartan) en capitales, comme l'ancienne The Bold Font
+    text-transform: uppercase;
     background: none;
     animation: 6s linear 6s infinite alternate blur;
 

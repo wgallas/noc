@@ -4,9 +4,13 @@
     src: url("../asset/fonts/SpecialElite-Regular.woff") format("woff");
 }
 
+// Police des titres : League Spartan ExtraBold (licence OFL : asset/fonts/LeagueSpartan-LICENSE.txt).
+// Elle remplace The Bold Font, qui n'avait pas les lettres du tchèque ; le nom « bold » est conservé.
 @font-face {
     font-family: "bold";
-    src: url("../asset/fonts/theboldfont.ttf");
+    src: url("../asset/fonts/LeagueSpartan-ExtraBold.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
 }
 
 @font-face {
@@ -38,6 +42,8 @@ body.system-noc {
     h4 {
         border: none;
         font-family: "bold";
+        // police des titres (League Spartan) en capitales, comme l'ancienne The Bold Font
+        text-transform: uppercase;
         color: white;
         text-shadow: 0px 0px 3px black, 0px 0px 15px gray;
     }

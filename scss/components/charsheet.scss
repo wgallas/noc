@@ -159,6 +159,8 @@ div.noc.sheet.actor {
                     grid-template-rows: repeat(9, 10%);
                     gap: 3px 0px;
                     font-family: 'bold';
+                    // police des titres (League Spartan) en capitales, comme l'ancienne The Bold Font
+                    text-transform: uppercase;
                     padding: 2% 1%;
 
 
@@ -3510,6 +3512,8 @@ div.noc.sheet.actor.cabale section.window-content {
 
         input.cabale-nom {
             font-family: "bold";
+            // police des titres (League Spartan) en capitales, comme l'ancienne The Bold Font
+            text-transform: uppercase;
             font-size: 26px;
             height: auto;
             line-height: 1.2;
