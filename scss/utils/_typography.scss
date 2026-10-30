@@ -182,12 +182,14 @@ body.system-noc {
             letter-spacing: 0.02em;
         }
 
+        // Oswald a des capitales plus hautes que League Spartan (Heading 2) : tailles réduites
+        // pour que Heading 3 reste un peu plus petit que Heading 2, et Heading 4 encore un peu plus
         h3 {
-            font-size: 170%;
+            font-size: 120%;
         }
 
         h4 {
-            font-size: 145%;
+            font-size: 102%;
         }
     }
 }
