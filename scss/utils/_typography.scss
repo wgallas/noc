@@ -13,6 +13,15 @@
     font-style: normal;
 }
 
+// Titres 3 et 4 des textes rédigés : Oswald Medium (licence OFL : asset/fonts/Oswald-LICENSE.txt),
+// police condensée proche de Modesto Condensed (police de Foundry sans les lettres du tchèque)
+@font-face {
+    font-family: "Oswald";
+    src: url("../asset/fonts/Oswald-Medium.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+}
+
 @font-face {
     font-family: "raleway";
     src: url("../asset/fonts/Raleway-SemiBold.ttf");
@@ -158,7 +167,7 @@ body.system-noc .journal-page-header {
 }
 
 // Textes rédigés : titres mieux distingués
-// Heading 1 plus grand ; Heading 3 et 4 en Modesto Condensed (police de Foundry), agrandis
+// Heading 1 plus grand ; Heading 3 et 4 en Oswald (condensée, toutes les lettres du tchèque), agrandis
 body.system-noc {
     .editor-content,
     .prosemirror,
@@ -169,7 +178,7 @@ body.system-noc {
 
         h3,
         h4 {
-            font-family: "Modesto Condensed", "bold", sans-serif;
+            font-family: "Oswald", "Modesto Condensed", sans-serif;
             letter-spacing: 0.02em;
         }
 

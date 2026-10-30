@@ -51,6 +51,7 @@ Hooks.once('init', async function () {
   Object.assign(CONFIG.fontDefinitions, {
     "Special Elite": { editor: true, fonts: [{ urls: ["systems/noc/asset/fonts/SpecialElite-Regular.woff"] }] },
     "League Spartan": { editor: true, fonts: [{ urls: ["systems/noc/asset/fonts/LeagueSpartan-ExtraBold.woff2"] }] },
+    "Oswald": { editor: true, fonts: [{ urls: ["systems/noc/asset/fonts/Oswald-Medium.woff2"] }] },
     // ancien nom : les textes qui l'utilisaient s'affichent désormais en League Spartan
     "The Bold Font": { editor: false, fonts: [{ urls: ["systems/noc/asset/fonts/LeagueSpartan-ExtraBold.woff2"] }] },
     "Raleway SemiBold": { editor: true, fonts: [{ urls: ["systems/noc/asset/fonts/Raleway-SemiBold.ttf"] }] }
