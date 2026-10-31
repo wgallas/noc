@@ -58,6 +58,25 @@ export function appliquerPerditions(actor) {
   }
 }
 
+/**
+ * Folie au niveau 6 ou plus (livre de base p. 208) : avec au moins 3 points de Trauma,
+ * +1 à tous les scores de Domaine. Calculé après tous les autres modificateurs
+ * (le niveau de Folie retenu est le niveau effectif).
+ */
+export function appliquerFolieTranscendante(actor) {
+  if (actor.type === "cabale") return;
+  const s = actor.system;
+  const folie = nombre(s?.talents?.ame?.folie?.niveau);
+  const trauma = nombre(s?.perditions?.trauma?.value);
+  s.folieTranscendante = folie >= 6 && trauma >= 3;
+  if (!s.folieTranscendante) return;
+  actor.overrides ??= {};
+  for (const [dom, d] of Object.entries(s.domaines ?? {})) {
+    d.value = nombre(d.value) + 1;
+    foundry.utils.setProperty(actor.overrides, `system.domaines.${dom}.value`, d.value);
+  }
+}
+
 /** Valeurs des jauges avant la mise à jour (pour repérer les seuils franchis) */
 export function valeursAvant(actor) {
   return Object.fromEntries(Object.entries(actor._source.system?.perditions ?? {}).map(([k, p]) => [k, nombre(p.value)]));

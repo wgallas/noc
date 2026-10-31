@@ -209,8 +209,9 @@
 						<input type="checkbox" name="flags.noc.enReserve" data-dtype="Boolean" {{checked actor.flags.noc.enReserve}}> En réserve
 					</label>
 					{{/if}}
-					{{#if (or actor.flags.noc.fatigue actor.flags.noc.bouleversement)}}
+					{{#if (or (or actor.flags.noc.fatigue actor.flags.noc.bouleversement) actor.system.folieTranscendante)}}
 					<div class="etats-actifs">
+						{{#if actor.system.folieTranscendante}}<span class="etat" data-tooltip="Folie 6 ou plus et au moins 3 points de Trauma : +1 à tous les scores de Domaine (p. 208)">Folie transcendante : Domaines +1</span>{{/if}}
 						{{#if actor.flags.noc.fatigue}}<span class="etat" data-tooltip="−1 à tous les talents jusqu'au prochain moment de calme">Fatigué</span>{{/if}}
 						{{#if actor.flags.noc.bouleversement}}<span class="etat" data-tooltip="Talents de Statut −1 ; contacts inaccessibles">Bouleversement administratif</span>{{/if}}
 					</div>

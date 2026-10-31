@@ -2,6 +2,7 @@ import { soinDuJet, demanderSoin } from "./soins.mjs";
 import { calculerBlessures, ciblesActuelles, messageMJCibles } from "./combat-blessures.mjs";
 import { traitsEnCombat } from "./armes.mjs";
 import { totalBonusEquipement } from "./stratagemes.mjs";
+import { descriptionNiveauTalent } from "./talents-niveaux.mjs";
 import { depenserCabale, bonusCabale } from "./cabale.mjs";
 /* -------------------------------------------- */
 
@@ -234,6 +235,11 @@ export class nocUtility {
       rollData.margin = Number(rollData.niveauFinal) - Number(rollData.niveauFinalRequis)
       rollData.isReussite = (rollData.margin >= 0)
     }
+
+    // Niveau 6 ou plus atteint : rappel de l'effet du Talent à haut niveau (p. 204-209)
+    const cleTalent = rollData.mode === "arme" ? ["action", "combat"] : [rollData.domaineId, rollData.talentId];
+    rollData.transcendance = (Number(rollData.niveauFinal) >= 6 && cleTalent[1])
+      ? descriptionNiveauTalent(cleTalent[0], cleTalent[1], 6) : "";
 
     // Soins / Apaisement / Lumière : niveau obtenu et cibles possibles
     rollData.soin = soinDuJet(rollData);

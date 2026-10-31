@@ -103,6 +103,9 @@
       <li>Gouttes de Fiel ajoutées : {{nbFiel}}</li>
       <li style="font-weight: bold; color: var(--color-text);">Nombre de succès : {{nbSuccess}}</li>
       <li class="rollResult">Niveau final obtenu : <strong>{{niveauFinal}}</strong></li>
+      {{#if transcendance}}
+        <li class="transcendance" data-tooltip="Accessible à un personnage ayant déjà reçu un point de progression par illumination (livre de base p. 204).">Niveau 6 atteint — {{transcendance}}</li>
+      {{/if}}
 
       {{#unless (eq mode "arme")}}
       {{#if aNiveauRequis}}

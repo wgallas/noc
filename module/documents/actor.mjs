@@ -11,7 +11,7 @@ import { armeAvecStratagemes, bonusEquipementTalent, outilUtilisableCommeArme } 
 import { appliquerArmures } from "../armures.mjs";
 import { appliquerEtats } from "../panneau-mj.mjs";
 import { jetonParDefaut } from "../jetons.mjs";
-import { appliquerPerditions, valeursAvant, seuilsFranchis } from "../perditions.mjs";
+import { appliquerPerditions, appliquerFolieTranscendante, valeursAvant, seuilsFranchis } from "../perditions.mjs";
 import { appliquerEffetsFiel, aggravationsActives } from "../fiel/bibliotheque.mjs";
 import { preparerCabale, cabalesPourJet, seuilsCabale, divisionDuPersonnage } from "../cabale.mjs";
 import { assistantCreation } from "../cabale-gestion.mjs";
@@ -246,6 +246,8 @@ export class nocActor extends Actor {
     appliquerEtats(this);
     appliquerPerditions(this);
     appliquerEffetsFiel(this);
+    // Folie 6 ou plus et Trauma 3 ou plus : +1 à tous les Domaines (niveau de Folie effectif)
+    appliquerFolieTranscendante(this);
     preparerCabale(this);
 
     this._preparePersonnageData();
