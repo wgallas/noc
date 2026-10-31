@@ -2,6 +2,7 @@ import { soinDuJet, demanderSoin } from "./soins.mjs";
 import { calculerBlessures, ciblesActuelles, messageMJCibles } from "./combat-blessures.mjs";
 import { traitsEnCombat } from "./armes.mjs";
 import { totalBonusEquipement } from "./stratagemes.mjs";
+import { fielDesDes } from "./fiel/gouttes.mjs";
 import { depenserCabale, bonusCabale } from "./cabale.mjs";
 /* -------------------------------------------- */
 
@@ -200,10 +201,8 @@ export class nocUtility {
       await this.showDiceSoNice(roll, game.settings.get("core", "rollMode"));
       const des = roll.dice.flatMap(d => d.results).map(r => ({ result: r.result, success: !!r.success }));
       const fiel = des.filter(d => d.result === 1).length;
-      if (fiel > 0) {
-        game.socketManager.launchSocket("gouttePlus", { qt: fiel });
-        ui.compteur.gouttePlus(fiel);
-      }
+      // 1 : goutte de Fiel (retirée si le lanceur est un Rouage hostile)
+      fielDesDes(rollData.rouageHostile, fiel, rollData.name);
       rollData.quantique = { nbDes: nbQuantique, des, succes: roll.total, fiel };
     }
     // énergie noire : X points de Blessures supplémentaires (valeur fixe)
@@ -279,13 +278,15 @@ export class nocUtility {
     rollData.formulaBonus = `${nbBonusDice}d10cs>=8`
     let myRollBonus = await new Roll(rollData.formulaBonus, actor.system).roll()
     await this.showDiceSoNice(myRollBonus, game.settings.get("core", "rollMode"))
+    let unsBonus = 0
     for (let result of myRollBonus.terms[0].results) {
       if (result.result == 1) {
-        game.socketManager.launchSocket("gouttePlus", { qt: 1 })
-        ui.compteur.gouttePlus(1)
+        unsBonus++
         rollData.nbFiel++
       }
     }
+    // 1 : goutte de Fiel (retirée si le lanceur est un Rouage hostile)
+    fielDesDes(rollData.rouageHostile, unsBonus, rollData.name)
     rollData.nbBonusDice = nbBonusDice
     rollData.rollBonus = myRollBonus
     // Update du nombre de réussites
@@ -318,11 +319,11 @@ export class nocUtility {
         rollData.nbAddDice++
       }
       if (result.result == 1) {
-        game.socketManager.launchSocket("gouttePlus", { qt: 1 })
-        ui.compteur.gouttePlus(1)
         rollData.nbFiel++
       }
     }
+    // 1 : goutte de Fiel (retirée si le lanceur est un Rouage hostile)
+    fielDesDes(rollData.rouageHostile, rollData.nbFiel, rollData.name)
     if (maxDiceValue == -1) maxDiceValue = 0;
     rollData.roll = myRoll
     rollData.nbSuccess = rollData.roll.total

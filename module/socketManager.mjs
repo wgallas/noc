@@ -1,5 +1,6 @@
 import { appliquerSoin } from "./soins.mjs";
 import { objetDieu } from "./objectDieu.mjs";
+import { retirerGouttesHostiles } from "./fiel/gouttes.mjs";
 
 
 export class SocketManager {
@@ -34,6 +35,9 @@ export class SocketManager {
                 if (!game.user.isGM) return;
                 this.launchSocket("dispayDroplet", {})
                 ui.compteur.gouttePlus(socketMsg.data.qt)
+                break;
+            case "goutteHostile":
+                await retirerGouttesHostiles(socketMsg.data.qt, socketMsg.data.nom);
                 break;
             case "appliquerSoin": {
                 if (!game.users.activeGM?.isSelf) return;

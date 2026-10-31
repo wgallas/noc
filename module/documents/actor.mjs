@@ -7,6 +7,7 @@ import { appliquerArchetype } from "../archetypes.mjs";
 import { appliquerQualites } from "../qualites.mjs";
 import { appliquerAutre } from "../autres.mjs";
 import { appliquerGabarit, armeAvecGabarit } from "../gabarits.mjs";
+import { estRouageHostile } from "../fiel/gouttes.mjs";
 import { armeAvecStratagemes, bonusEquipementTalent, outilUtilisableCommeArme } from "../stratagemes.mjs";
 import { appliquerArmures } from "../armures.mjs";
 import { appliquerEtats } from "../panneau-mj.mjs";
@@ -618,7 +619,9 @@ export class nocActor extends Actor {
       nbBonusCollaboratif: 0,
       nbDesDomaine: 0,
       nbDesCabale: 0,
-      cabaleData: null
+      cabaleData: null,
+      // Rouage hostile : ses 1 aux dés de destin retirent du Fiel (p. 231)
+      rouageHostile: estRouageHostile(this)
     }
 
 

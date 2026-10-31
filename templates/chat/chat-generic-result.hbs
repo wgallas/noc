@@ -100,7 +100,7 @@
       {{#if useVecuCabale}}
         <li>Un point de Vécu de la cabale a été utilisé</li>
       {{/if}}
-      <li>Gouttes de Fiel ajoutées : {{nbFiel}}</li>
+      {{#if rouageHostile}}{{#if nbFiel}}<li>Rouage hostile, dés à 1 : {{nbFiel}} (le Fiel baisse d'autant, ou un Héros gagne de la Singularité)</li>{{/if}}{{else}}<li>Gouttes de Fiel ajoutées : {{nbFiel}}</li>{{/if}}
       <li style="font-weight: bold; color: var(--color-text);">Nombre de succès : {{nbSuccess}}</li>
       <li class="rollResult">Niveau final obtenu : <strong>{{niveauFinal}}</strong></li>
 
@@ -146,7 +146,7 @@
                 </div>
               {{/each}}
             </div>
-            {{#if quantique.fiel}}<p class="note-combat">Gouttes de Fiel ajoutées : {{quantique.fiel}}</p>{{/if}}
+            {{#if quantique.fiel}}<p class="note-combat">{{#if rouageHostile}}Dés quantiques à 1 (Rouage hostile) : {{quantique.fiel}}{{else}}Gouttes de Fiel ajoutées : {{quantique.fiel}}{{/if}}</p>{{/if}}
           {{/if}}
           {{#if energieNoire}}
             <p class="titre-bloc-combat">Énergie noire : +{{energieNoire}}</p>
