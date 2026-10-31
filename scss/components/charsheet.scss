@@ -3808,3 +3808,76 @@ div.noc.sheet .item-list .stratageme-icone {
         }
     }
 }
+
+// Fiche Créature : bandeau du Domaine Action (le rond du score restait rogné à gauche)
+// et carte des armes (image, nom, dégâts et boutons sur une ligne)
+// (sélecteurs complets : plus précis que les règles générales des fiches)
+div.noc.sheet.actor.creature section.window-content section.sheet-body div.tab.principal.creature-corps {
+    .creature-action.stats .domaine h3 {
+        width: 100%;
+        left: 0;
+        top: 0;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 6px;
+        margin: 0 0 4px;
+
+        span.domaine-niveau {
+            flex: 0 0 22px;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            line-height: 22px;
+            padding: 0 !important;
+            top: 0 !important;
+            margin: 0;
+            box-sizing: border-box;
+        }
+    }
+
+    .creature-colonne2 .creature-armes ul.item-list li.item {
+        padding: 4px 6px;
+
+        .item-summary {
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 6px;
+
+            div.img {
+                flex: 0 0 2rem;
+
+                img {
+                    width: 2rem;
+                    height: 2rem;
+                    max-height: 2rem;
+                    min-width: 0;
+                    object-fit: contain;
+                }
+            }
+
+            h4.item-name {
+                flex: 1 1 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin: 0;
+                text-align: left;
+                line-height: 1.2em;
+            }
+
+            div.item-control {
+                position: static;
+                flex: 0 0 auto;
+                display: flex;
+                gap: 4px;
+            }
+        }
+
+        .degats-arme {
+            font-family: var(--font-primary, inherit);
+            font-size: 11px;
+            text-transform: none;
+            font-weight: normal;
+        }
+    }
+}

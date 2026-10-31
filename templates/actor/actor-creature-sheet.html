@@ -35,6 +35,9 @@
 									>
 								{{/if}}
 								{{#if (stratagemesTexte item)}}<i class="fas fa-gears stratageme-icone" data-tooltip="{{stratagemesTexte item}}"></i>{{/if}}
+								{{#if (eq item.type "arme")}}
+								<span class="degats-arme">Dégâts : {{#if item.system.formatV2}}{{#if item.system.adistance}}{{item.system.degatsBase}}{{else}}Constitution + {{item.system.degatsBase}}{{/if}}{{else}}{{item.system.degats}}{{/if}}{{#if item.system.traits}} — {{item.system.traits}}{{/if}}</span>
+								{{/if}}
 							</h4>
 							<div class="item-control">
 								<a class="fas fa-edit item-open" data-action="itemOpen" data-item-id="{{item.id}}"></a>
