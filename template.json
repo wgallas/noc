@@ -571,6 +571,19 @@
     "templates": {
       "base": {
         "description": ""
+      },
+      "stratageme": {
+        "stratagemes": {
+          "compartiment": false,
+          "ergonomie": false,
+          "mortel": false,
+          "lumineux": false,
+          "empoisonne": false,
+          "performant": false,
+          "sensibilite": false
+        },
+        "stratagemeTalent": "",
+        "stratagemePerformant": ""
       }
     },
     "archetype": {
@@ -615,7 +628,8 @@
     },
     "objetusuel": {
       "templates": [
-        "base"
+        "base",
+        "stratageme"
       ]
     },
     "thème": {
@@ -626,7 +640,8 @@
     },
     "outil": {
       "templates": [
-        "base"
+        "base",
+        "stratageme"
       ],
       "quantar": false,
       "needQuantar": false,
@@ -648,7 +663,8 @@
     },
     "armure": {
       "templates": [
-        "base"
+        "base",
+        "stratageme"
       ],
       "armure": 0,
       "traits": "",
@@ -658,7 +674,8 @@
     },
     "arme": {
       "templates": [
-        "base"
+        "base",
+        "stratageme"
       ],
       "needQuantar": false,
       "quantar": false,

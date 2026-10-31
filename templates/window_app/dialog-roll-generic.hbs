@@ -18,8 +18,11 @@
     {{#if (eq mode "arme")}}
       <h2 class="titre-arme">{{arme.name}}</h2>
       <div class="ligne-grise">
-        Combat : {{talent.niveau}} — {{#if (eq arme.type "outil")}}Arme improvisée (non maîtrisée et complexe) : +2{{else}}{{#if arme.system.maitrise}}Arme maîtrisée : +0{{else}}{{#if arme.system.traitsArme.complexe}}Arme non maîtrisée et complexe : +2{{else}}Arme non maîtrisée : +1{{/if}}{{/if}}{{/if}}
+        Combat : {{talent.niveau}} — {{#if arme.lameCachee}}Lame cachée (stratagème Mortel) : +0{{else if (eq arme.type "outil")}}Arme improvisée (non maîtrisée et complexe) : +2{{else}}{{#if arme.system.maitrise}}Arme maîtrisée : +0{{else}}{{#if arme.system.traitsArme.complexe}}Arme non maîtrisée et complexe : +2{{else}}Arme non maîtrisée : +1{{/if}}{{/if}}{{/if}}
       </div>
+      {{#each lignesStratagemes as |ligne|}}
+        <div class="ligne-grise">{{ligne}}</div>
+      {{/each}}
       <div class="fexrow form-group">
         <span>Niveau requis de base : </span>
         <span>{{niveauBase}}</span>
@@ -99,6 +102,16 @@
         <a class="bouton-collaboratif" data-ecart="-1" title="Retirer 1"><i class="fas fa-minus"></i></a>
         <a class="bouton-collaboratif" data-ecart="1" title="Ajouter 1"><i class="fas fa-plus"></i></a>
       </div>
+      {{#if equipements.length}}
+        <div class="flexcol options-jet equipements-jet">
+          {{#each equipements as |e index|}}
+            <label class="case-option">
+              <input type="checkbox" class="bonus-equipement" data-index="{{index}}" {{checked e.actif}}/>
+              <span>{{e.label}} : +{{e.bonus}}</span>
+            </label>
+          {{/each}}
+        </div>
+      {{/if}}
       <p class="regle-collaboration">Collaboration : quand c'est matériellement possible, un personnage mène l'action et les autres l'assistent, avec les talents que la Loi juge utiles. Le meneur gagne +1 niveau par tranche de 2 niveaux obtenus par ses assistants. Meneur et assistants peuvent provoquer le destin et puiser dans leurs réserves.</p>
     {{/if}}
 

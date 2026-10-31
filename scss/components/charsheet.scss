@@ -3768,3 +3768,12 @@ div.noc.sheet.actor.cabale .carte-gestion {
         }
     }
 }
+
+// Stratagèmes : icône dans les listes d'objets
+div.noc.sheet .item-list .stratageme-icone {
+    flex: 0 0 auto;
+    margin-left: 4px;
+    font-size: 11px;
+    opacity: 0.75;
+    cursor: help;
+}

@@ -10,6 +10,7 @@ import { documentsRecus, validite } from "../../documents-administratifs.mjs";
 import NOCContact from "../../ContactClass.js";
 import { choisirTheme, libelleTalent } from "../../archetypes.mjs";
 import { TYPES_GABARIT, gabaritDe, resumeGabarit } from "../../gabarits.mjs";
+import { outilUtilisableCommeArme } from "../../stratagemes.mjs";
 import { choisirQualite, descriptionQualite, enregistrerQualite } from "../../qualites.mjs";
 import { nocPersonnalisation } from "../../dialogs/noc-personnalisation.js";
 import { Quality } from "../../qualite_default.mjs";
@@ -327,7 +328,7 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
       // objet usuel, document administratif, armure : le clic sur le nom ouvre sa fiche
       if (["objetusuel", "document administratif", "armure"].includes(item?.type)) return item.sheet.render(true);
       // outil : fenêtre d'attaque seulement s'il peut servir d'arme improvisée
-      if (item?.type === "outil" && !item.system.improvisee?.active) return item.sheet.render(true);
+      if (item?.type === "outil" && !outilUtilisableCommeArme(item)) return item.sheet.render(true);
       this.actor.rollItem(itemId);
     })
 

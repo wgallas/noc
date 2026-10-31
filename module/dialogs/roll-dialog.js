@@ -149,6 +149,11 @@ export class nocRollDialog extends Dialog {
       this.rollData.nbDesDomaine = Number(event.currentTarget.value)
     })
     this.activerCabale(html)
+    // Stratagèmes : objet ergonomique ou sensible à la Noirceur utilisé pour ce jet
+    html.find('input.bonus-equipement').change((event) => {
+      const e = this.rollData.equipements?.[Number(event.currentTarget.dataset.index)]
+      if (e) e.actif = event.currentTarget.checked
+    })
     // bonus collaboratif : boutons +/- (minimum 0)
     html.find('a.bouton-collaboratif').click((event) => {
       const ecart = Number(event.currentTarget.dataset.ecart) || 0;

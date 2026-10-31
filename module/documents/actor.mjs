@@ -7,6 +7,7 @@ import { appliquerArchetype } from "../archetypes.mjs";
 import { appliquerQualites } from "../qualites.mjs";
 import { appliquerAutre } from "../autres.mjs";
 import { appliquerGabarit, armeAvecGabarit } from "../gabarits.mjs";
+import { armeAvecStratagemes, bonusEquipementTalent, outilUtilisableCommeArme } from "../stratagemes.mjs";
 import { appliquerArmures } from "../armures.mjs";
 import { appliquerEtats } from "../panneau-mj.mjs";
 import { jetonParDefaut } from "../jetons.mjs";
@@ -659,6 +660,8 @@ export class nocActor extends Actor {
     rollData.talentId = talentId
 
     this._ressourcesCabale(rollData, domaineId, talentId)
+    // Stratagèmes (Ergonomie, Sensibilité) des objets liés à ce talent : cases à cocher
+    rollData.equipements = bonusEquipementTalent(this, domaineId, talentId)
 
     this.startRoll(rollData)
   }
@@ -673,6 +676,18 @@ export class nocActor extends Actor {
       // valeurs calculées (formule de dégâts, texte des traits), absentes de la copie brute
       arme.system.degats = item.system.degats
       arme.system.traits = item.system.traits
+    } else if (item?.type == "outil" && !item.system.improvisee?.active && item.system.stratagemes?.mortel) {
+      // stratagème Mortel : l'outil cache une lame ou un poinçon (arme de contact, Constitution + 2)
+      arme = {
+        _id: item.id, name: item.name, img: item.img, type: "outil", lameCachee: true,
+        system: {
+          adistance: false,
+          maitrise: true,
+          traitsArme: {},
+          degats: "@talents.action.constitution.niveau + 2",
+          traits: "Lame cachée (stratagème Mortel)"
+        }
+      }
     } else if (item?.type == "outil" && item.system.improvisee?.active) {
       const imp = item.system.improvisee ?? {}
       const distance = imp.mode === "distance"
@@ -691,6 +706,9 @@ export class nocActor extends Actor {
     if (item && arme) {
       // Gabarit de corrompu frénétique : Multiple sur la copie de l'arme
       arme = armeAvecGabarit(this, arme)
+      // Stratagèmes de l'objet : Ergonomie (+1 en Combat), Mortel (dégâts +1, déjà compté pour une lame cachée)
+      const strat = armeAvecStratagemes(arme.lameCachee ? { system: { stratagemes: { ...item.system.stratagemes, mortel: false } } } : item, arme)
+      arme = strat.arme
       let rollData = this.buildGenericRollData()
       // Specific stuff
       rollData.title = "Arme"
@@ -710,6 +728,8 @@ export class nocActor extends Actor {
       rollData.cibleAuSol = false
       rollData.modSupplement = 0
       rollData.niveauFinalRequis = rollData.niveauBase + rollData.modMaitrise
+      rollData.bonusStratagemeArme = strat.bonusCombat
+      rollData.lignesStratagemes = strat.lignes
 
       this._ressourcesCabale(rollData, 'action', 'combat')
 

@@ -221,3 +221,23 @@ div.noc.item.sheet.gabarit {
     resize: vertical;
   }
 }
+
+// Stratagèmes d'un équipement
+div.noc.item.sheet .stratagemes-objet {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 2px 0 6px;
+
+  label.stratageme {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    cursor: help;
+
+    &.actif {
+      font-weight: bold;
+    }
+  }
+}

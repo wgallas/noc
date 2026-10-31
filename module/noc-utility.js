@@ -1,6 +1,7 @@
 import { soinDuJet, demanderSoin } from "./soins.mjs";
 import { calculerBlessures, ciblesActuelles, messageMJCibles } from "./combat-blessures.mjs";
 import { traitsEnCombat } from "./armes.mjs";
+import { totalBonusEquipement } from "./stratagemes.mjs";
 import { depenserCabale, bonusCabale } from "./cabale.mjs";
 /* -------------------------------------------- */
 
@@ -224,7 +225,9 @@ export class nocUtility {
 
     rollData.bonusCabale = bonusCabale(rollData)
     rollData.bonusCabaleTexte = `${rollData.bonusCabale > 0 ? "+" : ""}${rollData.bonusCabale}`
-    rollData.niveauFinal = rollData.talent.niveau + rollData.nbSuccess + ((rollData.useVecu || rollData.useVecuCabale) ? 1 : 0) + rollData.nbBonusCollaboratif + rollData.bonusCabale
+    // Stratagèmes : Ergonomie, Sensibilité (cases cochées) et Ergonomie de l'arme
+    rollData.bonusEquipement = totalBonusEquipement(rollData)
+    rollData.niveauFinal = rollData.talent.niveau + rollData.nbSuccess + ((rollData.useVecu || rollData.useVecuCabale) ? 1 : 0) + rollData.nbBonusCollaboratif + rollData.bonusCabale + rollData.bonusEquipement
     // un niveau requis de 0 est un vrai niveau requis : la réussite est calculée
     rollData.aNiveauRequis = rollData.niveauFinalRequis !== undefined && rollData.niveauFinalRequis !== null && rollData.niveauFinalRequis !== "";
     if (rollData.aNiveauRequis) {

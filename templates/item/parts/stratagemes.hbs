@@ -1,0 +1,28 @@
+<h3 class="titre-section" data-tooltip="Petites améliorations d'un équipement (livre de base p. 257) : 1 option de stratagème chacune, une seule fois par objet.">Stratagèmes</h3>
+<div class="stratagemes-objet">
+  {{#each stratagemes.liste as |s|}}
+  <label class="stratageme {{#if s.actif}}actif{{/if}}" data-tooltip="{{s.regle}}">
+    <input type="checkbox" name="system.stratagemes.{{s.cle}}" data-dtype="Boolean" {{checked s.actif}} {{#unless @root.editable}}disabled{{/unless}}>
+    {{s.label}}
+  </label>
+  {{/each}}
+</div>
+{{#if stratagemes.ergonomie}}{{#unless stratagemes.estArme}}
+<div class="form-group">
+  <h4 data-tooltip="Talent qui reçoit +1 quand l'objet est utilisé (case proposée dans la fenêtre de jet)">ergonomie : talent</h4>
+  <select name="system.stratagemeTalent" {{#unless editable}}disabled{{/unless}}>
+    <option value="">— à choisir —</option>
+    {{#each stratagemes.listeTalents as |groupe|}}
+    <optgroup label="{{groupe.domaine}}">
+      {{#each groupe.talents as |tal|}}<option value="{{tal.cle}}" {{#ifequal tal.cle @root.stratagemes.talent}}selected{{/ifequal}}>{{tal.label}}</option>{{/each}}
+    </optgroup>
+    {{/each}}
+  </select>
+</div>
+{{/unless}}{{/if}}
+{{#if stratagemes.performant}}
+<div class="form-group">
+  <h4>performant : quoi ?</h4>
+  <input type="text" name="system.stratagemePerformant" value="{{stratagemes.performance}}" placeholder="ex. portée +50 %" {{#unless editable}}disabled{{/unless}}>
+</div>
+{{/if}}

@@ -35,6 +35,7 @@
 										class="needQuantar {{#if item.system.quantar}} quantarUsed{{/if}}" data-tooltip="{{#if item.system.quantar}}quantar en place : cliquez pour le libérer{{else}}sans quantar, inutilisable : cliquez pour en placer un{{/if}}"
 									>
 								{{/if}}
+								{{#if (stratagemesTexte item)}}<i class="fas fa-gears stratageme-icone" data-tooltip="{{stratagemesTexte item}}"></i>{{/if}}
 							</h4>
 							<div class="item-control">
 								<a class="fas fa-edit item-open" data-action="itemOpen" data-item-id="{{item.id}}"></a>

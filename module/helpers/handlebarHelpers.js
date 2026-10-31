@@ -1,9 +1,15 @@
 import { descriptionNiveauTalent } from "../talents-niveaux.mjs";
+import { texteStratagemes } from "../stratagemes.mjs";
 export function registerHelpers() {
 
     // Description du niveau d'un talent (infobulle sur les fiches)
     Handlebars.registerHelper('niveauTalent', function (domaine, talent, niveau) {
         return descriptionNiveauTalent(domaine, talent, niveau);
+    });
+
+    // Stratagèmes d'un objet (infobulle sur les listes d'objets)
+    Handlebars.registerHelper('stratagemesTexte', function (item) {
+        return texteStratagemes(item).replace(/\n/g, "<br>");
     });
 
     Handlebars.registerHelper('repeat', function (n, block) {

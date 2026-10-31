@@ -89,7 +89,7 @@ export function armeAvecGabarit(actor, arme) {
   const x = m?.actif ? (Number(m.valeur) || 0) + 1 : 2;
   traits.multiple = { actif: true, valeur: x };
   arme.system.traitsArme = traits;
-  const base = arme.type === "outil" ? "Arme improvisée, " : "";
+  const base = arme.lameCachee ? "Lame cachée, " : (arme.type === "outil" ? "Arme improvisée, " : "");
   arme.system.traits = `${base}${texteTraits(traits)} — gabarit ${gabarit.name}`;
   return arme;
 }

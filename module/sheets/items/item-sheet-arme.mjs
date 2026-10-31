@@ -1,3 +1,4 @@
+import { contexteStratagemes } from "../../stratagemes.mjs";
 import { TRAITS_ARMES } from "../../armes.mjs";
 import { activerCompteurs } from "../../armures.mjs";
 
@@ -25,6 +26,7 @@ export class nocItemSheetArme extends foundry.appv1.sheets.ItemSheet {
     // Retrieve base data structure.
     const context = super.getData();
     context.systemTemplate = game.system.template;
+    context.stratagemes = contexteStratagemes(this.item);
     const traits = this.item.system.traitsArme ?? {};
     context.traitsSimples = [];
     context.traitsChiffres = [];
