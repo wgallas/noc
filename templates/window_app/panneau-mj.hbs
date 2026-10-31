@@ -94,6 +94,30 @@
     </div>
   </section>
 
+  <!-- FLUX D'UN SEUIL -->
+  <section class="bloc flux-seuil">
+    <h3 class="flexrow">
+      <span data-tooltip="Livre de base p. 205 : près d'un Seuil, qui provoque le destin lance au moins Flux dés de destin, et peut lancer jusqu'à Domaine + Flux dés de domaine.">Effet d'environnement : Flux d'un Seuil</span>
+      <span class="valeur-flux {{#if flux.valeur}}actif{{/if}}">Flux : <strong>{{flux.valeur}}</strong></span>
+    </h3>
+    <div class="reglages-flux flexrow">
+      <select class="reglage-flux" data-cle="lieu" data-tooltip="Lieu (Flux de base)">
+        {{#each flux.lieux as |l|}}<option value="{{l.cle}}" {{#if l.choisi}}selected{{/if}}>{{l.label}}</option>{{/each}}
+      </select>
+      <select class="reglage-flux" data-cle="tarissement" data-tooltip="Temps écoulé depuis la dernière ouverture du Seuil" {{#if flux.inactif}}disabled{{/if}}>
+        {{#each flux.tarissements as |t|}}<option value="{{t.cle}}" {{#if t.choisi}}selected{{/if}}>{{t.label}}</option>{{/each}}
+      </select>
+      <select class="reglage-flux" data-cle="eloignement" data-tooltip="Le Flux baisse de 1 tous les 10 m depuis les limites du Seuil (sauf à travers métaux lourds, basalte, béton armé, Matière noire)" {{#if flux.inactif}}disabled{{/if}}>
+        {{#each flux.eloignements as |e|}}<option value="{{e.cle}}" {{#if e.choisi}}selected{{/if}}>{{e.label}}</option>{{/each}}
+      </select>
+    </div>
+    <div class="flexrow boutons-flux">
+      <button type="button" data-action="annoncerFlux" data-tooltip="Message public aux joueurs">Annoncer aux joueurs</button>
+      <button type="button" data-action="sansFlux" {{#if flux.inactif}}disabled{{/if}}>Quitter le Seuil</button>
+    </div>
+    <p class="aide">Tant que le Flux est supérieur à 0, la fenêtre de jet propose la case « Près du Seuil » (cochée par défaut, à décocher pour un personnage éloigné). Le Flux s'ajoute aussi à la classe exogène des Autres pour leur flétrissement.</p>
+  </section>
+
   <!-- EFFETS DE FIEL -->
   <section class="bloc">
     <h3 class="flexrow">

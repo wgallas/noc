@@ -1,5 +1,10 @@
 
+import { enregistrerReglageFlux } from "./flux.mjs";
+
 export function registerNocSettings() {
+
+    // Flux d'un Seuil (effet d'environnement réglé dans le panneau du MJ)
+    enregistrerReglageFlux();
 
     // version de la conversion des archétypes et thèmes déjà appliquée au monde
     game.settings.register("noc", "migrationPerditions", {

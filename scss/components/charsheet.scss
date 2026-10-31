@@ -3777,3 +3777,34 @@ div.noc.sheet .item-list .stratageme-icone {
     opacity: 0.75;
     cursor: help;
 }
+
+// Panneau du MJ : Flux d'un Seuil
+.panneau-mj .flux-seuil {
+    h3 .valeur-flux {
+        flex: 0 0 auto;
+        font-size: 13px;
+
+        &.actif strong {
+            color: #8b1a1a;
+        }
+    }
+
+    .reglages-flux {
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 4px;
+
+        select {
+            flex: 1 1 30%;
+            min-width: 10em;
+        }
+    }
+
+    .boutons-flux {
+        gap: 6px;
+
+        button {
+            margin: 0;
+        }
+    }
+}

@@ -3,6 +3,7 @@
  * Fenêtre réservée au MJ (ApplicationV2), ouverte depuis la barre d'outils.
  */
 
+import { contexteFlux, descriptionFlux, modifierFlux, valeurFlux } from "./flux.mjs";
 import { cycleCourant, documentsEnVigueur, donneesPapier, nouveauCycle } from "./documents-administratifs.mjs";
 import { ouvrirPapier } from "./bureau.mjs";
 import { raisonSommeil, reveiller } from "./sommeil.mjs";
@@ -194,6 +195,18 @@ async function modifierPerdition(actor, perdition, points, { soigner = false, re
 /*  Fenêtre                                      */
 /* -------------------------------------------- */
 
+/* -------------------------------------------- */
+/*  Flux des Seuils                              */
+/* -------------------------------------------- */
+
+async function annoncerFlux() {
+  const flux = valeurFlux();
+  const lignes = flux
+    ? [`Flux : ${flux}`, `Qui provoque le destin lance au moins ${flux} dé${flux > 1 ? "s" : ""} de destin, et jusqu'à Domaine + ${flux} dés de domaine.`]
+    : ["Plus aucun Flux : les jets reprennent leurs limites habituelles."];
+  return message(flux ? `Flux d'un Seuil : ${descriptionFlux()}` : "Flux d'un Seuil : aucun", lignes, { public: true });
+}
+
 export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static DEFAULT_OPTIONS = {
@@ -216,7 +229,9 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       toutCocher: PanneauMJ.#onToutCocher,
       reveiller: PanneauMJ.#onReveiller,
       nouveauCycle: PanneauMJ.#onNouveauCycle,
-      ouvrirDocument: PanneauMJ.#onOuvrirDocument
+      ouvrirDocument: PanneauMJ.#onOuvrirDocument,
+      annoncerFlux: () => annoncerFlux(),
+      sansFlux: async () => { await modifierFlux({ lieu: "aucun" }); return annoncerFlux(); }
     }
   };
 
@@ -321,6 +336,7 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       niveaux,
       categories,
       categorie: this.categorie,
+      flux: contexteFlux(),
       onglet: this.onglet
     };
   }
@@ -344,6 +360,12 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       this.choix[ev.currentTarget.dataset.niveau] = ev.currentTarget.value;
     }));
     html.querySelector("select.categorie-tirage")?.addEventListener("change", ev => { this.categorie = ev.currentTarget.value; });
+    // Flux d'un Seuil : chaque changement est enregistré (le panneau se redessine)
+    html.querySelectorAll("select.reglage-flux").forEach(sel => sel.addEventListener("change", ev => {
+      const cle = ev.currentTarget.dataset.cle;
+      const valeur = cle === "eloignement" ? Number(ev.currentTarget.value) : ev.currentTarget.value;
+      modifierFlux({ [cle]: valeur });
+    }));
   }
 
   /** Acteurs ciblés : ceux cochés dans les deux listes */

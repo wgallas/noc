@@ -1,4 +1,5 @@
 import { nocUtility } from "../noc-utility.js";
+import { fluxPourJet, imposerMinimumFlux } from "../flux.mjs";
 
 const echapper = t => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const pluriel = (n, mot) => `${n} ${mot}${n > 1 ? "s" : ""}`;
@@ -55,6 +56,11 @@ export class nocRollDialog extends Dialog {
 
     let options = { classes: ["nocDialog"], width: 420, height: 'fit-content', 'z-index': 99999 };
     rollData.cabaleHtml = htmlCabale(rollData);
+    // Flux d'un Seuil (réglé par le MJ) : jusqu'à Domaine + Flux dés de domaine
+    if (rollData.flux === undefined) Object.assign(rollData, fluxPourJet());
+    const domaineDes = Number(rollData.domaine?.value) || 0;
+    rollData.maxDesAvecFlux = domaineDes + (rollData.flux || 0);
+    rollData.maxDesDomaine = domaineDes + (rollData.fluxActif ? rollData.flux : 0);
     let html = await renderTemplate('systems/noc/templates/window_app/dialog-roll-generic.hbs', rollData);
     delete rollData.cabaleHtml;
 
@@ -89,6 +95,8 @@ export class nocRollDialog extends Dialog {
 
   /* -------------------------------------------- */
   roll() {
+    // près d'un Seuil : au moins Flux dés de destin si le personnage provoque le destin
+    imposerMinimumFlux(this.rollData)
     nocUtility.roll(this.rollData)
   }
 
@@ -114,7 +122,7 @@ export class nocRollDialog extends Dialog {
       const distance = r.arme.system.adistance;
       r.niveauFinalRequis = (Number(r.niveauBase) || 0) + (Number(r.modMaitrise) || 0)
         + (distance ? (Number(r.modDistance) || 0) + (Number(r.modCouvert) || 0) : 0)
-        + (Number(r.modVisibilite) || 0)
+        + (Number(r.modConditions) || 0)
         + (r.cibleAuSol ? (distance ? 1 : -1) : 0)
         + (Number(r.modSupplement) || 0);
     } else if (this.rollData.niveauRequis !== undefined) {
@@ -148,6 +156,17 @@ export class nocRollDialog extends Dialog {
     html.find('#nbDesDomaine').change((event) => {
       this.rollData.nbDesDomaine = Number(event.currentTarget.value)
     })
+    // Flux d'un Seuil : la case change le nombre maximum de dés de domaine
+    html.find('#fluxActif').change((event) => {
+      const r = this.rollData
+      r.fluxActif = event.currentTarget.checked
+      r.maxDesDomaine = (Number(r.domaine?.value) || 0) + (r.fluxActif ? r.flux : 0)
+      const curseur = html.find('#nbDesDomaine')
+      curseur.attr('max', r.maxDesDomaine)
+      if (Number(curseur.val()) > r.maxDesDomaine) curseur.val(r.maxDesDomaine)
+      r.nbDesDomaine = Number(curseur.val())
+      html.find('[data-display-range="nbDesDomaine"]').html(String(r.nbDesDomaine))
+    })
     this.activerCabale(html)
     // Stratagèmes : objet ergonomique ou sensible à la Noirceur utilisé pour ce jet
     html.find('input.bonus-equipement').change((event) => {
@@ -161,7 +180,7 @@ export class nocRollDialog extends Dialog {
       this.rollData.nbBonusCollaboratif = valeur;
       html.find('#nbBonusCollaboratif').html(valeur > 0 ? `+${valeur}` : "0");
     })
-    html.find('#modDistance, #modVisibilite').change(() => this.updateNiveauFinal())
+    html.find('#modDistance, #modConditions').change(() => this.updateNiveauFinal())
     html.find('#modCouvert').change((event) => {
       this.rollData.modCouvert = Number(event.currentTarget.value)
       this.updateNiveauFinal()

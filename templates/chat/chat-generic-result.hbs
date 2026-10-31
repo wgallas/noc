@@ -79,6 +79,9 @@
       {{#if nbBonusCollaboratif}}
         <li>Bonus collaboratif : {{nbBonusCollaboratif}}</li>
       {{/if}}
+      {{#if fluxActif}}
+        <li>Près d'un Seuil (Flux {{flux}}){{#if fluxImpose}} : {{fluxImpose}} dé{{#ifgt fluxImpose 1}}s{{/ifgt}} de destin ajouté{{#ifgt fluxImpose 1}}s{{/ifgt}} pour atteindre le minimum{{/if}}</li>
+      {{/if}}
       {{#if bonusEquipement}}
         <li>Équipement (stratagèmes) : +{{bonusEquipement}}</li>
       {{/if}}

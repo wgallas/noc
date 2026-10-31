@@ -724,7 +724,7 @@ export class nocActor extends Actor {
       rollData.longuePortee = !!arme.system.traitsArme?.longuePortee
       rollData.modDistance = 0
       rollData.modCouvert = 0
-      rollData.modVisibilite = 0
+      rollData.modConditions = 0
       rollData.cibleAuSol = false
       rollData.modSupplement = 0
       rollData.niveauFinalRequis = rollData.niveauBase + rollData.modMaitrise

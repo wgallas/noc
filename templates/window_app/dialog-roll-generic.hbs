@@ -55,13 +55,15 @@
 
       <h3>Modificateurs</h3>
         <div class="fexrow form-group">
-          <span class="libelle-curseur">Visibilité : </span>
-          <span data-display-range="modVisibilite">Pas d'obscurité : +0</span>
-          <input class="noc-slider" id="modVisibilite" value="0" type="range" step="2" min="0" max="4" list="modVisibiliteList">
-          <datalist id="modVisibiliteList">
-            <option value="0">Pas d'obscurité : +0</option>
-            <option value="2">Obscurité partielle : +2</option>
-            <option value="4">Obscurité totale : +4</option>
+          <span class="libelle-curseur">Conditions extérieures : </span>
+          <span data-display-range="modConditions">Normales : +0</span>
+          <input class="noc-slider" id="modConditions" value="0" type="range" step="1" min="-1" max="3" list="modConditionsList">
+          <datalist id="modConditionsList">
+            <option value="-1">Favorables : -1</option>
+            <option value="0">Normales : +0</option>
+            <option value="1">Difficiles : +1</option>
+            <option value="2">Très difficiles : +2</option>
+            <option value="3">Extrêmes : +3</option>
           </datalist>
         </div>
         <div class="fexrow form-group">
@@ -138,17 +140,24 @@
         type="range"
         step="1"
         min="0"
-        max="{{domaine.value}}"
+        max="{{maxDesDomaine}}"
         list="nbDesDomaineList"
       >
       <datalist id="nbDesDomaineList">
         <option value="0">0</option>
-        {{#repeat domaine.value}}
+        {{#repeat maxDesAvecFlux}}
           <option value="{{add @index 1}}">{{add @index 1}}</option>
         {{/repeat}}
       </datalist>
 
     </div>
+
+    {{#if flux}}
+      <label class="case-option flux-jet" data-tooltip="{{fluxDescription}}">
+        <input type="checkbox" id="fluxActif" {{checked fluxActif}}/>
+        <span>Près du Seuil (Flux {{flux}}) : jusqu'à Domaine + {{flux}} dés de domaine ; si vous provoquez le destin, au moins {{flux}} dé{{#ifgt flux 1}}s{{/ifgt}} de destin</span>
+      </label>
+    {{/if}}
 
     {{#if cabaleHtml}}
       <div class="bloc-cabale">{{{cabaleHtml}}}</div>
