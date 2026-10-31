@@ -6,6 +6,7 @@ import { nocNoirceurTraits } from '../dialogs/noc-noirceurTrait.js';
 import { appliquerArchetype } from "../archetypes.mjs";
 import { appliquerQualites } from "../qualites.mjs";
 import { appliquerAutre } from "../autres.mjs";
+import { appliquerGabarit, armeAvecGabarit } from "../gabarits.mjs";
 import { appliquerArmures } from "../armures.mjs";
 import { appliquerEtats } from "../panneau-mj.mjs";
 import { jetonParDefaut } from "../jetons.mjs";
@@ -238,6 +239,8 @@ export class nocActor extends Actor {
     appliquerArchetype(this);
     appliquerQualites(this);
     appliquerAutre(this);
+    // Gabarit de corrompu : par-dessus l'archétype et l'Énergie noire
+    appliquerGabarit(this);
     appliquerArmures(this);
     appliquerEtats(this);
     appliquerPerditions(this);
@@ -686,6 +689,8 @@ export class nocActor extends Actor {
       }
     }
     if (item && arme) {
+      // Gabarit de corrompu frénétique : Multiple sur la copie de l'arme
+      arme = armeAvecGabarit(this, arme)
       let rollData = this.buildGenericRollData()
       // Specific stuff
       rollData.title = "Arme"

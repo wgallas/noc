@@ -18,6 +18,7 @@ import { nocItemSheetOutil } from "./sheets/items/item-sheet-outil.mjs";
 import { nocItemSheetObjetUsuel } from "./sheets/items/item-sheet-objetusuel.mjs";
 import { nocItemSheetDocumentAdministratif } from "./sheets/items/item-sheet-documentAdministratif.mjs";
 import { nocItemSheetArmure } from "./sheets/items/item-sheet-armure.mjs";
+import { nocItemSheetGabarit } from "./sheets/items/item-sheet-gabarit.mjs";
 
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
@@ -181,6 +182,11 @@ Hooks.once('init', async function () {
     types: ["armure"],
     makeDefault: true,
     label: "fiche d'armure'"
+  });
+  foundry.documents.collections.Items.registerSheet("noc", nocItemSheetGabarit, {
+    types: ["gabarit"],
+    makeDefault: true,
+    label: "fiche de gabarit de corrompu"
   });
 
   // Preload Handlebars templates.

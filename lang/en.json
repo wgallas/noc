@@ -1,4 +1,25 @@
 {
-
-  "NOC.Add": "Add"
+  "NOC.Add": "Add",
+  "ITEM": {
+    "TypeGabarit": "Corruption template"
+  },
+  "TYPES": {
+    "Actor": {
+      "personnage": "Character",
+      "rouage": "Cog",
+      "autre": "Other",
+      "cabale": "Cabal",
+      "creature": "Creature"
+    },
+    "Item": {
+      "archetype": "Archetype",
+      "thème": "Theme",
+      "outil": "Tool",
+      "arme": "Weapon",
+      "armure": "Armor",
+      "document administratif": "Administrative document",
+      "objetusuel": "Everyday object",
+      "gabarit": "Corruption template"
+    }
+  }
 }

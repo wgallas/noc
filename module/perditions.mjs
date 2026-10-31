@@ -81,6 +81,7 @@ export async function seuilsFranchis(actor, avant) {
       if (def.sequelle) majMin[`system.perditions.${cle}.min`] = Math.min(nouveau, nombre(majMin[`system.perditions.${cle}.min`] ?? p.min) + 1);
       if (def.trait) {
         if (cle === "noirceur") actor.noirceurTraitDialog?.();
+        if (cle === "noirceur" && seuil >= 10) lignes.push("La Loi peut lui appliquer un gabarit de corrompu (sadique, frénétique ou insidieux, p. 275) : compendium Archétypes, dossier « Gabarits de corrompus », à glisser sur la fiche.");
         if (cle === "traque") await ajouterTraitTraque(actor, seuil >= 10 ? "ennemi_public" : "criminel");
       }
     }

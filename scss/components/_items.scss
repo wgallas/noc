@@ -184,3 +184,40 @@ div.noc.item.sheet {
     }
   }
 }
+
+// Gabarits de corrompus
+div.noc.item.sheet.gabarit {
+  .hint {
+    font-size: 11px;
+    font-style: italic;
+    margin: 4px 0 8px;
+  }
+
+  .gabarit-domaines {
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+
+    .gabarit-domaine {
+      flex: 0 0 30%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2px 6px;
+      box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+
+      .libelle {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .archetype-themes .archetype-theme .theme-talents select.gabarit-ajout-talent {
+    flex: 0 0 9em;
+  }
+
+  textarea {
+    width: 100%;
+    resize: vertical;
+  }
+}

@@ -1,0 +1,65 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <section class="sheet-body">
+    <input class="item-name" name="name" type="text" value="{{document.name}}" placeholder="Nom du gabarit"/>
+    <img class="item-img" src="{{document.img}}" data-edit="img" title="{{document.name}}" />
+
+    <p class="hint">Glissez ce gabarit sur la fiche d'un personnage, d'un rouage, d'un Autre ou d'une créature : ses bonus s'ajoutent aux scores. Le retirer rend la fiche d'origine.</p>
+
+    <div class="form-group">
+      <h4>description</h4>
+      {{editor document.system.description target="system.description" button=true editable=editable engine="prosemirror" collaborate=false}}
+    </div>
+
+    <h3 class="titre-section">Domaines</h3>
+    <div class="gabarit-domaines flexrow">
+      {{#each domaines as |d|}}
+      <div class="gabarit-domaine">
+        <span class="libelle">{{d.label}}</span>
+        <span class="compteur-niveau">{{d.valeur}}
+          {{#if @root.editable}}
+          <span class="compteur-controls">
+            <a class="fas fa-add compteur-plus" data-champ="system.domaines.{{d.cle}}"></a>
+            <a class="fas fa-minus compteur-moins" data-champ="system.domaines.{{d.cle}}"></a>
+          </span>
+          {{/if}}
+        </span>
+      </div>
+      {{/each}}
+    </div>
+
+    <h3 class="titre-section">Talents</h3>
+    <div class="archetype-themes">
+      <div class="archetype-theme">
+        <div class="theme-talents flexrow">
+          {{#each talents as |t|}}
+          <span class="theme-talent">
+            {{t.label}}
+            <a class="theme-talent-valeur" data-action="cycle-talent" data-talent="{{t.talent}}" data-tooltip="+1, +2 ou −1">{{t.signe}}</a>
+            {{#if @root.editable}}<a class="fas fa-times" data-action="remove-talent" data-talent="{{t.talent}}" data-tooltip="retirer ce talent"></a>{{/if}}
+          </span>
+          {{/each}}
+          {{#if editable}}
+          <select class="theme-ajout-talent gabarit-ajout-talent">
+            <option value="">+ talent…</option>
+            {{#each listeTalents as |groupe|}}
+            <optgroup label="{{groupe.domaine}}">
+              {{#each groupe.talents as |tal|}}<option value="{{tal.cle}}">{{tal.label}}</option>{{/each}}
+            </optgroup>
+            {{/each}}
+          </select>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+
+    <h3 class="titre-section">Attaques</h3>
+    <div class="form-group">
+      <h4 data-tooltip="Multiple (2), ou X + 1 si l'arme a déjà Multiple (X). L'arme elle-même n'est pas modifiée.">les attaques gagnent Multiple</h4>
+      <input name="system.multiple" type="checkbox" data-dtype="Boolean" {{checked document.system.multiple}}>
+    </div>
+    <div class="form-group">
+      <h4>rappel de règle</h4>
+      <textarea name="system.special" rows="3" placeholder="effet à appliquer à la main (affiché dans l'infobulle de la fiche)">{{document.system.special}}</textarea>
+    </div>
+  </section>
+</form>

@@ -1,0 +1,13 @@
+name: Gabarits de corrompus
+type: Item
+description: ''
+folder: null
+sorting: a
+sort: 0
+color: null
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '14.369'
+_id: W00hKUxJsul3vYO3
+_key: '!folders!W00hKUxJsul3vYO3'

@@ -1,0 +1,8 @@
+{{#if gabarit}}
+<div class="archetype-rouage gabarit-corrompu flexrow">
+  {{#unless sansLibelle}}<span class="libelle">Gabarit :</span>{{/unless}}
+  <span class="item-name" data-tooltip="{{gabarit.resume}}">{{gabarit.nom}}</span>
+  <a class="fas fa-edit item-open" data-action="itemOpen" data-item-id="{{gabarit.id}}" data-tooltip="Ouvrir le gabarit"></a>
+  {{#if editable}}<a class="fas fa-trash item-delete" data-action="itemDelete" data-item-id="{{gabarit.id}}" data-tooltip="Retirer le gabarit (la fiche retrouve ses scores)"></a>{{/if}}
+</div>
+{{/if}}

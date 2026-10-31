@@ -15,7 +15,8 @@ export class nocItem extends Item {
         "arme": "arme.webp",
         "document administratif": "document_administratif.webp",
         "outil": "outil.webp",
-        "armure": "armure.webp"
+        "armure": "armure.webp",
+        "gabarit": "autre.webp"
       };
       data.img = `systems/noc/asset/default_icons/${icones[data.type] ?? "question_mark.webp"}`;
     }

@@ -1,0 +1,39 @@
+name: Corrompu (sadique)
+type: gabarit
+img: systems/noc/asset/default_icons/autre.webp
+system:
+  description: '<p>Gabarit applicable à tout Rouage ou toute créature succombant à la Noirceur, ou à un Héros ayant reçu son dixième point de Noirceur (Livre de base p. 275). Glissez-le sur la fiche : ses bonus s''ajoutent aux scores, et le retirer rend la fiche d''origine. Ses attaques gagnent le trait Choc : à ajouter par la Loi aux armes concernées.</p>'
+  domaines:
+    vie: 0
+    erudition: 0
+    technique: 0
+    action: 0
+    statut: 0
+    ame: 1
+    social: 1
+  talents:
+  - talent: action.deplacement
+    value: 1
+  - talent: ame.tenebres
+    value: 1
+  - talent: social.psychologie
+    value: 1
+  multiple: false
+  special: 'Ses attaques gagnent le trait Choc : à ajouter par la Loi aux armes concernées.'
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793471920591
+  modifiedTime: 1793471920591
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: iNwwDCKJ53B4ESXo
+folder: W00hKUxJsul3vYO3
+sort: 100000
+ownership:
+  default: 0
+_key: '!items!iNwwDCKJ53B4ESXo'

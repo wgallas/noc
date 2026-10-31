@@ -252,6 +252,13 @@
 						</div>
 					</div>
 
+					{{#if gabarit}}
+					<div class="form-group bloc-empile">
+						<div>Gabarit :</div>
+						{{> "systems/noc/templates/actor/parts/gabarit.hbs" sansLibelle=true}}
+					</div>
+					{{/if}}
+
 					<div class="form-group bloc-empile">
 						<div>Qualité :</div>
 						<div class="qualite-resume flexrow">

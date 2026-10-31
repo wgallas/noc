@@ -9,6 +9,7 @@ import { ouvrirGuichet, ouvrirPapier } from "../../bureau.mjs";
 import { documentsRecus, validite } from "../../documents-administratifs.mjs";
 import NOCContact from "../../ContactClass.js";
 import { choisirTheme, libelleTalent } from "../../archetypes.mjs";
+import { TYPES_GABARIT, gabaritDe, resumeGabarit } from "../../gabarits.mjs";
 import { choisirQualite, descriptionQualite, enregistrerQualite } from "../../qualites.mjs";
 import { nocPersonnalisation } from "../../dialogs/noc-personnalisation.js";
 import { Quality } from "../../qualite_default.mjs";
@@ -132,6 +133,15 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
         return ui.notifications.warn("Les archétypes sont réservés aux personnages et aux rouages.");
       }
       return this._onDropArchetype(ev, dropItem);
+    }
+    if (dropItem.type == "gabarit") {
+      if (!TYPES_GABARIT.includes(this.actor.type)) {
+        return ui.notifications.warn("Les gabarits de corrompus se posent sur un personnage, un rouage, un Autre ou une créature.");
+      }
+      if (!this.actor.isOwner || dropItem.parent?.id === this.actor.id) return false;
+      if (gabaritDe(this.actor)) {
+        return ui.notifications.warn(`${this.actor.name} porte déjà un gabarit de corrompu. Supprimez-le d'abord si vous voulez en changer.`);
+      }
     }
 
     return super._onDropItem(ev, data);
@@ -257,6 +267,8 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
   _preparePersonnageItems(context) {
     this.checkArchetype();
     this.prepareArchetype(context);
+    const gabarit = gabaritDe(this.actor);
+    context.gabarit = gabarit ? { id: gabarit.id, nom: gabarit.name, resume: resumeGabarit(gabarit.system) } : null;
     context.sommeil = raisonSommeil(this.actor);
     context.documentsRecus = this.actor.type === "personnage" ? documentsRecus(this.actor).map(d => ({
       uuid: d.uuid, nom: d.name, titulaire: d.actor?.name ?? "", perime: !!validite(d)?.perime

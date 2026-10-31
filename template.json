@@ -565,7 +565,8 @@
       "arme",
       "armure",
       "document administratif",
-      "objetusuel"
+      "objetusuel",
+      "gabarit"
     ],
     "templates": {
       "base": {
@@ -757,6 +758,23 @@
         "niveaux": 0,
         "heures": 0
       }
+    },
+    "gabarit": {
+      "templates": [
+        "base"
+      ],
+      "domaines": {
+        "vie": 0,
+        "erudition": 0,
+        "technique": 0,
+        "action": 0,
+        "statut": 0,
+        "ame": 0,
+        "social": 0
+      },
+      "talents": [],
+      "multiple": false,
+      "special": ""
     }
   }
 }

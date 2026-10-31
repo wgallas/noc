@@ -14,7 +14,27 @@
     "TypeDocumentadministratif": "Document administratif",
     "TypeDocument administratif": "Document administratif",
     "TypeObjetusuel": "Objet usuel",
-    "TypeArmure": "Armure"
+    "TypeArmure": "Armure",
+    "TypeGabarit": "Gabarit de corrompu"
   },
-  "NOC.Add": "Ajouter"
+  "NOC.Add": "Ajouter",
+  "TYPES": {
+    "Actor": {
+      "personnage": "Personnage",
+      "rouage": "Rouage",
+      "autre": "Autre",
+      "cabale": "Cabale",
+      "creature": "Créature"
+    },
+    "Item": {
+      "archetype": "Archétype",
+      "thème": "Thème",
+      "outil": "Outil",
+      "arme": "Arme",
+      "armure": "Armure",
+      "document administratif": "Document administratif",
+      "objetusuel": "Objet usuel",
+      "gabarit": "Gabarit de corrompu"
+    }
+  }
 }

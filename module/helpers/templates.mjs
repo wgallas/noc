@@ -10,6 +10,7 @@ export const preloadHandlebarsTemplates = async function () {
     "systems/noc/templates/actor/parts/actor-features.html",
     "systems/noc/templates/actor/parts/actor-items.html",
     "systems/noc/templates/actor/parts/actor-talents.html",
+    "systems/noc/templates/actor/parts/gabarit.hbs",
     "systems/noc/templates/item/parts/document-options.hbs",
     "systems/noc/templates/item/parts/document-bilan.hbs",
     "systems/noc/templates/item/parts/document-papier.hbs",
