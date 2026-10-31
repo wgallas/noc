@@ -195,7 +195,7 @@ system:
     degats: 3, perforant
   special: ''
 prototypeToken:
-  name: Molosse
+  name: Sanglier
   displayName: 0
   actorLink: false
   texture:

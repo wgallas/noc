@@ -1,0 +1,57 @@
+name: Pistolet mitrailleur A17 Havran
+type: arme
+img: systems/noc/asset/default_icons/arme.webp
+system:
+  description: <p>Arme automatique compacte à culasse télescopique, utilisée par la Garde Noire, les compagnies franches et des services de sécurité.</p><p>Livre de base p. 288.</p>
+  needQuantar: false
+  quantar: false
+  adistance: true
+  valeur: 2
+  limite: 2
+  degats: '3'
+  matrise: false
+  traits: ''
+  munitions:
+    type: Balles
+    quantite: 24
+  portee: 0
+  formatV2: true
+  degatsBase: 3
+  traitsArme:
+    choc: false
+    complexe: false
+    long: false
+    perforant: true
+    longuePortee: false
+    recurrent: false
+    tranchant: false
+    contrainte:
+      actif: false
+      valeur: 0
+    energieNoire:
+      actif: false
+      valeur: 0
+    multiple:
+      actif: true
+      valeur: 2
+    quantique:
+      actif: false
+      valeur: 0
+  maitrise: true
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: ZKLd3ASjdqc6dT6Y
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!ZKLd3ASjdqc6dT6Y'

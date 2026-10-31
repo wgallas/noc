@@ -1,0 +1,37 @@
+name: Cartouche d'air comprimé
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: <p>Cylindre de métal standardisé rempli d'air à très haute pression, qui alimente les appareils pneumatiques.</p>
+  quantar: false
+  needQuantar: false
+  valeur: 0
+  limite: 0
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>Rechargeable, comme les bonbonnes, dans les stations pneumatiques de l'Édification.</p><p>Livre de base p. 285.</p>
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: vpgqMwWaxG6SO0uM
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!vpgqMwWaxG6SO0uM'

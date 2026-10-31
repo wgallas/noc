@@ -1,0 +1,37 @@
+name: Enregistreur
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: <p>Appareil portatif qui enregistre et restitue les sons ; compagnon des interrogatoires de la Garde Noire et de la PoliSec.</p>
+  quantar: false
+  needQuantar: false
+  valeur: 2
+  limite: 1
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>3 heures de fonctionnement. Utilise une cartouche d'air comprimé.</p><p>Livre de base p. 285.</p>
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: K4bPAJaVUqsRpIon
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!K4bPAJaVUqsRpIon'

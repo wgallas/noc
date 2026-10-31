@@ -195,7 +195,7 @@ system:
     degats: '3'
   special: ''
 prototypeToken:
-  name: Molosse
+  name: Cerf
   displayName: 0
   actorLink: false
   texture:

@@ -10,7 +10,7 @@ system:
   duree: 1
   rangSup: 0
   port:
-    objet: 'Arme de poing (ex. P11 Mravenec, P23 Zmije)'
+    objet: 'Arme de poing (ex. P11 Mrevenec, P23 Zmije)'
     bonusX: 0
   acces:
     zone: 1

@@ -91,6 +91,18 @@
       }
     },
     {
+      "name": "outils",
+      "label": "Outils",
+      "system": "noc",
+      "path": "packs/item-outils",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
       "name": "documents",
       "label": "Documents administratifs",
       "system": "noc",

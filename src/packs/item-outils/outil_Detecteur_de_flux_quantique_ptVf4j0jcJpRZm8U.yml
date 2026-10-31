@@ -1,0 +1,37 @@
+name: Détecteur de flux quantique
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: <p>Instrument alambiqué des scientifiques du Progrès et de la cellule K, qui mesure les variations et les motifs de l'énergie quantique.</p>
+  quantar: false
+  needQuantar: false
+  valeur: 3
+  limite: 2
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Possède Sensibilité (3).</p><p>Acquisition à la création : 1 point de stratagème.</p><p>Livre de base p. 285.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: ptVf4j0jcJpRZm8U
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!ptVf4j0jcJpRZm8U'

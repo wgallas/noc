@@ -1,0 +1,57 @@
+name: Brûleur quantique O12 Kanec
+type: arme
+img: systems/noc/asset/default_icons/arme.webp
+system:
+  description: <p>Un effecteur K porte la cible à plusieurs milliers de degrés et l'embrase, sans combustible ni réservoir susceptible d'exploser. Utilisé pour la décontamination.</p><p>Nécessite un quantar. Livre de base p. 286.</p>
+  needQuantar: true
+  quantar: false
+  adistance: true
+  valeur: 2
+  limite: 3
+  degats: '3'
+  matrise: false
+  traits: ''
+  munitions:
+    type: Quantar
+    quantite: 10
+  portee: 0
+  formatV2: true
+  degatsBase: 3
+  traitsArme:
+    choc: false
+    complexe: false
+    long: false
+    perforant: false
+    longuePortee: false
+    recurrent: true
+    tranchant: false
+    contrainte:
+      actif: false
+      valeur: 0
+    energieNoire:
+      actif: false
+      valeur: 0
+    multiple:
+      actif: false
+      valeur: 0
+    quantique:
+      actif: true
+      valeur: 3
+  maitrise: true
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: XK3WWLcrofoKElX9
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!XK3WWLcrofoKElX9'

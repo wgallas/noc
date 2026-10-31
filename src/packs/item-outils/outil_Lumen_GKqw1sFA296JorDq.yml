@@ -1,0 +1,37 @@
+name: Lumen
+type: outil
+img: systems/noc/asset/default_icons/lumen.jpeg
+system:
+  description: <p>Lampe portative, souvent cylindrique, dont un effecteur dédié tire une lumière vive d'un quantar. Couleurs et formes du faisceau varient.</p>
+  quantar: false
+  needQuantar: true
+  valeur: 1
+  limite: 0
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>Éclaire jusqu'à 20 m. Nécessite un quantar.</p><p>Livre de base p. 285.</p>
+  portee: 20 m
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: GKqw1sFA296JorDq
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!GKqw1sFA296JorDq'

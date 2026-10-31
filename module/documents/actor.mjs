@@ -14,6 +14,23 @@ import { appliquerEffetsFiel, aggravationsActives } from "../fiel/bibliotheque.m
 import { preparerCabale, cabalesPourJet, seuilsCabale, divisionDuPersonnage } from "../cabale.mjs";
 import { assistantCreation } from "../cabale-gestion.mjs";
 /**
+ * Taille d'une réserve selon le niveau du Talent qui la commande
+ * (livre de base p. 260 ; Contacts niveau 5 : 10 Faveurs, p. 241).
+ * Au-delà du dernier palier, la taille reste celle du palier le plus haut.
+ */
+const PALIERS_RESERVES = {
+  singularite: [0, 0, 2, 3, 4, 5],     // Artefact -1, 0, 1, 2, 3, 4 et plus
+  espoir: [1, 3, 5, 7, 9, 10],         // Ferveur -1, 0, 1, 2, 3, 4 et plus
+  faveurs: [0, 0, 2, 4, 6, 8, 10]      // Contacts -1, 0, 1, 2, 3, 4, 5 et plus
+};
+export function tailleReserve(reserve, niveau) {
+  const paliers = PALIERS_RESERVES[reserve];
+  const n = Math.round(Number(niveau) || 0);
+  const i = Math.min(paliers.length - 1, Math.max(0, n + 1));
+  return paliers[i];
+}
+
+/**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
  */
@@ -247,62 +264,11 @@ export class nocActor extends Actor {
   async _preparePersonnageData() {
     if (this.type !== 'personnage') return;
 
-    switch (this.system.talents.technique.artefact.niveau) {
-      case -1:
-      case 0:
-        this.system.reserves.singularite.max = 0;
-        break;
-      case 1:
-        this.system.reserves.singularite.max = 2;
-        break;
-      case 2:
-        this.system.reserves.singularite.max = 3;
-        break;
-      case 3:
-        this.system.reserves.singularite.max = 4;
-        break;
-      case 4:
-        this.system.reserves.singularite.max = 5;
-        break;
-    }
-    switch (this.system.talents.statut.contact.niveau) {
-      case -1:
-      case 0:
-        this.system.reserves.faveurs.max = 0;
-        break;
-      case 1:
-        this.system.reserves.faveurs.max = 2;
-        break;
-      case 2:
-        this.system.reserves.faveurs.max = 4;
-        break;
-      case 3:
-        this.system.reserves.faveurs.max = 6;
-        break;
-      case 4:
-        this.system.reserves.faveurs.max = 8;
-        break;
-    }
-    switch (this.system.talents.vie.ferveur.niveau) {
-      case -1:
-        this.system.reserves.espoir.max = 1;
-        break;
-      case 0:
-        this.system.reserves.espoir.max = 3;
-        break;
-      case 1:
-        this.system.reserves.espoir.max = 5;
-        break;
-      case 2:
-        this.system.reserves.espoir.max = 7;
-        break;
-      case 3:
-        this.system.reserves.espoir.max = 9;
-        break;
-      case 4:
-        this.system.reserves.espoir.max = 10;
-        break;
-    }
+    // Taille des réserves selon le niveau du Talent (livre de base p. 260 :
+    // le niveau 4 vaut pour 4 ou plus ; Contacts 5 et plus : 10 Faveurs, p. 241)
+    const r = this.system.reserves;
+    r.singularite.max = tailleReserve("singularite", this.system.talents.technique.artefact.niveau);
+    r.espoir.max = tailleReserve("espoir", this.system.talents.vie.ferveur.niveau);
     // preparing contacts
     this.prepareContacts();
 
@@ -329,15 +295,7 @@ export class nocActor extends Actor {
     contacts = contacts.filter(c => c && typeof c === "object");
 
     // Les jetons de faveur, eux, restent limités par le talent Contacts.
-    let faveur = 0;
-    switch (this.system.talents.statut.contact.niveau) {
-      case 1: faveur = 2; break;
-      case 2: faveur = 4; break;
-      case 3: faveur = 6; break;
-      case 4: faveur = 8; break;
-      case 5: faveur = 10; break;
-      default: faveur = 0;
-    }
+    const faveur = tailleReserve("faveurs", this.system.talents.statut.contact.niveau);
 
     this.system.contacts = contacts;
     this.system.reserves.faveurs.max = faveur;

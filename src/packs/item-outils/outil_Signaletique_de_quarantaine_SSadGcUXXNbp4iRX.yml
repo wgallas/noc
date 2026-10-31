@@ -1,0 +1,37 @@
+name: Signalétique de quarantaine
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: <p>Kit de panneaux, bandes et accessoires fourni par le Progrès, l'Intégrité ou l'Édification.</p>
+  quantar: false
+  needQuantar: false
+  valeur: 1
+  limite: 3
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Signale une zone placée officiellement en quarantaine par l''Administration.</p><p>Acquisition à la création : 1 point de stratagème.</p><p>Livre de base p. 286.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: SSadGcUXXNbp4iRX
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!SSadGcUXXNbp4iRX'

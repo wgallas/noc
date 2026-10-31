@@ -1,0 +1,57 @@
+name: Carabine quantique R3-M Medvěd
+type: arme
+img: systems/noc/asset/default_icons/arme.webp
+system:
+  description: '<p>Arme d''épaule à intrication quantique dont les champs focalisés déstructurent la matière. Normalement réservée à la Garde Noire : la porter exige une habilitation Quantique.</p><p>Nécessite un quantar. Livre de base p. 287.</p>'
+  needQuantar: true
+  quantar: false
+  adistance: true
+  valeur: 2
+  limite: 3
+  degats: '3'
+  matrise: false
+  traits: ''
+  munitions:
+    type: Quantar
+    quantite: 12
+  portee: 0
+  formatV2: true
+  degatsBase: 3
+  traitsArme:
+    choc: false
+    complexe: false
+    long: false
+    perforant: false
+    longuePortee: false
+    recurrent: false
+    tranchant: false
+    contrainte:
+      actif: false
+      valeur: 0
+    energieNoire:
+      actif: false
+      valeur: 0
+    multiple:
+      actif: false
+      valeur: 0
+    quantique:
+      actif: true
+      valeur: 4
+  maitrise: true
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: y3QxZNpgcBkOAFIv
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!y3QxZNpgcBkOAFIv'

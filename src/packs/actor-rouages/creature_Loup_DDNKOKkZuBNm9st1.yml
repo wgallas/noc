@@ -71,7 +71,7 @@ system:
       deplacement:
         label: déplacement
         checked: false
-        niveau: 1
+        niveau: 2
       instinct:
         label: instinct
         checked: false
@@ -195,7 +195,7 @@ system:
     degats: 3, tranchant
   special: ''
 prototypeToken:
-  name: Molosse
+  name: Loup
   displayName: 0
   actorLink: false
   texture:

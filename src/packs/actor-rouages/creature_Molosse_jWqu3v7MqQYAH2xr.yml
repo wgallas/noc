@@ -71,7 +71,7 @@ system:
       deplacement:
         label: déplacement
         checked: false
-        niveau: 1
+        niveau: 2
       instinct:
         label: instinct
         checked: false

@@ -1,0 +1,37 @@
+name: Lunettes de vision nocturne
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: <p>Appareil optique à effecteur quantique I qui permet de voir dans l'obscurité totale.</p>
+  quantar: false
+  needQuantar: true
+  valeur: 2
+  limite: 1
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>Annule tout malus d'Instinct ou de Combat lié à la luminosité. Nécessite un quantar.</p><p>Livre de base p. 285.</p>
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: oyA7GZs89Ji71sEN
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!oyA7GZs89Ji71sEN'

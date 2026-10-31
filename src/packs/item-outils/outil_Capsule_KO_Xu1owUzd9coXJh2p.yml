@@ -1,0 +1,37 @@
+name: Capsule KO
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: <p>Ampoule de verre qui libère un gaz incapacitant quand on la brise.</p>
+  quantar: false
+  needQuantar: false
+  valeur: 1
+  limite: 3
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Aire d''effet de 3 m : Constitution (3), sinon inconscience pendant [degré d''échec] × 3 rounds.</p><p>Acquisition à la création : 1 point de stratagème.</p><p>Livre de base p. 285.</p>'
+  portee: 3 m (aire d'effet)
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: Xu1owUzd9coXJh2p
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!Xu1owUzd9coXJh2p'

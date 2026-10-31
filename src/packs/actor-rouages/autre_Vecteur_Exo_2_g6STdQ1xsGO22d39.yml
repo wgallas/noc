@@ -1,0 +1,299 @@
+name: Autre — Vecteur (Exo-2)
+type: autre
+img: systems/noc/asset/default_icons/autre.webp
+system:
+  domaines:
+    vie:
+      value: 0
+      label: vie
+    erudition:
+      value: 0
+      label: érudition
+    technique:
+      value: 0
+      label: technique
+    action:
+      value: 0
+      label: action
+    statut:
+      value: 0
+      label: statut
+    ame:
+      value: 0
+      label: âme
+    social:
+      value: 0
+      label: social
+  talents:
+    erudition:
+      bureau:
+        label: bureau
+        checked: false
+        niveau: 0
+      culture:
+        label: culture
+        checked: false
+        niveau: 0
+      recherche:
+        label: recherche
+        checked: false
+        niveau: 0
+      societe:
+        label: societé
+        checked: false
+        niveau: 0
+    technique:
+      artefact:
+        label: artefact
+        checked: false
+        niveau: 0
+      artisanat:
+        label: artisanat
+        checked: false
+        niveau: 0
+      ingenierie:
+        label: ingénierie
+        checked: false
+        niveau: 0
+      survie:
+        label: survie
+        checked: false
+        niveau: 0
+    action:
+      combat:
+        label: combat
+        checked: false
+        niveau: 0
+      constitution:
+        label: constitution
+        checked: false
+        niveau: 0
+      deplacement:
+        label: déplacement
+        checked: false
+        niveau: 0
+      instinct:
+        label: instinct
+        checked: false
+        niveau: 0
+    statut:
+      contact:
+        label: contacts
+        checked: false
+        niveau: 0
+      façade:
+        label: façade
+        checked: false
+        niveau: 0
+      fortune:
+        label: fortune
+        checked: false
+        niveau: 0
+      rang:
+        label: rang
+        checked: false
+        niveau: 0
+    ame:
+      extase:
+        label: extase
+        checked: false
+        niveau: 0
+      folie:
+        label: folie
+        checked: false
+        niveau: 0
+      sensibilite:
+        label: sensibilité
+        checked: false
+        niveau: 0
+      tenebres:
+        label: tenêbres
+        checked: false
+        niveau: 0
+    social:
+      charisme:
+        label: charisme
+        checked: false
+        niveau: 0
+      conviction:
+        label: conviction
+        checked: false
+        niveau: 0
+      psychologie:
+        label: psychologie
+        checked: false
+        niveau: 0
+      tromperie:
+        label: tromperie
+        checked: false
+        niveau: 0
+    vie:
+      apaisement:
+        label: apaisement
+        checked: false
+        niveau: 0
+      ferveur:
+        label: ferveur
+        checked: false
+        niveau: 0
+      lumiere:
+        label: lumière
+        checked: false
+        niveau: 0
+      soins:
+        label: soins
+        checked: false
+        niveau: 0
+  reserves:
+    singularite:
+      label: singularité
+      value: 0
+      min: 0
+      max: 10
+    faveurs:
+      label: faveurs
+      value: 0
+      min: 0
+      max: 10
+    espoir:
+      label: espoir
+      value: 1
+      min: 0
+      max: 1
+    vecu:
+      label: vécu
+      value: 1
+      min: 0
+      max: 1
+  perditions:
+    blessures:
+      label: blessures
+      value: 0
+      min: 0
+      max: 5
+      statut: {}
+    traque:
+      label: traque
+      value: 0
+      min: 0
+      max: 5
+      statut: {}
+    noirceur:
+      label: noirceur
+      value: 0
+      min: 0
+      max: 5
+      statut: {}
+    trauma:
+      label: trauma
+      value: 0
+      min: 0
+      max: 5
+      statut: {}
+  description: '<p>Entité rare et d''une puissance exceptionnelle, à l''autonomie sans équivalent chez les Autres. Hors du Dédale, ne survit que quelques minutes près d''un Seuil.</p><p>Flétrissement : −1 Énergie noire par minute. La proximité d''un Seuil ajoute son Flux à la classe pour ce délai ; tombé sous 0 en Énergie noire, l''Autre succombe.</p><p>Profil de base (Livre de base p. 278-280) : tous les Domaines à 2 et tous les Talents à 0, plus l''Énergie noire (8 − classe exogène), ajoutée par le système à tout sauf la Lumière. Pour typer la créature, augmenter un trait en en diminuant un autre d''autant.</p><p>Surcharge de Noirceur : dépenser 1 (et 1 seul) point d''Énergie noire pour +2 à un Talent pendant un round (ou 10 minutes hors action).</p><p>Lumière : dans l''aura d''un personnage ayant Lumière 1 ou plus, l''Énergie noire compte pour autant de moins dans le calcul des Domaines et Talents.</p><p>Ténèbres : sa réaction face à un personnage dépend du niveau de Ténèbres de celui-ci
+    (p. 280).</p>'
+  classeExo:
+    label: classe exo
+    value: 2
+    min: 1
+    max: 7
+  energieNoire:
+    label: énergie noire
+    value: 6
+    min: 1
+    max: 7
+    forcee: null
+prototypeToken:
+  name: Autre — Vecteur (Exo-2)
+  displayName: 0
+  actorLink: false
+  texture:
+    src: systems/noc/asset/default_icons/autre.webp
+    scaleX: 1
+    scaleY: 1
+    offsetX: 0
+    offsetY: 0
+    rotation: 0
+    tint: '#ffffff'
+    anchorX: 0.5
+    anchorY: 0.5
+    fit: contain
+    alphaThreshold: 0.75
+  width: 1
+  height: 1
+  lockRotation: true
+  rotation: 0
+  alpha: 1
+  disposition: -1
+  displayBars: 0
+  bar1:
+    attribute: null
+  bar2:
+    attribute: null
+  light:
+    alpha: 0.5
+    angle: 360
+    bright: 0
+    color: null
+    coloration: 1
+    dim: 0
+    attenuation: 0.5
+    luminosity: 0.5
+    saturation: 0
+    contrast: 0
+    shadows: 0
+    animation:
+      type: null
+      speed: 5
+      intensity: 5
+      reverse: false
+    darkness:
+      min: 0
+      max: 1
+    negative: false
+    priority: 0
+  sight:
+    enabled: false
+    range: 0
+    angle: 360
+    visionMode: basic
+    color: null
+    attenuation: 0.1
+    brightness: 0
+    saturation: 0
+    contrast: 0
+  detectionModes: []
+  flags: {}
+  randomImg: false
+  appendNumber: false
+  prependAdjective: false
+  hexagonalShape: 0
+  occludable:
+    radius: 0
+  ring:
+    enabled: true
+    colors:
+      ring: null
+      background: null
+    effects: 1
+    subject:
+      scale: 1
+      texture: null
+items: []
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+ownership:
+  default: 0
+folder: null
+sort: 0
+_id: g6STdQ1xsGO22d39
+_key: '!actors!g6STdQ1xsGO22d39'

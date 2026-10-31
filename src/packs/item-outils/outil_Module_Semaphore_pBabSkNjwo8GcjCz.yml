@@ -1,0 +1,37 @@
+name: Module Sémaphore
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Module de communication lumineuse à fixer sur un Lumen : clavier mécanique et bandes perforées, ou signaux manuels en morse ou tout autre code.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 3
+  limite: 2
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>Échange de messages courts jusqu'à 3 km. Nécessite un Lumen chargé.</p><p>Livre de base p. 285.</p>
+  portee: 3 km
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: pBabSkNjwo8GcjCz
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!pBabSkNjwo8GcjCz'

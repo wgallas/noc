@@ -1,0 +1,37 @@
+name: Bagage à double fond
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: <p>Sacoche, mallette ou valise cachant quelques feuillets ou un objet de la taille du poing. Accessoire des commerçants, des bureaucrates prudents, des espions et des faussaires.</p>
+  quantar: false
+  needQuantar: false
+  valeur: 1
+  limite: 3
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Découvrir le compartiment lors d''un examen : Instinct (2).</p><p>Acquisition à la création : 1 point de stratagème.</p><p>Livre de base p. 284.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.2.3
+  coreVersion: '14.369'
+  createdTime: 1793470925812
+  modifiedTime: 1793470925812
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: KoJM7YtfWJqArDne
+folder: null
+sort: 0
+ownership:
+  default: 0
+_key: '!items!KoJM7YtfWJqArDne'
