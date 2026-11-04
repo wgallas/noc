@@ -1,0 +1,208 @@
+name: Garde Noir ferroviaire
+type: archetype
+img: systems/noc/asset/default_icons/question_mark.webp
+system:
+  description: <p>Chargé de la sécurité des travailleurs du rail dans un environnement inconnu, hostile et imprévisible.</p><p>L'Extérieur – segment moravien, p. 43.</p>
+  talentMajeur: action.combat
+  themes:
+  - id: JP1zemtymgnoGrLe
+    nom: Éclaireur
+    description: ''
+    talents:
+    - talent: action.deplacement
+      value: 1
+    - talent: technique.survie
+      value: 1
+  - id: XnFz7Fn57dTTVvUT
+    nom: Vétéran
+    description: ''
+    talents:
+    - talent: ame.tenebres
+      value: 1
+    - talent: action.instinct
+      value: 1
+  - id: PpvVuSw5bxrHjqeG
+    nom: Croyant
+    description: ''
+    talents:
+    - talent: vie.ferveur
+      value: 1
+    - talent: ame.extase
+      value: 1
+  - id: Nf42jLkoSSu6roZQ
+    nom: Recrue
+    description: ''
+    talents:
+    - talent: action.deplacement
+      value: 1
+    - talent: ame.sensibilite
+      value: 1
+  - id: D9C38xrdDgyBUdpF
+    nom: Capitaine
+    description: ''
+    talents:
+    - talent: social.charisme
+      value: 1
+    - talent: action.instinct
+      value: 1
+  themeChoisi: ''
+  talentsMineurs:
+    erudition:
+      bureau:
+        label: bureau
+        checked: false
+        niveau: 0
+      culture:
+        label: culture
+        checked: false
+        niveau: 0
+      recherche:
+        label: recherche
+        checked: false
+        niveau: 0
+      societe:
+        label: societé
+        checked: false
+        niveau: 0
+    technique:
+      artefact:
+        label: artefact
+        checked: false
+        niveau: 0
+      artisanat:
+        label: artisanat
+        checked: false
+        niveau: 0
+      ingenierie:
+        label: ingénierie
+        checked: false
+        niveau: 0
+      survie:
+        label: survie
+        checked: false
+        niveau: 0
+    action:
+      combat:
+        label: combat
+        checked: false
+        niveau: 0
+      constitution:
+        label: constitution
+        checked: false
+        niveau: 1
+      deplacement:
+        label: déplacement
+        checked: true
+        niveau: 0
+      instinct:
+        label: instinct
+        checked: true
+        niveau: 0
+    statut:
+      contact:
+        label: contact
+        checked: false
+        niveau: 0
+      façade:
+        label: façade
+        checked: false
+        niveau: 0
+      fortune:
+        label: fortune
+        checked: false
+        niveau: 0
+      rang:
+        label: rang
+        checked: false
+        niveau: 0
+    ame:
+      extase:
+        label: extase
+        checked: false
+        niveau: 0
+      folie:
+        label: folie
+        checked: false
+        niveau: 1
+      sensibilite:
+        label: sensibilité
+        checked: false
+        niveau: 0
+      tenebres:
+        label: tenêbres
+        checked: false
+        niveau: 0
+    social:
+      charisme:
+        label: charisme
+        checked: false
+        niveau: 0
+      conviction:
+        label: conviction
+        checked: false
+        niveau: 0
+      psychologie:
+        label: psychologie
+        checked: false
+        niveau: 0
+      tromperie:
+        label: tromperie
+        checked: false
+        niveau: 0
+    vie:
+      apaisement:
+        label: apaisement
+        checked: false
+        niveau: 0
+      ferveur:
+        label: ferveur
+        checked: false
+        niveau: 0
+      lumiere:
+        label: lumière
+        checked: false
+        niveau: 0
+      soins:
+        label: soins
+        checked: false
+        niveau: 0
+  special: ''
+  affinite:
+    vie:
+      active: false
+      value: 1
+    erudition:
+      active: false
+      value: 1
+    technique:
+      active: false
+      value: 1
+    action:
+      active: true
+      value: 3
+    statut:
+      active: false
+      value: 1
+    ame:
+      active: true
+      value: 3
+    social:
+      active: false
+      value: 1
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: 80TYVMlXmDcKOpy0
+folder: qHsyV5kWjjMa3Cj8
+sort: 200000
+ownership:
+  default: 0
+_key: '!items!80TYVMlXmDcKOpy0'

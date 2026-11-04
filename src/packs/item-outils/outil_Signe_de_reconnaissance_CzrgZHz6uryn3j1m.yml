@@ -1,0 +1,47 @@
+name: Signe de reconnaissance
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Statut. Source : Extérieur.</p><p>Symbole d''une communauté de l''Extérieur.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 1
+  limite: 2
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>Le porteur est accueilli sans agressivité par les communautés qui connaissent le symbole, sauf s'il y est déjà connu comme ennemi.</p><p>L'Extérieur, p. 30.</p>
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: CzrgZHz6uryn3j1m
+folder: sDF65oe9KMpZ9p1m
+sort: 0
+ownership:
+  default: 0
+_key: '!items!CzrgZHz6uryn3j1m'

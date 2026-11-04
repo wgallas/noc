@@ -1,0 +1,47 @@
+name: Euphorisants
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Apaisement. Source : Bloc.</p><p>Cigarettes de phage gris, alcool ou produits clandestins du Karst. De quoi tenir 10 scènes.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 1
+  limite: 2
+  utilisations: 10
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>Sous euphorisants, le personnage subit 1 point de Trauma de moins à chaque perte de Trauma, mais son Instinct baisse de 1.</p><p>Le joueur annonce au début de chaque scène si son personnage en consomme.</p><p>L'Extérieur, p. 27.</p>
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: 2WgkdRaYmkUTXuJ9
+folder: VnMLASE96ljMjVRe
+sort: 0
+ownership:
+  default: 0
+_key: '!items!2WgkdRaYmkUTXuJ9'

@@ -1,0 +1,47 @@
+name: Plasmaphérèse
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Soins. Source : Bloc.</p><p>Malle des équipes expéditionnaires : pompe à manivelle ou à pile à quantar qui filtre le sang d''un patient sous lampes quantiques et lui injecte le plasma d''un donneur. Dernier recours contre une contamination au Fiel forte mais récente.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 4
+  limite: 3
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>L''opérateur confronte son Talent Soins (malus de 1 s''il est lui-même le patient ou le donneur). Le patient lance autant de dés de destin que le niveau obtenu : chaque succès retire 1 point de Noirceur, mais il subit une séquelle de Blessures.</p><p>L''Extérieur, p. 27.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: 1aplisKEFKTNGqSI
+folder: VnMLASE96ljMjVRe
+sort: 0
+ownership:
+  default: 0
+_key: '!items!1aplisKEFKTNGqSI'

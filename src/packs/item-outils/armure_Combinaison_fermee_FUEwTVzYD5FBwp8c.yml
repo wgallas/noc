@@ -1,0 +1,37 @@
+name: Combinaison fermée
+type: armure
+img: systems/noc/asset/default_icons/armure.webp
+system:
+  description: '<p>Talent : Survie. Source : Bloc ou Extérieur.</p><p>Combinaison étanche contre la souillure.</p><p>Le temps nécessaire pour subir les effets d''une source de Noirceur est multiplié par 10. Malus de 1 au Déplacement (appliqué par le système : case « encombrant »).</p><p>L''Extérieur, p. 29.</p>'
+  armure: 0
+  traits: ''
+  encombrant: true
+  limite: 1
+  valeur: 2
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: FUEwTVzYD5FBwp8c
+folder: ZiiSw7lIBdpwLY8Q
+sort: 0
+ownership:
+  default: 0
+_key: '!items!FUEwTVzYD5FBwp8c'

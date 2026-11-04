@@ -1,0 +1,47 @@
+name: Anti-tox
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Survie ou Soins. Source : Bloc.</p><p>Pilules antidotes à large spectre de l''Intégrité, à l''efficacité incertaine contre la nature viciée. Boîte de 5.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 3
+  limite: 2
+  utilisations: 5
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Sous l''effet d''un poison (Livre de base p. 252), le personnage avale de 1 à 5 pilules et lance un dé de destin par pilule. Succès nécessaires pour neutraliser la toxine : 1 (substance légère), 2 (puissante), 3 (violente).</p><p>Chaque 1 obtenu : 3 points de Blessures (violence de l''antidote).</p><p>Dans tous les cas, inconscience pendant autant d''heures que de pilules prises.</p><p>L''Extérieur, p. 27.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: cgSlsNitBCiXS9ib
+folder: VnMLASE96ljMjVRe
+sort: 0
+ownership:
+  default: 0
+_key: '!items!cgSlsNitBCiXS9ib'

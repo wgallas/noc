@@ -1,0 +1,47 @@
+name: Parachute rapide
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Déplacement. Source : Bloc.</p><p>Sac à toile courte qui limite les conséquences d''une chute imprévue ; présent dans certains blockhaus de la Garde Noire près des Puits.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 2
+  limite: 1
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Lors d''une chute de plus de 20 m : confrontation de Déplacement, chaque succès réduit les Blessures subies.</p><p>L''Extérieur, p. 30.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: jZufUT5qrzsmyaW6
+folder: 4RBEYXuvLUBqD40Y
+sort: 0
+ownership:
+  default: 0
+_key: '!items!jZufUT5qrzsmyaW6'

@@ -1,0 +1,208 @@
+name: Cheminot
+type: archetype
+img: systems/noc/asset/default_icons/question_mark.webp
+system:
+  description: <p>Ouvrier d'entretien des voies ferrées de l'Extérieur, qui travaille dans un danger permanent.</p><p>L'Extérieur – segment moravien, p. 43.</p>
+  talentMajeur: action.constitution
+  themes:
+  - id: QwSraAZdpDO2yJgb
+    nom: Prisonnier
+    description: ''
+    talents:
+    - talent: action.combat
+      value: 1
+    - talent: ame.tenebres
+      value: 1
+  - id: Z6fhjwPgV5eZX8OD
+    nom: Marginal
+    description: ''
+    talents:
+    - talent: vie.lumiere
+      value: 1
+    - talent: ame.extase
+      value: 1
+  - id: lUPBwXwIue8mIcyv
+    nom: Engagé
+    description: ''
+    talents:
+    - talent: ame.folie
+      value: 1
+    - talent: technique.survie
+      value: 1
+  - id: zCOCHW7AELfKf4PL
+    nom: Voleur
+    description: ''
+    talents:
+    - talent: statut.façade
+      value: 1
+    - talent: action.instinct
+      value: 1
+  - id: qsmDmJxei4Pv2lus
+    nom: Incompris
+    description: ''
+    talents:
+    - talent: technique.artefact
+      value: 1
+    - talent: vie.ferveur
+      value: 1
+  themeChoisi: ''
+  talentsMineurs:
+    erudition:
+      bureau:
+        label: bureau
+        checked: false
+        niveau: 0
+      culture:
+        label: culture
+        checked: false
+        niveau: 0
+      recherche:
+        label: recherche
+        checked: false
+        niveau: 0
+      societe:
+        label: societé
+        checked: false
+        niveau: 0
+    technique:
+      artefact:
+        label: artefact
+        checked: false
+        niveau: 0
+      artisanat:
+        label: artisanat
+        checked: false
+        niveau: 1
+      ingenierie:
+        label: ingénierie
+        checked: false
+        niveau: 0
+      survie:
+        label: survie
+        checked: false
+        niveau: 0
+    action:
+      combat:
+        label: combat
+        checked: false
+        niveau: 0
+      constitution:
+        label: constitution
+        checked: false
+        niveau: 0
+      deplacement:
+        label: déplacement
+        checked: true
+        niveau: 1
+      instinct:
+        label: instinct
+        checked: true
+        niveau: 0
+    statut:
+      contact:
+        label: contact
+        checked: false
+        niveau: 0
+      façade:
+        label: façade
+        checked: false
+        niveau: 0
+      fortune:
+        label: fortune
+        checked: false
+        niveau: 0
+      rang:
+        label: rang
+        checked: false
+        niveau: 0
+    ame:
+      extase:
+        label: extase
+        checked: false
+        niveau: 0
+      folie:
+        label: folie
+        checked: false
+        niveau: 0
+      sensibilite:
+        label: sensibilité
+        checked: false
+        niveau: 0
+      tenebres:
+        label: tenêbres
+        checked: false
+        niveau: 0
+    social:
+      charisme:
+        label: charisme
+        checked: false
+        niveau: 0
+      conviction:
+        label: conviction
+        checked: false
+        niveau: 0
+      psychologie:
+        label: psychologie
+        checked: false
+        niveau: 0
+      tromperie:
+        label: tromperie
+        checked: false
+        niveau: 0
+    vie:
+      apaisement:
+        label: apaisement
+        checked: false
+        niveau: 0
+      ferveur:
+        label: ferveur
+        checked: false
+        niveau: 0
+      lumiere:
+        label: lumière
+        checked: false
+        niveau: 0
+      soins:
+        label: soins
+        checked: false
+        niveau: 0
+  special: ''
+  affinite:
+    vie:
+      active: false
+      value: 1
+    erudition:
+      active: false
+      value: 1
+    technique:
+      active: true
+      value: 3
+    action:
+      active: true
+      value: 3
+    statut:
+      active: false
+      value: 1
+    ame:
+      active: false
+      value: 1
+    social:
+      active: false
+      value: 1
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: KI5TdmXhtILNO9Q2
+folder: qHsyV5kWjjMa3Cj8
+sort: 100000
+ownership:
+  default: 0
+_key: '!items!KI5TdmXhtILNO9Q2'

@@ -1,0 +1,47 @@
+name: Pièges rudimentaires
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Survie. Source : Bloc ou Extérieur.</p><p>Collets, fosses et pointes improvisés.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 1
+  limite: 2
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Installation : une demi-heure pour une zone d''une cinquantaine de m², puis confrontation de Survie. Qui entre dans la zone confronte son Instinct contre 1 + succès de l''installateur ; en cas d''échec, il déclenche le piège.</p><p>Effet : 2 points de Blessures + succès obtenus à l''installation.</p><p>L''Extérieur, p. 28.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: HA1PcMaYzus2kur9
+folder: ZiiSw7lIBdpwLY8Q
+sort: 0
+ownership:
+  default: 0
+_key: '!items!HA1PcMaYzus2kur9'

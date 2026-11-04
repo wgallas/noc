@@ -1,0 +1,47 @@
+name: Mines incendiaires
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Combat ou Survie. Source : Bloc.</p><p>Charges incendiaires à déclenchement.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 3
+  limite: 4
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Installation : une demi-heure pour une zone d''une cinquantaine de m², puis confrontation de Survie. Qui entre dans la zone confronte son Instinct contre 1 + succès de l''installateur ; en cas d''échec, il déclenche le piège.</p><p>Effet : 3 points de Blessures, récurrent.</p><p>L''Extérieur, p. 28.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: Dq16BKwcWNGqqcem
+folder: ZiiSw7lIBdpwLY8Q
+sort: 0
+ownership:
+  default: 0
+_key: '!items!Dq16BKwcWNGqqcem'

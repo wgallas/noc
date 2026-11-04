@@ -1,0 +1,47 @@
+name: Alarme et périmètre sécurisé
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Survie. Source : Bloc ou Extérieur.</p><p>Fils reliés à des objets bruyants, lumens à déclencheur, barbelés : une enclave un peu plus sûre d''une vingtaine de m².</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 2
+  limite: 1
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Installation : quinze minutes, puis confrontation de Survie. Pour entrer, il faut confronter son Déplacement contre 1 + succès de l''installateur ; en cas d''échec, l''alarme se déclenche (et les barbelés infligent 1 point de Blessures).</p><p>Limité (2) pour des barbelés.</p><p>L''Extérieur, p. 30.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: FMFPMP12K9eNVIEA
+folder: sDF65oe9KMpZ9p1m
+sort: 0
+ownership:
+  default: 0
+_key: '!items!FMFPMP12K9eNVIEA'

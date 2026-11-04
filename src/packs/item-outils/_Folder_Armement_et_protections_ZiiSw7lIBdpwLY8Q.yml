@@ -1,0 +1,13 @@
+name: Armement et protections
+type: Item
+description: ''
+folder: 2RU1dwWPpDFEkGyn
+sorting: a
+sort: 200000
+color: null
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '14.369'
+_id: ZiiSw7lIBdpwLY8Q
+_key: '!folders!ZiiSw7lIBdpwLY8Q'

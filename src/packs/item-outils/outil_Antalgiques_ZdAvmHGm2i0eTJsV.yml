@@ -1,0 +1,47 @@
+name: Antalgiques
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Soins. Source : Bloc.</p><p>Injections ou cachets antidouleur de l''Intégrité. Boîte de 6.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 2
+  limite: 2
+  utilisations: 6
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Prendre une dose : Action annexe ; le personnage regagne aussitôt 2 points de Blessures.</p><p>Dix minutes plus tard, léthargie pendant un quart : −1 à tous les Talents d''Action, de Technique et d''Érudition.</p><p>Deux prises en moins d''un cycle : confronter Conviction contre une difficulté égale au nombre de prises du cycle. En cas d''échec, séquelle de Noirceur et trait de Noirceur « Mauvais penchants (addiction) », jusqu''à guérison de la séquelle (Livre de base p. 255).</p><p>L''Extérieur, p. 26.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: ZdAvmHGm2i0eTJsV
+folder: VnMLASE96ljMjVRe
+sort: 0
+ownership:
+  default: 0
+_key: '!items!ZdAvmHGm2i0eTJsV'

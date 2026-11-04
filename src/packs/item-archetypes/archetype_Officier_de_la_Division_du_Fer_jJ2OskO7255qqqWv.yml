@@ -1,0 +1,224 @@
+name: Officier de la Division du Fer
+type: archetype
+img: systems/noc/asset/default_icons/question_mark.webp
+system:
+  description: <p>Responsable de l'un des postes stratégiques d'un train-atelier, dont les décisions engagent la vie de ses hommes et de ses collègues.</p><p>L'Extérieur – segment moravien, p. 43.</p>
+  talentMajeur: social.charisme
+  themes:
+  - id: 7bA5nVlGLB1TWpK1
+    nom: Pilote
+    description: ''
+    talents:
+    - talent: action.instinct
+      value: 1
+    - talent: social.conviction
+      value: 1
+  - id: RiNqDyfGKYmMrXKH
+    nom: Chauffeur
+    description: ''
+    talents:
+    - talent: action.constitution
+      value: 1
+    - talent: technique.ingenierie
+      value: 1
+  - id: Y5gSp7wpsM6cUBfv
+    nom: Infirmier
+    description: ''
+    talents:
+    - talent: vie.soins
+      value: 1
+    - talent: vie.apaisement
+      value: 1
+  - id: uYF74beJYGnZ70DM
+    nom: Machiniste affilié quantique
+    description: ''
+    talents:
+    - talent: technique.ingenierie
+      value: 1
+    - talent: erudition.culture
+      value: 1
+  - id: Zp4qDopY5M6Y8i4y
+    nom: Mécanicien moteur
+    description: ''
+    talents:
+    - talent: technique.ingenierie
+      value: 1
+    - talent: technique.artisanat
+      value: 1
+  - id: XTvvtJqDTOdAsUq6
+    nom: Chef de travaux
+    description: ''
+    talents:
+    - talent: technique.artisanat
+      value: 1
+    - talent: ame.tenebres
+      value: 1
+  - id: 994eZSLWQJe71a32
+    nom: Chef machiniste
+    description: ''
+    talents:
+    - talent: social.charisme
+      value: 1
+    - talent: technique.ingenierie
+      value: 1
+  themeChoisi: ''
+  talentsMineurs:
+    erudition:
+      bureau:
+        label: bureau
+        checked: false
+        niveau: 0
+      culture:
+        label: culture
+        checked: false
+        niveau: 0
+      recherche:
+        label: recherche
+        checked: false
+        niveau: 0
+      societe:
+        label: societé
+        checked: false
+        niveau: 0
+    technique:
+      artefact:
+        label: artefact
+        checked: false
+        niveau: 0
+      artisanat:
+        label: artisanat
+        checked: false
+        niveau: 0
+      ingenierie:
+        label: ingénierie
+        checked: false
+        niveau: 0
+      survie:
+        label: survie
+        checked: false
+        niveau: 0
+    action:
+      combat:
+        label: combat
+        checked: false
+        niveau: 0
+      constitution:
+        label: constitution
+        checked: false
+        niveau: 0
+      deplacement:
+        label: déplacement
+        checked: true
+        niveau: 0
+      instinct:
+        label: instinct
+        checked: true
+        niveau: 0
+    statut:
+      contact:
+        label: contact
+        checked: false
+        niveau: 0
+      façade:
+        label: façade
+        checked: false
+        niveau: 0
+      fortune:
+        label: fortune
+        checked: false
+        niveau: 0
+      rang:
+        label: rang
+        checked: false
+        niveau: 1
+    ame:
+      extase:
+        label: extase
+        checked: false
+        niveau: 0
+      folie:
+        label: folie
+        checked: false
+        niveau: 0
+      sensibilite:
+        label: sensibilité
+        checked: false
+        niveau: 0
+      tenebres:
+        label: tenêbres
+        checked: false
+        niveau: 0
+    social:
+      charisme:
+        label: charisme
+        checked: false
+        niveau: 0
+      conviction:
+        label: conviction
+        checked: false
+        niveau: 0
+      psychologie:
+        label: psychologie
+        checked: false
+        niveau: 1
+      tromperie:
+        label: tromperie
+        checked: false
+        niveau: 0
+    vie:
+      apaisement:
+        label: apaisement
+        checked: false
+        niveau: 0
+      ferveur:
+        label: ferveur
+        checked: false
+        niveau: 0
+      lumiere:
+        label: lumière
+        checked: false
+        niveau: 0
+      soins:
+        label: soins
+        checked: false
+        niveau: 0
+  special: ''
+  affinite:
+    vie:
+      active: false
+      value: 1
+    erudition:
+      active: false
+      value: 1
+    technique:
+      active: false
+      value: 1
+    action:
+      active: false
+      value: 1
+    statut:
+      active: true
+      value: 3
+    ame:
+      active: false
+      value: 1
+    social:
+      active: true
+      value: 3
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: jJ2OskO7255qqqWv
+folder: qHsyV5kWjjMa3Cj8
+sort: 300000
+ownership:
+  default: 0
+_key: '!items!jJ2OskO7255qqqWv'

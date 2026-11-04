@@ -1,0 +1,47 @@
+name: Purgatifs
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Survie ou Soins. Source : Bloc.</p><p>Traitement de choc contre une contamination au Fiel récente et légère, par ingestion. Boîte de 3.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 2
+  limite: 2
+  utilisations: 3
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Seulement pour un personnage à moins de 5 points de Noirceur. Neutralisé une dizaine de minutes, il lance ensuite 3 dés de destin : chaque succès retire 1 point de Noirceur. Malus de 1 en Constitution pendant le quart suivant.</p><p>Deuxième dose dans le même cycle : 2 dés seulement, et une séquelle de Blessures.</p><p>L''Extérieur, p. 27.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: LazFK98GBMWCv4it
+folder: VnMLASE96ljMjVRe
+sort: 0
+ownership:
+  default: 0
+_key: '!items!LazFK98GBMWCv4it'

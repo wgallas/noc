@@ -1,0 +1,13 @@
+name: Matériel de soin
+type: Item
+description: ''
+folder: 2RU1dwWPpDFEkGyn
+sorting: a
+sort: 100000
+color: null
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '14.369'
+_id: VnMLASE96ljMjVRe
+_key: '!folders!VnMLASE96ljMjVRe'

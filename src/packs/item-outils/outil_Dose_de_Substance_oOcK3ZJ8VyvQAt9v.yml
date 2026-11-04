@@ -1,0 +1,47 @@
+name: Dose de Substance
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Composé biochimique créé par l''Athanor, aujourd''hui consommé comme une drogue par la haute société : une heure de rêverie mécanique tournée vers l''Objet-Dieu, suivie d''une redescente pénible.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 0
+  limite: 0
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>+1 niveau en Artefact et en Ténèbres pendant une heure, puis perte de 1 point d'Espoir.</p><p>Valeur non indiquée dans le livre.</p><p>Guide de Prague, p. 103.</p>
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: oOcK3ZJ8VyvQAt9v
+folder: q0V1KHkXRXJyIOgv
+sort: 0
+ownership:
+  default: 0
+_key: '!items!oOcK3ZJ8VyvQAt9v'

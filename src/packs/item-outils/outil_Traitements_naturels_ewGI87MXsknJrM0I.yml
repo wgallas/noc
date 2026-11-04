@@ -1,0 +1,47 @@
+name: Traitements naturels
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Talent : Soins. Source : Extérieur.</p><p>Décoctions, cataplasmes, outils de cautérisation des peuples de l''Extérieur : le miraculeux côtoie l''inopérant. 6 traitements.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 1
+  limite: 3
+  utilisations: 6
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: '<p>Une dose au plus par moment de calme : 2 dés de destin ; chaque succès fait regagner 1 point de Blessures ou de Trauma supplémentaire, chaque 1 inflige 1 point de Blessures, Trauma ou Noirceur (au choix de la Loi).</p><p>Fabrication : avec Soins 2 et Survie 2 au moins, un quart à l''Extérieur et une confrontation de Soins (2) donnent 1 dose, plus 1 par niveau de réussite.</p><p>L''Extérieur, p. 28.</p>'
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: ewGI87MXsknJrM0I
+folder: VnMLASE96ljMjVRe
+sort: 0
+ownership:
+  default: 0
+_key: '!items!ewGI87MXsknJrM0I'

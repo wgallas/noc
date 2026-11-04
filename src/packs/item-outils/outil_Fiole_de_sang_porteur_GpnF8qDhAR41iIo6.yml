@@ -1,0 +1,47 @@
+name: Fiole de sang porteur
+type: outil
+img: systems/noc/asset/default_icons/outil.webp
+system:
+  description: '<p>Pendentif ou sceau familial renfermant le sang d''un ancêtre identifié par l''Athanor : la preuve d''une lignée porteuse du gène du Prima-Cech, source de fierté pour la vieille noblesse et souvenir douloureux pour bien d''autres citoyens.</p>'
+  quantar: false
+  needQuantar: false
+  valeur: 3
+  limite: 2
+  utilisations: 1
+  degats: ''
+  talent:
+    label: ''
+    niveau: 0
+  effetSpecial: <p>+1 pour interagir avec les membres de la vieille noblesse pragoise, −1 avec certains citoyens hostiles (la Loi décide quand).</p><p>Guide de Prague, p. 103.</p>
+  portee: ''
+  improvisee:
+    active: false
+    mode: contact
+    degats: 0
+  stratagemes:
+    compartiment: false
+    ergonomie: false
+    mortel: false
+    lumineux: false
+    empoisonne: false
+    performant: false
+    sensibilite: false
+  stratagemeTalent: ''
+  stratagemePerformant: ''
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  systemVersion: 2.3.0
+  coreVersion: '14.369'
+  createdTime: 1793832966501
+  modifiedTime: 1793832966501
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+_id: GpnF8qDhAR41iIo6
+folder: q0V1KHkXRXJyIOgv
+sort: 0
+ownership:
+  default: 0
+_key: '!items!GpnF8qDhAR41iIo6'

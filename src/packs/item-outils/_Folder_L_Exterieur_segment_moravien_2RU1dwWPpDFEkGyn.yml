@@ -1,0 +1,13 @@
+name: L'Extérieur (segment moravien)
+type: Item
+description: ''
+folder: null
+sorting: a
+sort: 100000
+color: null
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '14.369'
+_id: 2RU1dwWPpDFEkGyn
+_key: '!folders!2RU1dwWPpDFEkGyn'
