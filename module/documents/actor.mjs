@@ -8,6 +8,7 @@ import { appliquerQualites } from "../qualites.mjs";
 import { appliquerAutre } from "../autres.mjs";
 import { appliquerGabarit, armeAvecGabarit } from "../gabarits.mjs";
 import { estRouageHostile } from "../fiel/gouttes.mjs";
+import { appliquerExces } from "../fortune.mjs";
 import { armeAvecStratagemes, bonusEquipementTalent, outilUtilisableCommeArme } from "../stratagemes.mjs";
 import { appliquerArmures } from "../armures.mjs";
 import { appliquerEtats } from "../panneau-mj.mjs";
@@ -245,6 +246,8 @@ export class nocActor extends Actor {
     appliquerGabarit(this);
     appliquerArmures(this);
     appliquerEtats(this);
+    // Excès (transaction) : Fortune −1 jusqu'au début du scénario suivant
+    appliquerExces(this);
     appliquerPerditions(this);
     appliquerEffetsFiel(this);
     // Folie 6 ou plus et Trauma 3 ou plus : +1 à tous les Domaines (niveau de Folie effectif)
@@ -529,6 +532,10 @@ export class nocActor extends Actor {
         maj["system.contacts"] = contacts;
         maj["system.reserves.faveurs.value"] = 0;
         lignes.push("Faveurs : toutes rendues à la réserve");
+      }
+      if (this.flags?.noc?.exces) {
+        maj["flags.noc.-=exces"] = null;
+        lignes.push("Excès : levé (Fortune rétablie)");
       }
     } else return;
 

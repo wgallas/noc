@@ -413,6 +413,13 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
     const lignes = [`Gouttes : ${avant.gouttes} → ${apres.gouttes}`, `Menace : ${avant.menace} → ${apres.menace}`];
     // début de scénario : dés de Domaine, points d'Atouts et réserves des cabales rechargés
     if (etape === "scenario") lignes.push(...await rechargerCabales());
+    // début de scénario : les excès (Fortune −1) sont levés
+    if (etape === "scenario") {
+      for (const a of game.actors.filter(x => x.type === "personnage" && x.flags?.noc?.exces)) {
+        await a.unsetFlag("noc", "exces");
+        lignes.push(`${a.name} : excès levé (Fortune rétablie)`);
+      }
+    }
     await message(`${titres[etape]} (Loi)`, lignes);
     this.render();
   }

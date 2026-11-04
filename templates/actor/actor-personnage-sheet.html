@@ -88,6 +88,10 @@
 											>
 												<label for="{{talent.label}}">{{talent.label}}</label>
 											</a>
+											{{#if (eq talentId "fortune")}}{{#if @root.editable}}
+												<a class="transaction-fortune" data-tooltip="Transaction : acheter un bien ou un service (Fortune contre valeur, Faveurs possibles)"><i class="fas fa-coins"></i></a>
+												{{#if @root.isGM}}<a class="basculer-exces" data-tooltip="{{#if @root.actor.flags.noc.exces}}Lever l'excès{{else}}Signaler un excès (Fortune −1 jusqu'à la fin du scénario){{/if}}"><i class="fas fa-scale-unbalanced"></i></a>{{/if}}
+											{{/if}}{{/if}}
 										</div>
 									{{/each}}
 								{{/ifequal}}
@@ -209,8 +213,9 @@
 						<input type="checkbox" name="flags.noc.enReserve" data-dtype="Boolean" {{checked actor.flags.noc.enReserve}}> En réserve
 					</label>
 					{{/if}}
-					{{#if (or (or actor.flags.noc.fatigue actor.flags.noc.bouleversement) actor.system.folieTranscendante)}}
+					{{#if (or (or (or actor.flags.noc.fatigue actor.flags.noc.bouleversement) actor.system.folieTranscendante) actor.flags.noc.exces)}}
 					<div class="etats-actifs">
+						{{#if actor.flags.noc.exces}}<span class="etat" data-tooltip="Transaction excessive : Fortune −1 jusqu'au début du scénario suivant (p. 241)">Excès : Fortune −1</span>{{/if}}
 						{{#if actor.system.folieTranscendante}}<span class="etat" data-tooltip="Folie 6 ou plus et au moins 3 points de Trauma : +1 à tous les scores de Domaine (p. 208)">Folie transcendante : Domaines +1</span>{{/if}}
 						{{#if actor.flags.noc.fatigue}}<span class="etat" data-tooltip="−1 à tous les talents jusqu'au prochain moment de calme">Fatigué</span>{{/if}}
 						{{#if actor.flags.noc.bouleversement}}<span class="etat" data-tooltip="Talents de Statut −1 ; contacts inaccessibles">Bouleversement administratif</span>{{/if}}

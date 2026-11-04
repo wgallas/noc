@@ -11,6 +11,7 @@ import NOCContact from "../../ContactClass.js";
 import { choisirTheme, libelleTalent } from "../../archetypes.mjs";
 import { TYPES_GABARIT, gabaritDe, resumeGabarit } from "../../gabarits.mjs";
 import { outilUtilisableCommeArme } from "../../stratagemes.mjs";
+import { TYPES_ACHETABLES, acquisitionObjet, basculerExces, transaction } from "../../fortune.mjs";
 import { choisirQualite, descriptionQualite, enregistrerQualite } from "../../qualites.mjs";
 import { nocPersonnalisation } from "../../dialogs/noc-personnalisation.js";
 import { Quality } from "../../qualite_default.mjs";
@@ -145,6 +146,12 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
       }
     }
 
+    // Personnage : un objet qui a une valeur s'achète (transaction) ou s'obtient sans achat
+    if (this.actor.type === "personnage" && TYPES_ACHETABLES.includes(dropItem.type)
+      && this.actor.isOwner && dropItem.parent?.id !== this.actor.id) {
+      const ajouter = await acquisitionObjet(this.actor, dropItem);
+      if (!ajouter) return false;
+    }
     return super._onDropItem(ev, data);
 
   }
@@ -342,6 +349,9 @@ export class nocActorSheetPersonnage extends foundry.appv1.sheets.ActorSheet {
     }
     html.find('a.unassignCabale').click(this.leaveCabale.bind(this));
     html.find('button.etape-jeu').click(ev => this.actor.etapeDeJeu(ev.currentTarget.dataset.etape));
+    // Fortune : transaction (bien ou service) ; le MJ signale ou lève un excès
+    html.find('a.transaction-fortune').click(ev => { ev.preventDefault(); ev.stopPropagation(); transaction(this.actor); });
+    html.find('.basculer-exces').click(ev => { ev.preventDefault(); ev.stopPropagation(); basculerExces(this.actor); });
     html.find('a.progression-plus').click(() => this.changerProgression(1));
     html.find('a.quantars-plus').click(() => this.changerQuantars(1));
     html.find('a.quantars-moins').click(() => this.changerQuantars(-1));

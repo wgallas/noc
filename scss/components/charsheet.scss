@@ -3881,3 +3881,29 @@ div.noc.sheet.actor.creature section.window-content section.sheet-body div.tab.p
         }
     }
 }
+
+// Fortune : boutons Transaction et Excès à côté du Talent
+div.noc.sheet.actor.personnage a.transaction-fortune,
+div.noc.sheet.actor.personnage a.basculer-exces {
+    flex: 0 0 auto;
+    margin-left: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    opacity: 0.8;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.nocDialog .transaction-fortune {
+    .form-group {
+        align-items: center;
+        gap: 6px;
+    }
+
+    .ligne-grise {
+        font-size: 11px;
+        font-style: italic;
+    }
+}
