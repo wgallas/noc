@@ -1,33 +1,12 @@
-import { nocActorSheetPersonnage } from "./actor-sheet-personnage.mjs";
+import { NocFicheActeur } from "./fiche-acteur.mjs";
 
-
-/**
- * Extend the basic ActorSheet with some very simple modifications
- * @extends {ActorSheet}
- */
-export class nocActorSheetRouage extends nocActorSheetPersonnage {
-
-  /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["noc", "sheet", "actor", "rouage"],
-      width: 600,
-      height: 780,
-      dragDrop: [
-        { dragSelector: ".item-list .item", dropSelector: null },
-      ],
-
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "principal" }]
-    });
-  }
-
-  /** @override */
-  get template() {
-    return `systems/noc/templates/actor/actor-${this.actor.type}-sheet.html`;
-  }
-  /* -------------------------------------------- */
-  /*  Drag and Drop                               */
-  /* -------------------------------------------- */
-
-
+/** Fiche de rouage (ApplicationV2) */
+export class nocActorSheetRouage extends NocFicheActeur {
+  static DEFAULT_OPTIONS = {
+    classes: ["rouage"],
+    position: { width: 600, height: 780 }
+  };
+  static MODELE = "systems/noc/templates/actor/actor-rouage-sheet.html";
+  static GLISSABLES = ".item-list .item";
+  static PARTS = { main: { template: "systems/noc/templates/actor/actor-rouage-sheet.html" } };
 }

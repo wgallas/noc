@@ -1,42 +1,25 @@
 import { classeExo, energieNoireDeduite } from "../../autres.mjs";
-import { nocActorSheetPersonnage } from "./actor-sheet-personnage.mjs";
+import { NocFicheActeur } from "./fiche-acteur.mjs";
+import { ecouter } from "../v2-outils.mjs";
 
+/** Fiche d'Autre (ApplicationV2) */
+export class nocActorSheetAutre extends NocFicheActeur {
+  static DEFAULT_OPTIONS = {
+    classes: ["autre"],
+    position: { width: 600, height: 780 }
+  };
+  static MODELE = "systems/noc/templates/actor/actor-autre-sheet.html";
+  static GLISSABLES = ".item-list .item";
+  static PARTS = { main: { template: "systems/noc/templates/actor/actor-autre-sheet.html" } };
 
-/**
- * Extend the basic ActorSheet with some very simple modifications
- * @extends {ActorSheet}
- */
-export class nocActorSheetAutre extends nocActorSheetPersonnage {
-
-  /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["noc", "sheet", "actor", "autre"],
-      width: 600,
-      height: 780,
-      dragDrop: [
-        { dragSelector: ".item-list .item", dropSelector: null },
-      ],
-
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "principal" }]
-    });
-  }
-
-  /** @override */
-  get template() {
-    return `systems/noc/templates/actor/actor-${this.actor.type}-sheet.html`;
-  }
-  /* -------------------------------------------- */
-  /*  Drag and Drop                               */
-  /* -------------------------------------------- */
-  activateListeners(html) {
-    super.activateListeners(html);
+  activerEcouteurs(html) {
+    super.activerEcouteurs(html);
     if (!this.isEditable) return;
-    html.find("a.classe-exo-plus").click(() => this.changerClasseExo(1));
-    html.find("a.classe-exo-moins").click(() => this.changerClasseExo(-1));
-    html.find("a.energie-plus").click(() => this.forcerEnergieNoire(1));
-    html.find("a.energie-moins").click(() => this.forcerEnergieNoire(-1));
-    html.find("a.energie-auto").click(() => this.actor.update({ "system.energieNoire.forcee": null }));
+    ecouter(html, "a.classe-exo-plus", () => this.changerClasseExo(1));
+    ecouter(html, "a.classe-exo-moins", () => this.changerClasseExo(-1));
+    ecouter(html, "a.energie-plus", () => this.forcerEnergieNoire(1));
+    ecouter(html, "a.energie-moins", () => this.forcerEnergieNoire(-1));
+    ecouter(html, "a.energie-auto", () => this.actor.update({ "system.energieNoire.forcee": null }));
   }
 
   /** Classe Exo entre 1 et 7 ; l'Énergie Noire déduite suit automatiquement */

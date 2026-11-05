@@ -1,4 +1,4 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="fiche fiche-objet">
 	{{!-- Sheet Body --}}
 	<section class="sheet-body">
 		{{#if item.actor}}
@@ -14,11 +14,9 @@
 			<div class="img-container">
 				<input class="item-name" name="name" type="text" value="{{document.name}}" placeholder="Name"/>
 
-				<img class="item-img" src="{{document.img}}" data-edit="img" title="{{document.name}}"/>
+				<img class="item-img" src="{{document.img}}" data-edit="img" data-action="editImage" title="{{document.name}}"/>
 				<h4>description</h4>
-				{{editor item.system.description target="system.description"
-        button=true editable=editable
-        engine="prosemirror" collaborate=false}}
+				{{nocEditeur "system.description"}}
 			</div>
 			<div class="arch-stats">
 
@@ -120,4 +118,4 @@
 			{{/each}}
 		</div>
 	</section>
-</form>
+</div>

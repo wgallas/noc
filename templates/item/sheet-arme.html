@@ -1,19 +1,17 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="fiche fiche-objet">
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     <input class="item-name" name="name" type="text" value="{{document.name}}"
       placeholder="Name"/>
-    <img class="item-img" src="{{document.img}}" data-edit="img"
+    <img class="item-img" src="{{document.img}}" data-edit="img" data-action="editImage"
       title="{{document.name}}" />
 
 
     <div class="details" data-group="primary" data-tab="details">
       <div class="form-group">
         <h4>Description</h4>
-        {{editor document.system.description target="system.description"
-        button=true editable=editable
-        engine="prosemirror" collaborate=false}}
+        {{nocEditeur "system.description"}}
       </div>
 
       <div class="form-group">
@@ -106,4 +104,4 @@
 
     {{> "systems/noc/templates/item/parts/stratagemes.hbs"}}
   </section>
-</form>
+</div>

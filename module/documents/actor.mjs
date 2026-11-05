@@ -459,8 +459,7 @@ export class nocActor extends Actor {
 
   }
   async noirceurTraitDialog() {
-    let dial = await nocNoirceurTraits.create(this);
-    dial.render(true)
+    return nocNoirceurTraits.choisir(this);
 
   }
   /**

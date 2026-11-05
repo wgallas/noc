@@ -1,8 +1,8 @@
-<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+<div class="fiche {{actor.type}} flexcol">
 
 	{{!-- En-tête : image, nom, archétype, bilan --}}
 	<header class="cabale-entete">
-		<img class="profile-img" src="{{actor.img}}" data-edit="img" data-tooltip="{{actor.name}}" height="90" width="90"/>
+		<img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" data-tooltip="{{actor.name}}" height="90" width="90"/>
 		<div class="cabale-entete-infos">
 			<input class="cabale-nom" type="text" name="name" value="{{actor.name}}" placeholder="Nom de la cabale">
 			<div class="cabale-entete-ligne">
@@ -211,7 +211,7 @@
 			</div>
 			<div class="description">
 				<h3>Description</h3>
-				{{editor actor.system.description target="system.description" button=true editable=editable engine="prosemirror" collaborate=false}}
+				{{nocEditeur "system.description"}}
 			</div>
 		</div>
 
@@ -240,4 +240,4 @@
 		</div>
 
 	</section>
-</form>
+</div>

@@ -1,77 +1,28 @@
-import { nocUtility } from "../noc-utility.js";
 import { NOC } from "../helpers/config.mjs";
 
-export class nocNoirceurTraits extends Dialog {
+/** Choix des traits de Noirceur (DialogV2) */
+export class nocNoirceurTraits {
 
-    /* -------------------------------------------- */
-    static async create(actor) {
-        let traits = NOC.traitsPerditions.noirceur;
-
-        let options = { classes: ["nocDialog"], width: 420, height: 'fit-content', 'z-index': 99999 };
-        let html = await renderTemplate('systems/noc/templates/window_app/noirceurTraits.hbs', { actor, traits });
-
-        return new nocNoirceurTraits(actor, html, options);
-    }
-
-    /* -------------------------------------------- */
-
-    /* -------------------------------------------- */
-    constructor(actor, html, talents, options, close = undefined) {
-        let conf = {
-            title: "",
-            content: html,
-            buttons: {
-                valid: {
-                    icon: '<i class="fas fa-check"></i>',
-                    label: "Valider",
-                    callback: () => { this.addTraits(html) }
-                },
-                cancel: {
-                    icon: '<i class="fas fa-times"></i>',
-                    label: "Annuler",
-                    callback: () => { this.close() }
-                }
-            },
-            close: close
-        }
-
-        super(conf, options);
-
-        this.actor = actor;
-        this.traits = NOC.traitsPerditions.noirceur;
-    }
-
-
-    async addTraits(html) {
-        let selectedTraits = [];
-        let inputs = this.element[0].querySelectorAll('input');
-        for (let input of inputs) {
-            if (input.checked) {
-                selectedTraits.push(NOC.traitsPerditions.noirceur[input.dataset.traitId])
-            }
-        }
-
-        let traits = this.actor.system.traits.concat(selectedTraits);
-        await this.actor.update({
-            'system.traits': traits
-        })
-
-
-    }
-    /* -------------------------------------------- */
-    async refreshDialog() {
-        const content = await renderTemplate("systems/noc/templates/dialog-roll-generic.hbs", this.rollData)
-        this.data.content = content
-        this.render(true)
-    }
-
-    /* -------------------------------------------- */
-
-    /* -------------------------------------------- */
-    activateListeners(html) {
-        super.activateListeners(html);
-
-
-    }
-
+  /** Ouvre la fenêtre et ajoute au personnage les traits cochés */
+  static async choisir(actor) {
+    const traits = NOC.traitsPerditions.noirceur;
+    const content = await foundry.applications.handlebars.renderTemplate('systems/noc/templates/window_app/noirceurTraits.hbs', { actor, traits });
+    const choisis = await foundry.applications.api.DialogV2.wait({
+      window: { title: "Traits de Noirceur" },
+      classes: ["nocDialog"],
+      position: { width: 420 },
+      content,
+      buttons: [
+        {
+          action: "valider", label: "Valider", icon: "fas fa-check", default: true,
+          callback: (event, bouton) => [...bouton.form.querySelectorAll('input[data-trait-id]:checked')]
+            .map(input => traits[input.dataset.traitId]).filter(Boolean)
+        },
+        { action: "annuler", label: "Annuler", icon: "fas fa-times" }
+      ],
+      rejectClose: false
+    });
+    if (!Array.isArray(choisis) || !choisis.length) return;
+    await actor.update({ 'system.traits': (actor.system.traits ?? []).concat(choisis) });
+  }
 }

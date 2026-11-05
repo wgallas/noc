@@ -1,4 +1,4 @@
-div.noc.item.sheet {
+.noc.item.sheet {
 
   section.window-content {
     background: url(../asset/images/fondequipement.webp);
@@ -186,7 +186,7 @@ div.noc.item.sheet {
 }
 
 // Gabarits de corrompus
-div.noc.item.sheet.gabarit {
+.noc.item.sheet.gabarit {
   .hint {
     font-size: 11px;
     font-style: italic;
@@ -223,7 +223,7 @@ div.noc.item.sheet.gabarit {
 }
 
 // Stratagèmes d'un équipement
-div.noc.item.sheet .stratagemes-objet {
+.noc.item.sheet .stratagemes-objet {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 10px;

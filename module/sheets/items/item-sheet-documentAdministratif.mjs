@@ -3,28 +3,18 @@ import {
   calculerDocument, listeBeneficiaires, estDelivre, donneesPapier
 } from "../../documents-administratifs.mjs";
 import { presenterDocument, nomsPJ } from "../../bureau.mjs";
+import { NocFicheObjet } from "./fiche-objet.mjs";
+import { ecouter } from "../v2-outils.mjs";
 
-export class nocItemSheetDocumentAdministratif extends foundry.appv1.sheets.ItemSheet {
+export class nocItemSheetDocumentAdministratif extends NocFicheObjet {
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["noc", "sheet", "item", "document-administratif"],
-      width: 460,
-      height: 760,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
-    });
-  }
+  static DEFAULT_OPTIONS = { classes: ["document-administratif"], position: { width: 460, height: 760 } };
+  static EDITEURS = ["system.description", "system.effetsDeBureau"];
+  static PARTS = { main: { template: "systems/noc/templates/item/sheet-document administratif.html" } };
+  /** boutons +/- propres (data-min) */
+  static COMPTEURS = false;
 
-  /** @override */
-  get template() {
-    const path = "systems/noc/templates/item";
-    return `${path}/sheet-${this.document.type}.html`;
-  }
-
-  /** @override */
-  getData() {
-    const context = super.getData();
-    context.systemTemplate = game.system.template;
+  async _donnees(context) {
     context.calc = calculerDocument(this.item);
     context.formulaires = Object.fromEntries(Object.entries(FORMULAIRES).map(([k, f]) => [k, f.label]));
     context.descriptionFormulaire = FORMULAIRES[context.calc.type].description;
@@ -58,39 +48,37 @@ export class nocItemSheetDocumentAdministratif extends foundry.appv1.sheets.Item
       dureeSortie: s.sortie?.duree || "formulaire",
       modeRequisition: s.requisition?.mode || "objet"
     };
-    return context;
   }
 
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-    html.find("a.presenter-document").click(() => presenterDocument(this.item));
-    html.find("a.basculer-edition").click(() => {
+  activerEcouteurs(html) {
+    ecouter(html, "a.presenter-document", () => presenterDocument(this.item));
+    ecouter(html, "a.basculer-edition", () => {
       this._edition = !(this._edition ?? !this.item.actor);
-      this.render(false);
+      this.render();
     });
     if (game.user.isGM) {
-      html.find("a.deverrouiller-document").click(() => this.item.update({ "system.deverrouille": true }));
-      html.find("a.reverrouiller-document").click(() => this.item.update({ "system.deverrouille": false }));
+      ecouter(html, "a.deverrouiller-document", () => this.item.update({ "system.deverrouille": true }));
+      ecouter(html, "a.reverrouiller-document", () => this.item.update({ "system.deverrouille": false }));
     }
     if (!this.isEditable) return;
 
     // boutons +/- : data-champ = chemin, data-min = minimum (0 par défaut)
-    html.find("a.compteur-plus").click(ev => this._changer(ev.currentTarget, 1));
-    html.find("a.compteur-moins").click(ev => this._changer(ev.currentTarget, -1));
+    ecouter(html, "a.compteur-plus", ev => this._changer(ev.currentTarget, 1));
+    ecouter(html, "a.compteur-moins", ev => this._changer(ev.currentTarget, -1));
 
     // bénéficiaires : la liste est enregistrée en entier
-    html.find("input.beneficiaire").change(ev => {
+    ecouter(html, "input.beneficiaire", ev => {
+      ev.stopPropagation();
       const liste = listeBeneficiaires(this.item.system);
       liste[Number(ev.currentTarget.dataset.index)] = ev.currentTarget.value;
       this.item.update({ "system.beneficiaires": liste });
-    });
-    html.find("a.ajouter-beneficiaire").click(() => {
+    }, "change");
+    ecouter(html, "a.ajouter-beneficiaire", () => {
       const liste = listeBeneficiaires(this.item.system);
       liste.push("");
       this.item.update({ "system.beneficiaires": liste });
     });
-    html.find("a.retirer-beneficiaire").click(ev => {
+    ecouter(html, "a.retirer-beneficiaire", ev => {
       const liste = listeBeneficiaires(this.item.system);
       liste.splice(Number(ev.currentTarget.dataset.index), 1);
       this.item.update({ "system.beneficiaires": liste });

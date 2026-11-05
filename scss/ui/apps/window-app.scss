@@ -1,5 +1,7 @@
 div.app.window-app:not(.sidebar-popout),
-div.app.window-app.sidebar-popout {
+div.app.window-app.sidebar-popout,
+.application.noc.sheet,
+.application.nocDialog {
 
     input {
         user-select: all;

@@ -2,16 +2,6 @@
  * Armures : score d'armure, encombrant (Déplacement -1), limitée, valeur.
  */
 
-/** Boutons +/- génériques d'une fiche (data-champ = chemin de la valeur, minimum 0) */
-export function activerCompteurs(html, document) {
-  const changer = async (champ, ecart) => {
-    const valeur = Math.max(0, (Number(foundry.utils.getProperty(document._source, champ)) || 0) + ecart);
-    return document.update({ [champ]: valeur });
-  };
-  html.find("a.compteur-plus").click(ev => changer(ev.currentTarget.dataset.champ, 1));
-  html.find("a.compteur-moins").click(ev => changer(ev.currentTarget.dataset.champ, -1));
-}
-
 /** Une armure encombrante réduit de 1 le talent Déplacement de son porteur */
 export function appliquerArmures(actor) {
   const t = actor.system.talents?.action?.deplacement;

@@ -1,7 +1,4 @@
-<form
-	class="{{cssClass}} {{actor.type}}"
-	autocomplete="off"
->
+<div class="fiche {{actor.type}}">
 
 	<nav
 		class="sheet-tabs tabs"
@@ -192,7 +189,7 @@
 					<img
 						class="profile-img"
 						src="{{actor.img}}"
-						data-edit="img"
+						data-edit="img" data-action="editImage"
 						title="{{actor.name}}"
 						height="100"
 						width="100"
@@ -358,11 +355,11 @@
 			<div class="signalement signalement-haut">
 					<div class="form-group editeur-court">
 						<h2>Implication</h2>
-						{{editor actor.system.implication target="system.implication" button=true editable=editable engine="prosemirror" collaborate=false}}
+						{{nocEditeur "system.implication"}}
 					</div>
 					<div class="form-group editeur-court">
 						<h2>Couverture</h2>
-						{{editor actor.system.couverture target="system.couverture" button=true editable=editable engine="prosemirror" collaborate=false}}
+						{{nocEditeur "system.couverture"}}
 					</div>
 			</div>
 
@@ -371,11 +368,11 @@
 				<div class="signalement flexcol">
 					<div class="form-group editeur-moyen">
 						<h2>Signalement</h2>
-						{{editor actor.system.signalement target="system.signalement" button=true editable=editable engine="prosemirror" collaborate=false}}
+						{{nocEditeur "system.signalement"}}
 					</div>
 					<div class="form-group editeur-long">
 						<h2>Description</h2>
-						{{editor actor.system.description target="system.description" button=true editable=editable engine="prosemirror" collaborate=false}}
+						{{nocEditeur "system.description"}}
 					</div>
 				</div>
 
@@ -578,4 +575,4 @@
 			</div>
 		</div>
 	</section>
-</form>
+</div>

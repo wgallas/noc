@@ -1,4 +1,5 @@
-import { nocActorSheetPersonnage } from "./actor-sheet-personnage.mjs";
+import { NocFicheActeur } from "./fiche-acteur.mjs";
+import { confirmer, donneesGlisser, ecouter } from "../v2-outils.mjs";
 import { ATOUTS, RESERVES_CABALE, JAUGES_CABALE, membresCabale, infligerCabale } from "../../cabale.mjs";
 import { assistantCreation, apportHeros, retirerApport, modifierApport, apportsCabale, entretien, semainesSansNoirceur, espritDeCorps, depenserProgression, donProgression, intermede } from "../../cabale-gestion.mjs";
 
@@ -12,72 +13,32 @@ const TYPES = {
 };
 
 
-/**
- * Extend the basic ActorSheet with some very simple modifications
- * @extends {ActorSheet}
- */
-export class nocActorSheetCabale extends nocActorSheetPersonnage {
+/** Fiche de cabale (ApplicationV2) */
+export class nocActorSheetCabale extends NocFicheActeur {
 
-  /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["noc", "sheet", "actor", "cabale"],
-      width: 920,
-      height: 780,
-      dragDrop: [
-        { dragSelector: ".item-list .item", dropSelector: null },
-      ],
+  static DEFAULT_OPTIONS = {
+    classes: ["cabale"],
+    position: { width: 920, height: 780 }
+  };
+  static MODELE = "systems/noc/templates/actor/actor-cabale-sheet.html";
+  static ONGLET_INITIAL = "profil";
+  static GLISSABLES = ".item-list .item";
+  static PARTS = { main: { template: "systems/noc/templates/actor/actor-cabale-sheet.html" } };
 
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "profil" }]
-    });
-  }
+  /** La cabale n'a pas de vue limitée (comme avant) */
+  get estLimitee() { return false; }
 
-  /** @override */
-  get template() {
-    return `systems/noc/templates/actor/actor-${this.actor.type}-sheet.html`;
-  }
-  /* -------------------------------------------- */
-  /*  Drag and Drop                               */
-  /* -------------------------------------------- */
-
-  /** @inheritdoc */
-  _canDragStart(selector) {
-    return this.isEditable;
-  }
-
-  /* -------------------------------------------- */
-
-  /** @inheritdoc */
-  _canDragDrop(selector) {
-    return this.isEditable;
-  }
+  /** @override : seuls des personnages se déposent sur une cabale */
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
-    const actor = this.actor;
-
-    /**
-     * A hook event that fires when some useful data is dropped onto an ActorSheet.
-     * @function dropActorSheetData
-     * @memberof hookEvents
-     * @param {Actor} actor      The Actor
-     * @param {ActorSheet} sheet The ActorSheet application
-     * @param {object} data      The data that has been dropped onto the sheet
-     */
-    const allowed = Hooks.call("dropActorSheetData", actor, this, data);
+    const data = donneesGlisser(event);
+    if (!data) return;
+    const allowed = Hooks.call("dropActorSheetData", this.actor, this, data);
     if (allowed === false) return;
-
-    // Handle different data types
-    switch (data.type) {
-
-      case "Actor":
-        return this._onDropActor(event, data);
-      case "Item":
-        return this._onDropItem(event, data);
-
-    }
+    if (data.type === "Actor") return this._nocDeposerActeur(event, data);
   }
-  async _onDropActor(ev, data) {
-    let dropActor = await Actor.implementation.fromDropData(data);
+
+  async _nocDeposerActeur(ev, data) {
+    const dropActor = await Actor.implementation.fromDropData(data);
     if (!dropActor) return false;
     if (dropActor.type != "personnage") {
       return ui.notifications.warn("Vous ne pouvez ajouter que des personnages aux cabales");
@@ -89,24 +50,7 @@ export class nocActorSheetCabale extends nocActorSheetPersonnage {
       return ui.notifications.warn("Vous n'avez pas de droits sur ce personnage ; demandez à la Loi de l'ajouter.");
     }
     await membre.setCabale(this.actor);
-    return this.render(false);
-  }
-  _onDropItem(ev, data) {
-  }
-  /* -------------------------------------------- */
-
-  /** @override */
-  getData() {
-    // Retrieve the data structure from the base sheet. You can inspect or log
-    // the context variable to see the structure, but some key properties for
-    // sheets are the actor object, the data object, whether or not it's
-    // editable, the items array, and the effects array.
-    const context = super.getData();
-
-    // Prepare character data and items.
-    this._preparePersonnageData(context);
-
-    return context;
+    return this.render();
   }
 
   /* -------------------------------------------- */
@@ -161,36 +105,30 @@ export class nocActorSheetCabale extends nocActorSheetPersonnage {
   /* -------------------------------------------- */
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  activerEcouteurs(html) {
+    super.activerEcouteurs(html);
 
-    html.find('.remove-member').click(async ev => {
+    ecouter(html, ".remove-member", async ev => {
       const membre = game.actors.get(ev.currentTarget.dataset.actorId);
       if (!membre) return;
       if (!membre.isOwner) return ui.notifications.warn("Vous n'avez pas de droits sur ce personnage.");
-      const ok = await foundry.applications.api.DialogV2.confirm({
-        window: { title: "Retirer un membre" },
-        content: `<p>Retirer ${membre.name} de la cabale ?</p>`
-      });
-      if (ok) await membre.leaveCabale(this.actor.id);
-      this.render(false);
+      if (await confirmer("Retirer un membre", `<p>Retirer ${membre.name} de la cabale ?</p>`)) {
+        await membre.leaveCabale(this.actor.id);
+      }
+      this.render();
     });
-    html.find('.display-actor').click(ev => {
-      const actorId = $(ev.currentTarget).data("actor-id")
-      let actor = game.actors.get(actorId);
-      actor.sheet.render(true);
-    })
+    ecouter(html, ".display-actor", ev => game.actors.get(ev.currentTarget.dataset.actorId)?.sheet.render(true));
     if (this.isEditable) {
       // niveau d'un Atout (−1 donne une faille) et score d'un Domaine
-      html.find('.atout-ctrl a').click(ev => this._modifier(ev, "talents", -1));
-      html.find('.domaine-ctrl a').click(ev => this._modifier(ev, "domaines", 0));
+      ecouter(html, ".atout-ctrl a", ev => this._modifier(ev, "talents", -1));
+      ecouter(html, ".domaine-ctrl a", ev => this._modifier(ev, "domaines", 0));
       // dés de Domaine et points d'Atouts restants (correction manuelle)
-      html.find('a.restant-ctrl').click(ev => this._modifierRestant(ev.currentTarget));
-      html.find('a.vecu-achats').click(ev => {
+      ecouter(html, "a.restant-ctrl", ev => this._modifierRestant(ev.currentTarget));
+      ecouter(html, "a.vecu-achats", ev => {
         const valeur = Math.max(0, nombre(this.actor._source.system.vecuAchats) + nombre(ev.currentTarget.dataset.ecart));
         this.actor.update({ "system.vecuAchats": valeur });
       });
-      html.find('button.dommages-cabale').click(() => this._dommages());
+      ecouter(html, "button.dommages-cabale", () => this._dommages());
       // création, entretien et progression
       const actions = {
         creation: assistantCreation, apport: apportHeros,
@@ -199,18 +137,9 @@ export class nocActorSheetCabale extends nocActorSheetPersonnage {
         noirceur: semainesSansNoirceur, division: espritDeCorps,
         depenser: depenserProgression, don: donProgression, intermede
       };
-      html.find('[data-gestion]').click(ev => actions[ev.currentTarget.dataset.gestion]?.(this.actor, ev.currentTarget.dataset));
+      ecouter(html, "[data-gestion]", ev => actions[ev.currentTarget.dataset.gestion]?.(this.actor, ev.currentTarget.dataset));
     }
-    let membersImages = html.find('div.img');
-    for (let el of membersImages) { this.randomRotate(el) }
-    // Delete Inventory Item
-    html.find('.item-delete').click(ev => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
-      item.delete();
-      li.slideUp(200, () => this.render(false));
-    });
-
+    for (const el of html.querySelectorAll("div.img")) this.randomRotate(el);
   }
   /** +/- sur un niveau d'Atout (minimum −1) ou un score de Domaine (minimum 0) */
   async _modifier(ev, groupe, min) {

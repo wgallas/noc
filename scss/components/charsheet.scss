@@ -1,12 +1,12 @@
-div.noc.sheet.actor {
+.noc.sheet.actor {
     margin: 0;
 
     input {
         user-select: all;
     }
 
-    form.personnage,
-    form.cabale {
+    .fiche.personnage,
+    .fiche.cabale {
         max-height: fit-content;
         filter: grayscale(0.5)
     }
@@ -28,7 +28,7 @@ div.noc.sheet.actor {
 
     ;
 
-    form.cabale {
+    .fiche.cabale {
         .domaine {
             font-size: smaller;
 
@@ -1188,7 +1188,7 @@ div.noc.sheet.actor {
 
         }
 
-        &:hover form.limitted {
+        &:hover .fiche.limitted {
             .form-group {
                 opacity: 1;
                 box-shadow: 0px 0px 100px gray inset;
@@ -1200,7 +1200,7 @@ div.noc.sheet.actor {
 }
 
 // liste des cabales d'un personnage : une cabale sous l'autre
-div.noc.sheet.actor .liste-cabales {
+.noc.sheet.actor .liste-cabales {
     display: flex !important;
     flex-direction: column !important;
     flex-wrap: nowrap;
@@ -1214,10 +1214,12 @@ div.noc.sheet.actor .liste-cabales {
     .cabale-entree {
         margin-bottom: 8px;
     }
-}
-
+}
+
+
+
 // résumé du personnage : cabales sous leur titre, progression avec boutons
-div.noc.sheet.actor .form-group.bloc-cabales {
+.noc.sheet.actor .form-group.bloc-cabales {
     flex-direction: column !important;
     align-items: stretch !important;
 
@@ -1240,7 +1242,7 @@ div.noc.sheet.actor .form-group.bloc-cabales {
     }
 }
 
-div.noc.sheet.actor h3.progression {
+.noc.sheet.actor h3.progression {
     align-items: center;
 
     span:first-child {
@@ -1294,10 +1296,12 @@ div.noc.sheet.actor h3.progression {
             opacity: 1;
         }
     }
-}
-
+}
+
+
+
 // résumé du personnage : libellé au-dessus, valeur en dessous
-div.noc.sheet.actor .form-group.bloc-empile {
+.noc.sheet.actor .form-group.bloc-empile {
     flex-direction: column !important;
     align-items: stretch !important;
 
@@ -1328,18 +1332,20 @@ div.noc.sheet.actor .form-group.bloc-empile {
             white-space: nowrap;
         }
     }
-}
-
+}
+
+
+
 // Fiche personnage : le contenu suit la taille de la fenêtre
 // (au lieu de garder une hauteur fixe dans une fenêtre agrandie)
-div.noc.sheet.actor.personnage section.window-content {
+.noc.sheet.actor.personnage section.window-content {
     max-height: none !important;
     height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 
-    > form.personnage {
+    > .fiche.personnage {
         max-height: none !important;
         flex: 1 1 auto;
         min-height: 0;
@@ -1373,10 +1379,12 @@ div.noc.sheet.actor.personnage section.window-content {
             }
         }
     }
-}
-
+}
+
+
+
 // Fiche personnage, onglet Fiche de signalement
-div.noc.sheet.actor.personnage section.window-content > form.personnage > section.sheet-body > div.tab.description {
+.noc.sheet.actor.personnage section.window-content > .fiche.personnage > section.sheet-body > div.tab.description {
     // « display » seulement quand l'onglet est actif, sinon il masquerait les autres onglets
     &.active {
         display: flex;
@@ -1584,10 +1592,12 @@ div.noc.sheet.actor.personnage section.window-content > form.personnage > sectio
             }
         }
     }
-}
-
+}
+
+
+
 // rond de valeur avec boutons +/- au survol (quantars)
-div.noc.sheet span.compteur-niveau {
+.noc.sheet span.compteur-niveau {
     position: relative;
     flex: 0 0 22px;
     width: 22px;
@@ -1634,7 +1644,7 @@ div.noc.sheet span.compteur-niveau {
 }
 
 // Fiche personnage, onglet Inventaire
-div.noc.sheet.actor.personnage section.window-content > form.personnage > section.sheet-body > div.tab.items {
+.noc.sheet.actor.personnage section.window-content > .fiche.personnage > section.sheet-body > div.tab.items {
     padding: 6px 8px;
 
     h3.quantars-ligne {
@@ -1685,10 +1695,12 @@ div.noc.sheet.actor.personnage section.window-content > form.personnage > sectio
             }
         }
     }
-}
-
+}
+
+
+
 // Fiche Rouage : inventaire en trois colonnes
-div.noc.sheet.actor.rouage .inventaire-rouage {
+.noc.sheet.actor.rouage .inventaire-rouage {
     flex: 1 1 auto;
     min-width: 0;
 
@@ -1725,11 +1737,13 @@ div.noc.sheet.actor.rouage .inventaire-rouage {
             }
         }
     }
-}
-
+}
+
+
+
 // Fiche Rouage : jauges sur trois colonnes au-dessus de l'inventaire
 // (Espoir, Vécu | Blessures, Traque | Noirceur, Trauma)
-div.noc.sheet.actor.rouage .rouage-bas {
+.noc.sheet.actor.rouage .rouage-bas {
     gap: 8px;
 
     .rouage-jauges {
@@ -1749,10 +1763,12 @@ div.noc.sheet.actor.rouage .rouage-bas {
     .inventaire-rouage {
         width: 100%;
     }
-}
-
+}
+
+
+
 // Fiche Créature : Action en colonne 1, jauges en colonne 2
-div.noc.sheet.actor.creature .creature-corps {
+.noc.sheet.actor.creature .creature-corps {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -1779,9 +1795,11 @@ div.noc.sheet.actor.creature .creature-corps {
             margin: 2px 0;
         }
     }
-}
-
-div.noc.sheet.actor.creature .creature-corps .creature-colonne2 {
+}
+
+
+
+.noc.sheet.actor.creature .creature-corps .creature-colonne2 {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -1807,7 +1825,7 @@ div.noc.sheet.actor.creature .creature-corps .creature-colonne2 {
 }
 
 // Fiche Autre : Classe Exo et Énergie Noire, puis même structure que le Rouage
-div.noc.sheet.actor.autre {
+.noc.sheet.actor.autre {
     .autre-ligne {
         align-items: center;
         justify-content: space-around;
@@ -1888,10 +1906,12 @@ div.noc.sheet.actor.autre {
             }
         }
     }
-}
-
+}
+
+
+
 // Quantars : état bien visible sur les objets qui en ont besoin
-div.noc.sheet.actor {
+.noc.sheet.actor {
     li.item img.needQuantar {
         cursor: pointer;
         max-height: 1.6em !important;
@@ -1924,12 +1944,14 @@ div.noc.sheet.actor {
 }
 
 // Fiches d'objets : compteur aligné dans sa ligne
-div.noc.item.sheet .form-group span.compteur-niveau {
+.noc.item.sheet .form-group span.compteur-niveau {
     flex: 0 0 22px;
-}
-
+}
+
+
+
 // Fiche d'outil : section Arme improvisée
-div.noc.item.sheet {
+.noc.item.sheet {
     h3.titre-section {
         margin: 10px 0 4px;
         padding: 2px 6px;
@@ -1950,10 +1972,12 @@ div.noc.item.sheet {
     .form-group select {
         flex: 0 0 8em;
     }
-}
-
+}
+
+
+
 // Fiche d'arme : traits sur deux colonnes
-div.noc.item.sheet .traits-arme {
+.noc.item.sheet .traits-arme {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2px 12px;
@@ -1980,8 +2004,10 @@ div.noc.item.sheet .traits-arme {
     &.traits-chiffres .trait-arme {
         justify-content: space-between;
     }
-}
-
+}
+
+
+
 // Fenêtre de jet d'arme
 .nocDialog .skill-roll-dialog {
     h2.titre-arme {
@@ -2011,10 +2037,11 @@ div.noc.item.sheet .traits-arme {
         gap: 6px;
         flex: 0 0 auto;
     }
-}
-
+}
+
+
+
 // Fenêtre de jet : vraies cases à cocher (Cible au sol, Espoir, Vécu)
-div.app.window-app.nocDialog .skill-roll-dialog,
 .nocDialog .skill-roll-dialog {
     #cibleAuSol,
     #useEspoir,
@@ -2060,10 +2087,12 @@ div.app.window-app.nocDialog .skill-roll-dialog,
             margin-left: 4px;
         }
     }
-}
-
+}
+
+
+
 // Fiche personnage : boutons d'étapes de jeu, barre en bas de l'onglet principal
-div.noc.sheet.actor.personnage section.window-content > form.personnage > section.sheet-body > .tab.principal.active {
+.noc.sheet.actor.personnage section.window-content > .fiche.personnage > section.sheet-body > .tab.principal.active {
     display: flex;
     flex-direction: column;
 
@@ -2084,10 +2113,12 @@ div.noc.sheet.actor.personnage section.window-content > form.personnage > sectio
             line-height: 2em;
         }
     }
-}
-
+}
+
+
+
 // États durables (Fatigue, Bouleversement administratif)
-div.noc.sheet.actor .etats-actifs,
+.noc.sheet.actor .etats-actifs,
 .panneau-mj .cible-ligne {
     .etat {
         display: inline-block;
@@ -2210,8 +2241,10 @@ div.noc.sheet.actor .etats-actifs,
             margin: 0;
         }
     }
-}
-
+}
+
+
+
 // Panneau du MJ : points +/- et niveaux de Menace
 .panneau-mj {
     .points-ligne {
@@ -2412,7 +2445,7 @@ div.noc.sheet.actor .etats-actifs,
 }
 
 // Fiche de document administratif
-div.noc.item.sheet.document-administratif {
+.noc.item.sheet.document-administratif {
     .form-group select.choix-formulaire,
     .form-group select.large {
         flex: 1 1 auto;
@@ -2569,13 +2602,13 @@ div.noc.item.sheet.document-administratif {
 }
 
 // Fiche personnage : bouton pour changer de thème
-div.noc.sheet .theme-resume a.changerTheme {
+.noc.sheet .theme-resume a.changerTheme {
     flex: 0 0 auto !important;
     margin-left: 4px;
 }
 
 // Rouage / Autre : bascule des jauges de perdition 5 <-> 10
-div.noc.sheet .reserve.perdition h4 a.basculerJauges {
+.noc.sheet .reserve.perdition h4 a.basculerJauges {
     font-size: 10px;
     margin-left: 6px;
     opacity: 0.7;
@@ -2617,7 +2650,7 @@ div.noc.sheet .reserve.perdition h4 a.basculerJauges {
 }
 
 // Fiche de rouage : archétype et thème
-div.noc.sheet .archetype-rouage {
+.noc.sheet .archetype-rouage {
     align-items: center;
     gap: 6px;
     padding: 2px 6px;
@@ -2639,7 +2672,7 @@ div.noc.sheet .archetype-rouage {
 }
 
 // Personnages en sommeil
-div.noc.sheet .bandeau-sommeil {
+.noc.sheet .bandeau-sommeil {
     margin: 2px 0;
     padding: 2px 6px;
     font-size: 12px;
@@ -2648,7 +2681,7 @@ div.noc.sheet .bandeau-sommeil {
     border: 1px dashed #5c5c5c;
 }
 
-div.noc.sheet label.case-reserve {
+.noc.sheet label.case-reserve {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -2796,7 +2829,7 @@ div.noc.sheet label.case-reserve {
     }
 }
 
-div.noc.sheet.document-administratif .papier-mode {
+.noc.sheet.document-administratif .papier-mode {
     padding: 8px;
 }
 
@@ -2868,7 +2901,7 @@ div.noc.sheet.document-administratif .papier-mode {
     }
 }
 
-div.noc.sheet .documents-recus {
+.noc.sheet .documents-recus {
     margin-top: 4px;
 
     h4 {
@@ -2888,7 +2921,7 @@ div.noc.sheet .documents-recus {
     }
 }
 
-div.noc.sheet a.guichet-bureau-bouton {
+.noc.sheet a.guichet-bureau-bouton {
     display: block;
     margin: 4px 0;
     font-size: 12px;
@@ -2914,7 +2947,7 @@ div.noc.sheet a.guichet-bureau-bouton {
 
 
 // Fiche de cabale : réserves de dés, atouts, réserves communes, jauges
-div.noc.sheet.actor.cabale .cabale-stats {
+.noc.sheet.actor.cabale .cabale-stats {
     .cabale-bilan {
         display: flex;
         flex-wrap: wrap;
@@ -3092,7 +3125,7 @@ div.noc.sheet.actor.cabale .cabale-stats {
 
 
 // Fiche de cabale : progression, entretien, création
-div.noc.sheet.actor.cabale .gestion-cabale {
+.noc.sheet.actor.cabale .gestion-cabale {
     font-size: 12px;
 
     h4 {
@@ -3370,7 +3403,7 @@ div.noc.sheet.actor.cabale .gestion-cabale {
 
 // Cases à cocher des fiches d'objets et du guichet : case claire et vide, coche foncée une fois cochée
 // (remplace le carré noir à coche orange du thème de Foundry)
-div.noc.item.sheet section.window-content input[type="checkbox"],
+.noc.item.sheet section.window-content input[type="checkbox"],
 .application.noc.guichet-bureau .window-content input[type="checkbox"] {
     -webkit-appearance: none !important;
     appearance: none !important;
@@ -3471,11 +3504,11 @@ div.noc.item.sheet section.window-content input[type="checkbox"],
 
 
 // Fiche de cabale : en-tête, onglets Profil / Gestion / Description / Membres
-div.noc.sheet.actor.cabale section.window-content {
+.noc.sheet.actor.cabale section.window-content {
     max-height: none;
     height: 100%;
 
-    > form.cabale {
+    > .fiche.cabale {
         height: 100%;
         max-height: none;
         display: flex;
@@ -3723,7 +3756,7 @@ div.noc.sheet.actor.cabale section.window-content {
 
 
 // Document administratif : durée permanente, barre « Voir le papier » en mode édition
-div.noc.item.sheet.document-administratif {
+.noc.item.sheet.document-administratif {
     span.duree-permanente {
         font-style: italic;
         font-weight: bold;
@@ -3737,7 +3770,7 @@ div.noc.item.sheet.document-administratif {
 
 
 // Fiche de cabale : liste des apports des Héros
-div.noc.sheet.actor.cabale .carte-gestion {
+.noc.sheet.actor.cabale .carte-gestion {
     h4 {
         margin: 6px 0 2px;
         color: #1b1813;
@@ -3770,7 +3803,7 @@ div.noc.sheet.actor.cabale .carte-gestion {
 }
 
 // Stratagèmes : icône dans les listes d'objets
-div.noc.sheet .item-list .stratageme-icone {
+.noc.sheet .item-list .stratageme-icone {
     flex: 0 0 auto;
     margin-left: 4px;
     font-size: 11px;
@@ -3812,7 +3845,7 @@ div.noc.sheet .item-list .stratageme-icone {
 // Fiche Créature : bandeau du Domaine Action (le rond du score restait rogné à gauche)
 // et carte des armes (image, nom, dégâts et boutons sur une ligne)
 // (sélecteurs complets : plus précis que les règles générales des fiches)
-div.noc.sheet.actor.creature section.window-content section.sheet-body div.tab.principal.creature-corps {
+.noc.sheet.actor.creature section.window-content section.sheet-body div.tab.principal.creature-corps {
     .creature-action.stats .domaine h3 {
         width: 100%;
         left: 0;
@@ -3883,8 +3916,8 @@ div.noc.sheet.actor.creature section.window-content section.sheet-body div.tab.p
 }
 
 // Fortune : boutons Transaction et Excès à côté du Talent
-div.noc.sheet.actor.personnage a.transaction-fortune,
-div.noc.sheet.actor.personnage a.basculer-exces {
+.noc.sheet.actor.personnage a.transaction-fortune,
+.noc.sheet.actor.personnage a.basculer-exces {
     flex: 0 0 auto;
     margin-left: 4px;
     font-size: 11px;
@@ -3906,4 +3939,58 @@ div.noc.sheet.actor.personnage a.basculer-exces {
         font-size: 11px;
         font-style: italic;
     }
+}
+
+
+// Fiches et fenêtres de jet (ApplicationV2) : fonds papier du système. Le thème
+// sombre de Foundry y mettrait du texte et des champs clairs, illisibles.
+.application.noc.sheet,
+.application.nocDialog {
+    --color-text-primary: #191813;
+    --color-text-secondary: #4b4a44;
+    --color-text-subtle: #5a4c40;
+    --color-text-emphatic: #000;
+    --color-form-label: #191813;
+    --color-form-hint: #4b4a44;
+    --color-text-hyperlink: #5b1f12;
+    --input-text-color: #191813;
+    --input-background-color: rgba(0, 0, 0, 0.05);
+    --input-border-color: #7a7971;
+    --input-placeholder-color: #7a7971;
+
+    .window-content {
+        color: #191813;
+    }
+
+    :where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
+        color: #191813;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-color: #7a7971;
+    }
+
+    :where(select option) {
+        color: #191813;
+        background: #f0ead8;
+    }
+}
+
+// Fenêtre de jet : boutons du bas de la fenêtre (DialogV2)
+.application.nocDialog .form-footer button {
+    color: #191813;
+}
+
+// Compteur de Fiel (ApplicationV2 sans cadre) : pas de fond ni de position de fenêtre
+#CompteurFiel.application {
+    position: relative;
+    inset: auto;
+    background: none;
+    border: none;
+    box-shadow: none;
+    min-width: 0;
+    min-height: 0;
+    max-height: none;
+    padding: 0;
+    overflow: visible;
+    pointer-events: none;
+    z-index: auto;
 }

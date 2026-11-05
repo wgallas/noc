@@ -1,30 +1,18 @@
-import { nocActorSheetRouage } from "./actor-sheet-rouage.mjs";
+import { NocFicheActeur } from "./fiche-acteur.mjs";
+import { ecouter } from "../v2-outils.mjs";
 
+/** Fiche de créature (ApplicationV2) */
+export class nocActorSheetCreature extends NocFicheActeur {
+  static DEFAULT_OPTIONS = {
+    classes: ["creature"],
+    position: { width: 600, height: 780 }
+  };
+  static MODELE = "systems/noc/templates/actor/actor-creature-sheet.html";
+  static GLISSABLES = ".item-list .item";
+  static PARTS = { main: { template: "systems/noc/templates/actor/actor-creature-sheet.html" } };
 
-/**
- * Extend the basic ActorSheet with some very simple modifications
- * @extends {ActorSheet}
- */
-export class nocActorSheetCreature extends nocActorSheetRouage {
-
-  /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["noc", "sheet", "actor", "creature"],
-      width: 600,
-      height: 780,
-      dragDrop: [
-        { dragSelector: ".item-list .item", dropSelector: null },
-      ],
-
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "principal" }]
-    });
-  }
-  activateListeners(html) {
-    super.activateListeners(html);
-    html.find('a#roll-creature-attaque').click(this.rollAttaque.bind(this))
-  }
-  async rollAttaque(ev) {
-    this.actor.creatureAttaque()
+  activerEcouteurs(html) {
+    super.activerEcouteurs(html);
+    ecouter(html, "a#roll-creature-attaque", () => this.actor.creatureAttaque());
   }
 }

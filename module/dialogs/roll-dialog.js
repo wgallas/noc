@@ -49,46 +49,44 @@ export function htmlCabale(rollData) {
   return html + "</div>";
 }
 
-export class nocRollDialog extends Dialog {
+/** Délégation d'évènements : gestionnaire(ev, élément correspondant au sélecteur) */
+function deleguer(racine, types, selecteur, gestionnaire) {
+  for (const type of types.split(" ")) {
+    racine.addEventListener(type, ev => {
+      const el = ev.target.closest?.(selecteur);
+      if (el && racine.contains(el)) gestionnaire(ev, el);
+    });
+  }
+}
+
+/** Fenêtre de jet (DialogV2) */
+export class nocRollDialog extends foundry.applications.api.DialogV2 {
 
   /* -------------------------------------------- */
   static async create(actor, rollData) {
-
-    let options = { classes: ["nocDialog"], width: 420, height: 'fit-content', 'z-index': 99999 };
     rollData.cabaleHtml = htmlCabale(rollData);
     // Flux d'un Seuil (réglé par le MJ) : jusqu'à Domaine + Flux dés de domaine
     if (rollData.flux === undefined) Object.assign(rollData, fluxPourJet());
     const domaineDes = Number(rollData.domaine?.value) || 0;
     rollData.maxDesAvecFlux = domaineDes + (rollData.flux || 0);
     rollData.maxDesDomaine = domaineDes + (rollData.fluxActif ? rollData.flux : 0);
-    let html = await renderTemplate('systems/noc/templates/window_app/dialog-roll-generic.hbs', rollData);
+    const html = await foundry.applications.handlebars.renderTemplate('systems/noc/templates/window_app/dialog-roll-generic.hbs', rollData);
     delete rollData.cabaleHtml;
-
-    return new nocRollDialog(actor, rollData, html, options);
+    return new nocRollDialog(actor, rollData, html);
   }
 
   /* -------------------------------------------- */
-  constructor(actor, rollData, html, options, close = undefined) {
-    let conf = {
-      title: "",
+  constructor(actor, rollData, html) {
+    super({
+      window: { title: `${rollData.name ?? actor.name} — ${rollData.title ?? "Jet"}` },
+      classes: ["nocDialog"],
+      position: { width: 420 },
       content: html,
-      buttons: {
-        roll: {
-          icon: '<i class="fas fa-check"></i>',
-          label: "Lancer !",
-          callback: () => { this.roll() }
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: "Annuler",
-          callback: () => { this.close() }
-        }
-      },
-      close: close
-    }
-
-    super(conf, options);
-
+      buttons: [
+        { action: "roll", label: "Lancer !", icon: "fas fa-check", default: true, callback: (event, bouton, dialog) => dialog.roll() },
+        { action: "cancel", label: "Annuler", icon: "fas fa-times" }
+      ]
+    });
     this.actor = actor;
     this.rollData = rollData;
   }
@@ -100,22 +98,18 @@ export class nocRollDialog extends Dialog {
     nocUtility.roll(this.rollData)
   }
 
-  /* -------------------------------------------- */
-  async refreshDialog() {
-    const content = await renderTemplate("systems/noc/templates/dialog-roll-generic.hbs", this.rollData)
-    this.data.content = content
-    this.render(true)
+  /** Racine du contenu de la fenêtre */
+  get contenu() {
+    return this.element?.querySelector(".skill-roll-dialog") ?? this.element;
   }
 
   /* -------------------------------------------- */
   updateNiveauFinal() {
-    let inputs = this._element.find('input');
-    for (let input of inputs) {
-      if (input.type === "range") {
-        this.rollData[input.id] = Number(input.value)
-      } if (input.type === "checkbox") {
-        this.rollData[input.id] = input.checked
-      }
+    const html = this.contenu;
+    for (const input of html.querySelectorAll('input')) {
+      if (!input.id) continue;
+      if (input.type === "range") this.rollData[input.id] = Number(input.value);
+      if (input.type === "checkbox") this.rollData[input.id] = input.checked;
     }
     if (this.rollData.arme) {
       const r = this.rollData;
@@ -128,124 +122,122 @@ export class nocRollDialog extends Dialog {
     } else if (this.rollData.niveauRequis !== undefined) {
       this.rollData.niveauFinalRequis = (Number(this.rollData.niveauRequis) || 0) + (Number(this.rollData.modCouvert) || 0) + (Number(this.rollData.modSupplement) || 0)
     }
-    this._element.find('#niveauFinalRequis').html(this.rollData.niveauFinalRequis);
+    const cible = html.querySelector('#niveauFinalRequis');
+    if (cible) cible.innerHTML = this.rollData.niveauFinalRequis;
   }
-  /* -------------------------------------------- */
-  activateListeners(html) {
-    super.activateListeners(html);
 
-    var dialog = this;
-    function onLoad() {
-      dialog.updateNiveauFinal()
-    }
-    $(function () { onLoad(); });
+  /* -------------------------------------------- */
+  /** @override */
+  async _onRender(context, options) {
+    await super._onRender(context, options);
+    const html = this.contenu;
+    const r = this.rollData;
+    const un = sel => html.querySelector(sel);
+    const sur = (sel, type, fn) => { for (const el of html.querySelectorAll(sel)) el.addEventListener(type, fn); };
+    this.updateNiveauFinal();
 
     // un seul point d'Espoir et un seul point de Vécu par jet : celui du Héros ou celui de la cabale
-    html.find('#useEspoir').change((event) => {
-      this.rollData.useEspoir = event.currentTarget.checked
-      if (this.rollData.useEspoir) { this.rollData.useEspoirCabale = false; html.find('#useEspoirCabale').prop('checked', false) }
-    })
-    html.find('#useVecu').change((event) => {
-      this.rollData.useVecu = event.currentTarget.checked
-      if (this.rollData.useVecu) { this.rollData.useVecuCabale = false; html.find('#useVecuCabale').prop('checked', false) }
-    })
-    html.find('#cibleAuSol').change((event) => {
-      this.rollData.cibleAuSol = event.currentTarget.checked
-      this.updateNiveauFinal()
-    })
-    html.find('#nbDesDomaine').change((event) => {
-      this.rollData.nbDesDomaine = Number(event.currentTarget.value)
-    })
+    sur('#useEspoir', 'change', ev => {
+      r.useEspoir = ev.currentTarget.checked;
+      if (r.useEspoir) { r.useEspoirCabale = false; const c = un('#useEspoirCabale'); if (c) c.checked = false; }
+    });
+    sur('#useVecu', 'change', ev => {
+      r.useVecu = ev.currentTarget.checked;
+      if (r.useVecu) { r.useVecuCabale = false; const c = un('#useVecuCabale'); if (c) c.checked = false; }
+    });
+    sur('#cibleAuSol', 'change', ev => {
+      r.cibleAuSol = ev.currentTarget.checked;
+      this.updateNiveauFinal();
+    });
+    sur('#nbDesDomaine', 'change', ev => { r.nbDesDomaine = Number(ev.currentTarget.value); });
     // Flux d'un Seuil : la case change le nombre maximum de dés de domaine
-    html.find('#fluxActif').change((event) => {
-      const r = this.rollData
-      r.fluxActif = event.currentTarget.checked
-      r.maxDesDomaine = (Number(r.domaine?.value) || 0) + (r.fluxActif ? r.flux : 0)
-      const curseur = html.find('#nbDesDomaine')
-      curseur.attr('max', r.maxDesDomaine)
-      if (Number(curseur.val()) > r.maxDesDomaine) curseur.val(r.maxDesDomaine)
-      r.nbDesDomaine = Number(curseur.val())
-      html.find('[data-display-range="nbDesDomaine"]').html(String(r.nbDesDomaine))
-    })
-    this.activerCabale(html)
+    sur('#fluxActif', 'change', ev => {
+      r.fluxActif = ev.currentTarget.checked;
+      r.maxDesDomaine = (Number(r.domaine?.value) || 0) + (r.fluxActif ? r.flux : 0);
+      const curseur = un('#nbDesDomaine');
+      curseur.max = r.maxDesDomaine;
+      if (Number(curseur.value) > r.maxDesDomaine) curseur.value = r.maxDesDomaine;
+      r.nbDesDomaine = Number(curseur.value);
+      const aff = un('[data-display-range="nbDesDomaine"]');
+      if (aff) aff.innerHTML = String(r.nbDesDomaine);
+    });
+    this.activerCabale(html);
     // Stratagèmes : objet ergonomique ou sensible à la Noirceur utilisé pour ce jet
-    html.find('input.bonus-equipement').change((event) => {
-      const e = this.rollData.equipements?.[Number(event.currentTarget.dataset.index)]
-      if (e) e.actif = event.currentTarget.checked
-    })
+    sur('input.bonus-equipement', 'change', ev => {
+      const e = r.equipements?.[Number(ev.currentTarget.dataset.index)];
+      if (e) e.actif = ev.currentTarget.checked;
+    });
     // bonus collaboratif : boutons +/- (minimum 0)
-    html.find('a.bouton-collaboratif').click((event) => {
-      const ecart = Number(event.currentTarget.dataset.ecart) || 0;
-      const valeur = Math.max(0, (Number(this.rollData.nbBonusCollaboratif) || 0) + ecart);
-      this.rollData.nbBonusCollaboratif = valeur;
-      html.find('#nbBonusCollaboratif').html(valeur > 0 ? `+${valeur}` : "0");
-    })
-    html.find('#modDistance, #modConditions').change(() => this.updateNiveauFinal())
-    html.find('#modCouvert').change((event) => {
-      this.rollData.modCouvert = Number(event.currentTarget.value)
-      this.updateNiveauFinal()
-    })
-    html.find('#modSupplement').change((event) => {
-      this.rollData.modSupplement = Number(event.currentTarget.value)
-      this.updateNiveauFinal()
-    })
-    html.find('input[type="range"]').change((ev) => {
-      this.displayRange(ev)
-    })
-
+    sur('a.bouton-collaboratif', 'click', ev => {
+      ev.preventDefault();
+      const ecart = Number(ev.currentTarget.dataset.ecart) || 0;
+      const valeur = Math.max(0, (Number(r.nbBonusCollaboratif) || 0) + ecart);
+      r.nbBonusCollaboratif = valeur;
+      const aff = un('#nbBonusCollaboratif');
+      if (aff) aff.innerHTML = valeur > 0 ? `+${valeur}` : "0";
+    });
+    sur('#modDistance, #modConditions', 'change', () => this.updateNiveauFinal());
+    sur('#modCouvert', 'change', ev => { r.modCouvert = Number(ev.currentTarget.value); this.updateNiveauFinal(); });
+    sur('#modSupplement', 'change', ev => { r.modSupplement = Number(ev.currentTarget.value); this.updateNiveauFinal(); });
+    deleguer(html, 'change', 'input[type="range"]', (ev, el) => this.displayRange(el));
   }
+
   /** Bloc de la cabale : choix de la cabale, dés, Atouts, Espoir et Vécu communs */
   activerCabale(html) {
-    const r = this.rollData
+    const r = this.rollData;
     const rafraichir = () => {
-      html.find('.bloc-cabale').html(htmlCabale(r))
-      this.setPosition({ height: "auto" })
-    }
-    html.on('change', '#cabaleChoice', (event) => {
-      const cabale = (r.cabales ?? []).find(c => c.id === event.currentTarget.value)
-      if (!cabale) return
-      r.cabaleData = cabale
-      r.cabaleDomaine = cabale.domaines?.[r.domaineId] ? foundry.utils.duplicate(cabale.domaines[r.domaineId]) : null
-      r.nbDesCabale = 0
-      r.atoutsCabale = {}
-      r.uniteCabale = 0
-      r.useEspoirCabale = false
-      r.useVecuCabale = false
-      rafraichir()
-    })
-    html.on('input change', '#nbDesCabale', (event) => {
-      r.nbDesCabale = Number(event.currentTarget.value) || 0
-      html.find('[data-display-range="nbDesCabale"]').html(String(r.nbDesCabale))
-    })
-    html.on('change', 'input.support-cabale', (event) => {
-      r.atoutsCabale ??= {}
-      r.atoutsCabale[event.currentTarget.dataset.atout] = event.currentTarget.checked ? 1 : 0
-    })
-    html.on('click', 'a.bouton-atout', (event) => {
-      const cle = event.currentTarget.dataset.atout
-      const atout = (r.cabaleData?.atouts ?? []).find(a => a.cle === cle)
-      if (!atout) return
-      r.atoutsCabale ??= {}
-      const valeur = (Number(r.atoutsCabale[cle]) || 0) + (Number(event.currentTarget.dataset.ecart) || 0)
-      r.atoutsCabale[cle] = Math.max(0, Math.min(Number(atout.restant) || 0, valeur))
-      rafraichir()
-    })
-    html.on('change', 'input.unite-cabale', (event) => {
-      r.uniteCabale = event.currentTarget.checked ? Number(event.currentTarget.dataset.bonus) || 0 : 0
-    })
-    html.on('change', '#useEspoirCabale', (event) => {
-      r.useEspoirCabale = event.currentTarget.checked
-      if (r.useEspoirCabale) { r.useEspoir = false; html.find('#useEspoir').prop('checked', false) }
-    })
-    html.on('change', '#useVecuCabale', (event) => {
-      r.useVecuCabale = event.currentTarget.checked
-      if (r.useVecuCabale) { r.useVecu = false; html.find('#useVecu').prop('checked', false) }
-    })
+      const bloc = html.querySelector('.bloc-cabale');
+      if (bloc) bloc.innerHTML = htmlCabale(r);
+      this.setPosition({ height: "auto" });
+    };
+    deleguer(html, 'change', '#cabaleChoice', (ev, el) => {
+      const cabale = (r.cabales ?? []).find(c => c.id === el.value);
+      if (!cabale) return;
+      r.cabaleData = cabale;
+      r.cabaleDomaine = cabale.domaines?.[r.domaineId] ? foundry.utils.deepClone(cabale.domaines[r.domaineId]) : null;
+      r.nbDesCabale = 0;
+      r.atoutsCabale = {};
+      r.uniteCabale = 0;
+      r.useEspoirCabale = false;
+      r.useVecuCabale = false;
+      rafraichir();
+    });
+    deleguer(html, 'input change', '#nbDesCabale', (ev, el) => {
+      r.nbDesCabale = Number(el.value) || 0;
+      const aff = html.querySelector('[data-display-range="nbDesCabale"]');
+      if (aff) aff.innerHTML = String(r.nbDesCabale);
+    });
+    deleguer(html, 'change', 'input.support-cabale', (ev, el) => {
+      r.atoutsCabale ??= {};
+      r.atoutsCabale[el.dataset.atout] = el.checked ? 1 : 0;
+    });
+    deleguer(html, 'click', 'a.bouton-atout', (ev, el) => {
+      ev.preventDefault();
+      const cle = el.dataset.atout;
+      const atout = (r.cabaleData?.atouts ?? []).find(a => a.cle === cle);
+      if (!atout) return;
+      r.atoutsCabale ??= {};
+      const valeur = (Number(r.atoutsCabale[cle]) || 0) + (Number(el.dataset.ecart) || 0);
+      r.atoutsCabale[cle] = Math.max(0, Math.min(Number(atout.restant) || 0, valeur));
+      rafraichir();
+    });
+    deleguer(html, 'change', 'input.unite-cabale', (ev, el) => {
+      r.uniteCabale = el.checked ? Number(el.dataset.bonus) || 0 : 0;
+    });
+    deleguer(html, 'change', '#useEspoirCabale', (ev, el) => {
+      r.useEspoirCabale = el.checked;
+      if (r.useEspoirCabale) { r.useEspoir = false; const c = html.querySelector('#useEspoir'); if (c) c.checked = false; }
+    });
+    deleguer(html, 'change', '#useVecuCabale', (ev, el) => {
+      r.useVecuCabale = el.checked;
+      if (r.useVecuCabale) { r.useVecu = false; const c = html.querySelector('#useVecu'); if (c) c.checked = false; }
+    });
   }
 
-  displayRange(ev) {
-    let displayTarget = this._element.find(`[data-display-range=${ev.currentTarget.id}]`)[0];
-    let option = this._element.find(`#${ev.currentTarget.list.id} option[value="${ev.currentTarget.value}"]`)[0];
-    displayTarget.innerHTML = option.innerHTML
+  displayRange(curseur) {
+    const html = this.contenu;
+    const cible = html.querySelector(`[data-display-range="${curseur.id}"]`);
+    const option = curseur.list ? curseur.list.querySelector(`option[value="${curseur.value}"]`) : null;
+    if (cible) cible.innerHTML = option ? option.innerHTML : curseur.value;
   }
 }

@@ -1,84 +1,42 @@
+import { NocFicheObjet } from "./fiche-objet.mjs";
+import { ecouter } from "../v2-outils.mjs";
 
-export class nocItemSheetTheme extends foundry.appv1.sheets.ItemSheet {
+/** Fiche de thème, ancien format (ApplicationV2) */
+export class nocItemSheetTheme extends NocFicheObjet {
+  static DEFAULT_OPTIONS = { position: { width: 380, height: 380 } };
+  static PARTS = { main: { template: "systems/noc/templates/item/sheet-thème.html" } };
+  static COMPTEURS = false;
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["noc", "sheet", "item"],
-      width: 380,
-      height: 380,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
-    });
+  /** Un thème posé sur un acteur n'est plus modifiable */
+  get isEditable() {
+    if (this.document.parent) return false;
+    return super.isEditable;
   }
 
-  /** @override */
-  get template() {
-    const path = "systems/noc/templates/item";
-    return `${path}/sheet-${this.document.type}.html`;
-  }
-
-  /* -------------------------------------------- */
-
-  /** @override */
-  getData() {
-    // Retrieve base data structure.
-    const context = super.getData();
-    context.systemTemplate = game.system.template;
-
-    this.options.editable = !(context.document.system.origin && context.document.system.origin == "embeddedItem")
-    this.options.editable = (context.document.parent) ? false : true
-    return context;
-  }
-
-  /* -------------------------------------------- */
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    let checks = html.find('a.talent-check');
-    for (let check of checks) {
-      let talent = check.dataset.domaine + "." + check.dataset.talent;
-      let talObject = this.item.system.talents.find(t => t.talent == talent)
-      if (talObject) {
-        check.dataset.value = talObject.value;
-        switch (talObject.value) {
-          case -1:
-            check.innerHTML = `<i class="fa-regular fa-square-minus"></i>`;
-            check.dataset.tooltip = "-1"
-            break;
-          case 0:
-            check.innerHTML = `<i class="fa-solid fa-square"></i>`;
-            break;
-          case 1:
-            check.innerHTML = `<i class="fa-regular fa-square-plus"></i>`;
-            check.dataset.tooltip = "+1"
-            break;
-        }
-
-      }
+  activerEcouteurs(html) {
+    const checks = html.querySelectorAll("a.talent-check");
+    for (const check of checks) {
+      const talent = check.dataset.domaine + "." + check.dataset.talent;
+      const talObject = (this.item.system.talents ?? []).find(t => t.talent == talent);
+      if (!talObject) continue;
+      check.dataset.value = talObject.value;
+      if (talObject.value === -1) { check.innerHTML = `<i class="fa-regular fa-square-minus"></i>`; check.dataset.tooltip = "-1"; }
+      else if (talObject.value === 1) { check.innerHTML = `<i class="fa-regular fa-square-plus"></i>`; check.dataset.tooltip = "+1"; }
+      else check.innerHTML = `<i class="fa-solid fa-square"></i>`;
     }
-    // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
-    checks.click(this.cycleTalent.bind(this));
+    ecouter(html, "a.talent-check", this.cycleTalent.bind(this));
   }
-
 
   async cycleTalent(ev) {
-    let val = ev.currentTarget.dataset.value;
+    ev.preventDefault();
+    let val = Number(ev.currentTarget.dataset.value) || 0;
     val++;
-    if (val > 1) { val = -1 };
-    ev.currentTarget.dataset.value = val;
-    let tal = ev.currentTarget.dataset.domaine + "." + ev.currentTarget.dataset.talent;
-    let talArray = this.item.system.talents;
-
-    let obj = talArray.find(t => t.talent == tal)
-    obj ? obj.value = val : talArray.push({ talent: tal, value: val })
-
-
+    if (val > 1) val = -1;
+    const tal = ev.currentTarget.dataset.domaine + "." + ev.currentTarget.dataset.talent;
+    const talArray = foundry.utils.deepClone(this.item.system.talents ?? []);
+    const obj = talArray.find(t => t.talent == tal);
+    obj ? obj.value = val : talArray.push({ talent: tal, value: val });
     await this.item.update({ "system.talents": talArray });
-
-    this.render(true);
-
   }
-
 }

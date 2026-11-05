@@ -1,13 +1,13 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="fiche fiche-objet">
   <section class="sheet-body">
     <input class="item-name" name="name" type="text" value="{{document.name}}" placeholder="Nom du gabarit"/>
-    <img class="item-img" src="{{document.img}}" data-edit="img" title="{{document.name}}" />
+    <img class="item-img" src="{{document.img}}" data-edit="img" data-action="editImage" title="{{document.name}}" />
 
     <p class="hint">Glissez ce gabarit sur la fiche d'un personnage, d'un rouage, d'un Autre ou d'une créature : ses bonus s'ajoutent aux scores. Le retirer rend la fiche d'origine.</p>
 
     <div class="form-group">
       <h4>description</h4>
-      {{editor document.system.description target="system.description" button=true editable=editable engine="prosemirror" collaborate=false}}
+      {{nocEditeur "system.description"}}
     </div>
 
     <h3 class="titre-section">Domaines</h3>
@@ -62,4 +62,4 @@
       <textarea name="system.special" rows="3" placeholder="effet à appliquer à la main (affiché dans l'infobulle de la fiche)">{{document.system.special}}</textarea>
     </div>
   </section>
-</form>
+</div>

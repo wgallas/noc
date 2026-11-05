@@ -3,7 +3,7 @@ import { nocActor } from "./documents/actor.mjs";
 import { nocItem } from "./documents/item.mjs";
 import { nocCombat, enregistrerAjoutJetonsCombat } from "./helpers/noc-combat.js";
 
-// Import sheet classes.__ACTORS (fiches V1, en attendant la migration V2)
+// Fiches d'acteurs et d'objets (ApplicationV2)
 import { nocActorSheetPersonnage } from "./sheets/actors/actor-sheet-personnage.mjs";
 import { nocActorSheetRouage } from "./sheets/actors/actor-sheet-rouage.mjs";
 import { nocActorSheetCabale } from "./sheets/actors/actor-sheet-cabale.mjs";
@@ -28,6 +28,7 @@ import { registerNocSettings } from "./registerSettings.mjs";
 import { SocketManager } from "./socketManager.mjs";
 import { objetDieu } from "./objectDieu.mjs";
 import { registerHelpers } from './helpers/handlebarHelpers.js';
+import { enregistrerAssistantEditeur } from './sheets/v2-outils.mjs';
 import { nocUtility } from './noc-utility.js';
 import { migrerArchetypes } from "./archetypes.mjs";
 import { migrerQualites } from "./qualites.mjs";
@@ -63,6 +64,8 @@ Hooks.once('init', async function () {
   registerNocSettings();
   //handlebar custom helpers
   registerHelpers();
+  // éditeur de texte riche des fiches V2 : {{nocEditeur "system.description"}}
+  enregistrerAssistantEditeur();
   CONFIG.debug.hooks = true
 
   //manage socket messages
@@ -118,7 +121,9 @@ Hooks.once('init', async function () {
   CONFIG.Macro.compendiumBanner = "systems/noc/asset/ui/macro_tab.png"
 
   // Register sheet application classes
-  foundry.documents.collections.Actors.unregisterSheet("core", foundry.appv1.sheets.ActorSheet);
+  // fiches par défaut de Foundry retirées (V1 tant qu'elles existent, V2 sinon)
+  const ficheActeurCore = foundry.appv1?.sheets?.ActorSheet ?? foundry.applications.sheets.ActorSheetV2;
+  foundry.documents.collections.Actors.unregisterSheet("core", ficheActeurCore);
   foundry.documents.collections.Actors.registerSheet("noc", nocActorSheetPersonnage, {
     types: ["personnage"],
     makeDefault: true,
@@ -147,7 +152,8 @@ Hooks.once('init', async function () {
 
 
   // ITEMS sheet registering
-  foundry.documents.collections.Items.unregisterSheet("core", foundry.appv1.sheets.ItemSheet);
+  const ficheObjetCore = foundry.appv1?.sheets?.ItemSheet ?? foundry.applications.sheets.ItemSheetV2;
+  foundry.documents.collections.Items.unregisterSheet("core", ficheObjetCore);
   foundry.documents.collections.Items.registerSheet("noc", nocItemSheetOutil, {
     types: ["outil"],
     makeDefault: true,

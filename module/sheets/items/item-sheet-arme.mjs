@@ -1,31 +1,14 @@
 import { contexteStratagemes } from "../../stratagemes.mjs";
 import { TRAITS_ARMES } from "../../armes.mjs";
-import { activerCompteurs } from "../../armures.mjs";
+import { NocFicheObjet } from "./fiche-objet.mjs";
+import { ecouter } from "../v2-outils.mjs";
 
-export class nocItemSheetArme extends foundry.appv1.sheets.ItemSheet {
+/** Fiche d'arme (ApplicationV2) */
+export class nocItemSheetArme extends NocFicheObjet {
+  static DEFAULT_OPTIONS = { position: { width: 440, height: 760 } };
+  static PARTS = { main: { template: "systems/noc/templates/item/sheet-arme.html" } };
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["noc", "sheet", "item"],
-      width: 440,
-      height: 760,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
-    });
-  }
-
-  /** @override */
-  get template() {
-    const path = "systems/noc/templates/item";
-    return `${path}/sheet-${this.document.type}.html`;
-  }
-
-  /* -------------------------------------------- */
-
-  /** @override */
-  getData() {
-    // Retrieve base data structure.
-    const context = super.getData();
-    context.systemTemplate = game.system.template;
+  async _donnees(context) {
     context.stratagemes = contexteStratagemes(this.item);
     const traits = this.item.system.traitsArme ?? {};
     context.traitsSimples = [];
@@ -36,23 +19,14 @@ export class nocItemSheetArme extends foundry.appv1.sheets.ItemSheet {
       if (def.chiffre) context.traitsChiffres.push({ ...ligne, actif: !!t?.actif, valeur: Number(t?.valeur) || 0 });
       else context.traitsSimples.push({ ...ligne, actif: !!t });
     }
-    return context;
   }
 
-  /* -------------------------------------------- */
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    // Everything below here is only needed if the sheet is editable
+  activerEcouteurs(html) {
     if (!this.isEditable) return;
-
-    activerCompteurs(html, this.item);
     // Contact / Distance
-    html.find("select.type-arme").change(ev => {
+    ecouter(html, "select.type-arme", ev => {
       ev.stopPropagation();
       return this.item.update({ "system.adistance": ev.currentTarget.value === "distance" });
-    });
+    }, "change");
   }
 }

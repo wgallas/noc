@@ -69,7 +69,7 @@ export class nocUtility {
         let msgId = nocUtility.findChatMessageId(event.currentTarget)
         nocUtility.removeChatMessageId(msgId)
 
-        let nbDice = $(event.target).data('nb-dice')
+        let nbDice = Number(event.currentTarget.dataset.nbDice)
         this.rollBonus(rollData, nbDice)
       })
     })
@@ -244,7 +244,7 @@ export class nocUtility {
     }
 
     let msg = await this.createChatWithRollMode(rollData.alias, {
-      content: await renderTemplate(`systems/noc/templates/chat/chat-generic-result.hbs`, rollData)
+      content: await foundry.applications.handlebars.renderTemplate(`systems/noc/templates/chat/chat-generic-result.hbs`, rollData)
     });
     rollData.roll = foundry.utils.duplicate(rollData.roll);
     if (rollData.rollBonus) {
@@ -453,33 +453,4 @@ export class nocUtility {
   static async createChatWithRollMode(name, chatOptions) {
     return this.createChatMessage(name, game.settings.get("core", "rollMode"), chatOptions)
   }
-
-  /* -------------------------------------------- */
-  static async confirmDelete(actorSheet, li) {
-    let itemId = li.data("item-id");
-    let msgTxt = "<p>Are you sure to remove this Item ?";
-    let buttons = {
-      delete: {
-        icon: '<i class="fas fa-check"></i>',
-        label: "Yes, remove it",
-        callback: () => {
-          actorSheet.actor.deleteEmbeddedDocuments("Item", [itemId]);
-          li.slideUp(200, () => actorSheet.render(false));
-        }
-      },
-      cancel: {
-        icon: '<i class="fas fa-times"></i>',
-        label: "Cancel"
-      }
-    }
-    msgTxt += "</p>";
-    let d = new Dialog({
-      title: "Confirm removal",
-      content: msgTxt,
-      buttons: buttons,
-      default: "cancel"
-    });
-    d.render(true);
-  }
-
 }
