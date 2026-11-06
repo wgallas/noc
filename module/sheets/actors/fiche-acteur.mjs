@@ -60,6 +60,11 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
   /*  Contexte                                     */
   /* -------------------------------------------- */
 
+  /** Titre de la fenêtre : le nom de l'acteur seul (comme les anciennes fiches) */
+  get title() {
+    return this.document.isToken ? `[Jeton] ${this.document.name}` : this.document.name;
+  }
+
   /** @override */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);

@@ -28,6 +28,11 @@ export class NocFicheObjet extends HandlebarsApplicationMixin(ItemSheetV2) {
     main: { template: "systems/noc/templates/item/sheet-objetusuel.html" }
   };
 
+  /** Titre de la fenêtre : le nom de l'objet seul (comme les anciennes fiches) */
+  get title() {
+    return this.document.name;
+  }
+
   /** @override */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
