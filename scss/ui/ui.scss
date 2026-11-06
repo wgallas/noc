@@ -447,10 +447,13 @@ section#combat-popout {
 li.chat-message {
     box-shadow: 0px 0px 15px black;
     border: none;
-    background: url(../asset/images/fondnotes.webp);
-    background-size: cover;
+    // carnet : spirale de taille fixe à gauche (répétée), papier en dessous ; le texte
+    // commence après la spirale, quelle que soit la hauteur du message
+    background:
+        url(../asset/images/fondnotes-spirale.webp) left top / 24px auto repeat-y,
+        url(../asset/images/fondnotes-papier.webp) center / cover no-repeat;
 
-    padding: 1rem 2rem;
+    padding: 1rem 1.2rem 1rem calc(24px + 0.9rem);
 
     &.whisper {
         box-shadow: 0px 0px 100px 10px rgb(124, 102, 68) inset;
