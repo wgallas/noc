@@ -1,106 +1,127 @@
-<div class="fiche fiche-objet">
-	{{!-- Sheet Body --}}
+<div class="fiche fiche-objet fiche-archetype">
 	<section class="sheet-body">
 		{{#if item.actor}}
-			<h2>Attention ! cet archetype est déjà dans un acteur, les modifications ne
-								      seront pas répercutés sur l'acteur. Ceci est du à une limitation de
-								      Foundry</h2>
+			<p class="archetype-avertissement"><i class="fas fa-lock"></i> Archétype porté par {{item.actor.name}} : retirez-le et glissez-en un autre pour le modifier.</p>
 		{{/if}}
 
-
-		<div class="flexrow">
-
-
-			<div class="img-container">
-				<input class="item-name" name="name" type="text" value="{{document.name}}" placeholder="Name"/>
-
-				<img class="item-img" src="{{document.img}}" data-edit="img" data-action="editImage" title="{{document.name}}"/>
-				<h4>description</h4>
-				{{nocEditeur "system.description"}}
-			</div>
-			<div class="arch-stats">
-
-				<h4>Talent Majeur (niv 2)</h4>
-				<select name="system.talentMajeur">
-					<option value="null">Aucun</option>
-					{{#each systemTemplate.Actor.personnage.talents as |domaine
-          domaineId|}}
-						<optgroup label="{{domaineId}}">
-							{{#each domaine as |talent talentId|}}
-
-								<option value="{{domaineId}}.{{talentId}}" {{#ifequal @root.item.system.talentMajeur (concat domaineId "." talentId)}} selected {{/ifequal}}>
-									{{talent.label}}
-								</option>
-							{{/each}}
-						</optgroup>
-					{{/each}}
-				</select>
-
-				<h4>affinités</h4>
-				<div class="flexcol">
-
-					{{#each item.system.affinite as |domaine domaineId|}}
-						<div class="flexrow">
-							<input name="system.affinite.{{domaineId}}.active" class="affinite-check" type="checkbox" {{checked domaine.active }}>
-							<span>{{domaineId}}</span>
-							{{#if domaine.active}}
-								<input type="number" name="system.affinite.{{domaineId}}.value" value="{{domaine.value}}" class="affinite-value">
-							{{/if}}
-
-						</div>
-					{{/each}}
+		{{!-- En-tête : image, nom, description --}}
+		<header class="archetype-entete">
+			<img class="archetype-image" src="{{document.img}}" data-edit="img" {{#if editable}}data-action="editImage"{{/if}} title="{{document.name}}"/>
+			<div class="archetype-identite">
+				<input class="item-name" name="name" type="text" value="{{document.name}}" placeholder="Nom de l'archétype" {{#unless editable}}disabled{{/unless}}/>
+				<div class="archetype-description">
+					{{nocEditeur "system.description"}}
 				</div>
 			</div>
-			<div class="talents-mineurs">
+		</header>
 
-				<h4>talents</h4>
-				<div class="talents-mineurs-grid">
-					{{#each systemTemplate.Actor.personnage.talents as |domaine domaineId|}}
-						<div class="flexcol domaine-container">
-							<h5>{{domaineId}}</h5>
-							{{#each domaine as |talent talentId|}}
-								<div class="flexrow">
-									<a data-value="0" class="talent-check" type="checkbox" data-domaine="{{domaineId}}" data-talent="{{talentId}}">
-										<i class="fa-solid fa-square"></i>
-									</a>
-									{{talent.label}}
-								</div>
-							{{/each}}
-						</div>
-					{{/each}}
-				</div>
-
-			</div>
-		</div>
-
-
-		<div class="archetype-themes drop-area">
-			<h4>thèmes
-				<a class="fas fa-add" data-action="add-theme" data-tooltip="ajouter un thème"></a>
-			</h4>
-			<p class="hint">Le joueur choisit l'un de ces thèmes en glissant l'archétype sur sa fiche. Cliquez sur la valeur d'un talent pour la changer (+1, +2, -1).</p>
-			{{#each themes as |theme|}}
-				<div class="archetype-theme {{#if theme.choisi}}theme-choisi{{/if}}" data-theme-id="{{theme.id}}">
-					<div class="flexrow">
-						{{#if theme.choisi}}<span class="theme-badge" data-tooltip="thème choisi par le personnage">✔</span>{{/if}}
-						<input class="theme-nom" type="text" value="{{theme.nom}}" placeholder="nom du thème" {{#unless @root.editable}}disabled{{/unless}}/>
-						{{#if @root.editable}}
-							<a class="fas fa-trash theme-delete" data-action="delete-theme" data-tooltip="supprimer ce thème"></a>
+		{{!-- Domaines et talent majeur --}}
+		<section class="archetype-bloc">
+			<h3>Domaines</h3>
+			<p class="hint">2 dans chaque Domaine ; {{#if editable}}cliquez sur un Domaine pour lui donner une affinité (valeur réglable).{{else}}en couleur : Domaine d'affinité.{{/if}}</p>
+			<div class="archetype-domaines">
+				{{#each domainesArch as |d|}}
+					<div class="archetype-domaine {{#if d.affinite}}affinite{{/if}}">
+						<label class="domaine-bascule" {{#if @root.editable}}data-tooltip="affinité avec ce Domaine"{{/if}}>
+							<input type="checkbox" name="system.affinite.{{d.cle}}.active" {{checked d.affinite}} {{#unless @root.editable}}disabled{{/unless}}/>
+							<span class="domaine-nom">{{d.label}}</span>
+						</label>
+						{{#if d.affinite}}
+							<input class="domaine-valeur" type="number" min="0" max="5" name="system.affinite.{{d.cle}}.value" value="{{d.valeur}}" {{#unless @root.editable}}disabled{{/unless}}/>
+						{{else}}
+							<span class="domaine-valeur">2</span>
 						{{/if}}
 					</div>
-					<div class="theme-talents flexrow">
-						{{#each theme.talents as |t|}}
-							<span class="theme-talent">
-								{{t.label}}
-								<a class="theme-talent-valeur" data-action="cycle-theme-talent" data-talent="{{t.talent}}">{{t.signe}}</a>
-								{{#if @root.editable}}
-									<a class="fas fa-times" data-action="remove-theme-talent" data-talent="{{t.talent}}" data-tooltip="retirer ce talent"></a>
-								{{/if}}
-							</span>
+				{{/each}}
+			</div>
+
+			<div class="archetype-majeur">
+				<span class="libelle">Talent majeur <em>(+2)</em></span>
+				{{#if editable}}
+					<select name="system.talentMajeur">
+						<option value="null">— aucun —</option>
+						{{#each domainesArch as |d|}}
+							<optgroup label="{{d.label}}">
+								{{#each d.talents as |t|}}
+									<option value="{{t.cle}}" {{#if t.majeur}}selected{{/if}}>{{t.label}}</option>
+								{{/each}}
+							</optgroup>
 						{{/each}}
+					</select>
+				{{else}}
+					<strong>{{#if talentMajeurLabel}}{{talentMajeurLabel}}{{else}}aucun{{/if}}</strong>
+				{{/if}}
+			</div>
+		</section>
+
+		{{!-- Talents --}}
+		<section class="archetype-bloc">
+			<h3>Talents</h3>
+			<div class="archetype-talents">
+				{{#each domainesArch as |d|}}
+					<div class="archetype-carte">
+						<h4>{{d.label}}</h4>
+						<ul>
+							{{#each d.talents as |t|}}
+								<li class="{{t.classe}}">
+									<span class="talent-nom">{{t.label}}</span>
+									{{#if t.majeur}}
+										<span class="talent-bonus majeur" data-tooltip="talent majeur{{#if t.niveau}} ({{t.signeMineur}} en talent mineur){{/if}}">{{t.signe}}</span>
+									{{else if @root.editable}}
+										<a class="talent-bonus talent-check" data-domaine="{{d.cle}}" data-talent="{{t.talent}}" data-value="{{t.niveau}}" data-tooltip="cliquez : +1, puis −1, puis 0">{{t.signe}}</a>
+									{{else}}
+										<span class="talent-bonus">{{t.signe}}</span>
+									{{/if}}
+								</li>
+							{{/each}}
+						</ul>
+					</div>
+				{{/each}}
+				<div class="archetype-carte archetype-legende">
+					<h4>Bilan</h4>
+					<ul>
+						<li><span class="talent-bonus majeur">+2</span> talent majeur</li>
+						<li class="positif"><span class="talent-bonus">+1</span> talent mineur</li>
+						<li class="negatif"><span class="talent-bonus">−1</span> talent faible</li>
+					</ul>
+					<p class="bilan">{{bilan.positifs}} bonus, {{bilan.negatifs}} malus{{#if bilan.affinites}}, {{bilan.affinites}} affinité{{#if (gt bilan.affinites 1)}}s{{/if}}{{/if}}</p>
+				</div>
+			</div>
+		</section>
+
+		{{!-- Thèmes --}}
+		<section class="archetype-bloc archetype-themes drop-area">
+			<h3 class="flexrow">
+				<span>Thèmes</span>
+				{{#if editable}}<a class="fas fa-add" data-action="add-theme" data-tooltip="ajouter un thème"></a>{{/if}}
+			</h3>
+			<p class="hint">Le joueur choisit l'un de ces thèmes quand il glisse l'archétype sur sa fiche.{{#if editable}} Cliquez sur la valeur d'un talent pour la changer (+1, +2, −1).{{/if}}</p>
+			<div class="archetype-themes-grille">
+				{{#each themes as |theme|}}
+					<div class="archetype-theme {{#if theme.choisi}}theme-choisi{{/if}}" data-theme-id="{{theme.id}}">
+						<div class="theme-entete">
+							{{#if theme.choisi}}<i class="fas fa-check theme-badge" data-tooltip="thème choisi par le personnage"></i>{{/if}}
+							<input class="theme-nom" type="text" value="{{theme.nom}}" placeholder="nom du thème" {{#unless @root.editable}}disabled{{/unless}}/>
+							{{#if @root.editable}}
+								<a class="fas fa-trash theme-delete" data-action="delete-theme" data-tooltip="supprimer ce thème"></a>
+							{{/if}}
+						</div>
+						<div class="theme-talents">
+							{{#each theme.talents as |t|}}
+								<span class="theme-talent">
+									<span class="theme-talent-nom">{{t.label}}</span>
+									{{#if @root.editable}}
+										<a class="theme-talent-valeur" data-action="cycle-theme-talent" data-talent="{{t.talent}}">{{t.signe}}</a>
+										<a class="fas fa-times theme-talent-retirer" data-action="remove-theme-talent" data-talent="{{t.talent}}" data-tooltip="retirer ce talent"></a>
+									{{else}}
+										<span class="theme-talent-valeur">{{t.signe}}</span>
+									{{/if}}
+								</span>
+							{{/each}}
+						</div>
 						{{#if @root.editable}}
 							<select class="theme-ajout-talent">
-								<option value="">+ talent…</option>
+								<option value="">+ ajouter un talent…</option>
 								{{#each @root.listeTalents as |groupe|}}
 									<optgroup label="{{groupe.domaine}}">
 										{{#each groupe.talents as |tal|}}
@@ -110,12 +131,16 @@
 								{{/each}}
 							</select>
 						{{/if}}
+						{{#if @root.editable}}
+							<textarea class="theme-description" rows="2" placeholder="description (facultative)">{{theme.description}}</textarea>
+						{{else if theme.description}}
+							<p class="theme-description">{{theme.description}}</p>
+						{{/if}}
 					</div>
-					<textarea class="theme-description" rows="2" placeholder="description (facultative)" {{#unless @root.editable}}disabled{{/unless}}>{{theme.description}}</textarea>
-				</div>
-			{{else}}
-				<p>Aucun thème. Cliquez sur + pour en ajouter.</p>
-			{{/each}}
-		</div>
+				{{else}}
+					<p class="aucun-theme">Aucun thème.{{#if editable}} Cliquez sur + pour en ajouter, ou glissez ici un ancien objet « thème ».{{/if}}</p>
+				{{/each}}
+			</div>
+		</section>
 	</section>
 </div>
