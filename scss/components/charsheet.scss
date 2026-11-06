@@ -3962,16 +3962,6 @@
         color: #191813;
     }
 
-    :where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
-        color: #191813;
-        background-color: rgba(0, 0, 0, 0.05);
-        border-color: #7a7971;
-    }
-
-    :where(select option) {
-        color: #191813;
-        background: #f0ead8;
-    }
 }
 
 // Compteur de Fiel (ApplicationV2 sans cadre) : pas de fond ni de position de fenêtre
@@ -3988,4 +3978,63 @@
     overflow: visible;
     pointer-events: none;
     z-index: auto;
+}
+
+// Fiches et fenêtres de jet (ApplicationV2) : titre de la fenêtre à la taille des anciennes fiches
+.application.noc.sheet,
+.application.nocDialog {
+    --header-height: 30px;
+
+    > .window-header .window-title {
+        font-size: 120%;
+        background: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+// Contenu des fenêtres comme dans les anciennes fiches (défilement vertical si besoin)
+@layer system {
+    .application.noc.sheet > .window-content,
+    .application.nocDialog > .window-content {
+        justify-content: flex-start;
+        overflow: hidden auto;
+    }
+}
+
+// Inventaire : vignettes des objets plus grandes (demande du MJ)
+.noc.sheet.actor .tab.items .inventaire-colonnes ul.item-list li.item {
+    div.item-summary > div.img {
+        flex: 0 0 64px;
+        max-width: 64px;
+        margin: 4px 8px 0 0;
+
+        img {
+            display: block;
+            width: 64px;
+            height: 64px;
+            max-width: none;
+            max-height: none;
+            min-width: 0;
+            object-fit: cover;
+            border: 1px solid rgba(0, 0, 0, 0.45);
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+        }
+    }
+}
+
+// Fenêtres de dialogue (DialogV2) : contenu comme les anciennes fenêtres, boutons compacts
+@layer system {
+    .application.nocDialog .dialog-content .form-group {
+        gap: normal;
+    }
+
+    .application.nocDialog .dialog-content label {
+        font-weight: normal;
+    }
+}
+
+.application.nocDialog .form-footer button {
+    line-height: 1.2;
+    padding: 4px 6px;
 }

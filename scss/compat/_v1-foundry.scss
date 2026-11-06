@@ -1,0 +1,1054 @@
+// Styles de compatibilité V1 de Foundry (couche « compatibility », sélecteurs body.game .app),
+// recopiés pour le contenu des fiches et fenêtres ApplicationV2 du système : les styles de NOC ont été
+// écrits par-dessus ceux-là. Fichier généré à partir de foundry2.css (Foundry v14) ; ne pas modifier à la main.
+// Couche « system » de Foundry : au-dessus de ses règles d'applications V2, sous les styles du système.
+@layer system {
+body.game :is(.application.noc.sheet, .application.nocDialog) {
+  --color-text-light-highlight: #f0f0e0;
+  --color-text-light-heading: #c9c7b8;
+  --color-text-light-primary: #b5b3a4;
+  --color-text-dark-primary: #191813;
+  --color-text-dark-secondary: #4b4a44;
+  --color-text-dark-header: #23221d;
+  --color-text-dark-inactive: #7a7971;
+  --color-text-hyperlink: #ff6400;
+  --color-text-selection: #f7f3e8;
+  --color-text-selection-bg: #777;
+  --color-text-primary: var(--color-text-dark-primary);
+  --color-text-emphatic: var(--color-text-dark-primary);
+  --color-text-light-0: #fff;
+  --color-text-light-1: #eee;
+  --color-text-light-2: #ddd;
+  --color-text-light-3: #ccc;
+  --color-text-light-4: #bbb;
+  --color-text-light-5: #aaa;
+  --color-text-light-6: #999;
+  --color-text-light-7: #888;
+  --color-text-dark-1: #111;
+  --color-text-dark-2: #222;
+  --color-text-dark-3: #444;
+  --color-text-dark-4: #555;
+  --color-text-dark-5: #666;
+  --color-text-dark-6: #777;
+  --color-border-light-1: #ddd;
+  --color-border-light-2: #999;
+  --color-border-dark-1: #111;
+  --color-border-dark-2: #222;
+  --color-border-dark-3: #333;
+  --color-border-dark-4: #444;
+  --color-border-dark-5: #666;
+  --color-shadow-primary: #ff0000;
+  --color-shadow-highlight: #ff6400;
+  --color-shadow-dark: #000;
+  --color-underline-inactive: #7a7971;
+  --color-underline-active: #44191A;
+  --color-underline-header: #782e22;
+  --color-border-light-highlight: #f0f0e0;
+  --color-border-light-primary: #b5b3a4;
+  --color-border-light-secondary: #c9c7b8;
+  --color-border-light-tertiary: #7a7971;
+  --color-border-dark: #000;
+  --color-border-dark-primary: #191813;
+  --color-border-dark-secondary: #23221d;
+  --color-border-dark-tertiary: #4b4a44;
+  --color-border-highlight: #ff6400;
+  --color-border-highlight-alt: #ff0000;
+  --color-bg-btn-minor-inactive: #c9c7b8;
+  --color-bg-btn-minor-active: #b5b3a4;
+  --color-select-option-bg: #dad8cc;
+  --color-checkbox-checked: #666;
+  --color-ownership-none: #5500ff;
+  --color-ownership-observer: #7a7971;
+  --color-ownership-owner: #b5b3a4;
+  --sidebar-width: 300px;
+  --sidebar-header-height: 32px;
+  --sidebar-item-height: 48px;
+  --hotbar-width: 578px;
+  --macro-size: 50px;
+  --color-blind-bg: #f5eaf5;
+  --color-blind-border: #6b476b;
+  --color-emote-bg: #f3edde;
+  --color-emote-border: #887c5d;
+  --color-whisper-bg: #e8e8ef;
+  --color-whisper-border: #545469;
+  --color-scrollbar: #782e22;
+  --color-scrollbar-track: transparent;
+  --form-field-height: 26px;
+  --font-primary: "Signika", sans-serif;
+  --line-height-12: 0.75rem;
+  --line-height-16: 1rem;
+  --line-height-20: 1.25rem;
+  --line-height-30: 1.875rem;
+  --background-parchment: url(/ui/parchment.jpg) repeat;
+}
+body.game .application.noc.sheet {
+  display: flex;
+  flex-direction: column;
+}
+body.game .application.noc.sheet .window-content header.sheet-header {
+  display: flex;
+  align-items: center;
+}
+body.game .application.noc.sheet .window-content header.sheet-header img {
+  flex: 0 0 64px;
+  height: 64px;
+  margin-right: 6px;
+}
+body.game .application.noc.sheet .window-content header.sheet-header h1 {
+  flex: 1;
+  margin: 0;
+  border-bottom: none;
+}
+body.game .application.noc.sheet .window-content header.sheet-header h1 input {
+  height: 48px;
+  line-height: 48px;
+  margin: 8px 2%;
+  width: 96%;
+}
+body.game .application.noc.sheet .window-content nav.sheet-tabs {
+  border-top: 1px solid var(--color-border-light-primary);
+  border-bottom: 1px solid var(--color-border-light-primary);
+}
+body.game .application.noc.sheet .window-content footer.sheet-footer {
+  display: flex;
+  flex: 0 0 32px;
+  line-height: 32px;
+}
+body.game .application.noc.sheet .window-content .editor-content {
+  height: 100%;
+  overflow-y: auto;
+  word-break: break-word;
+}
+body.game .application.noc.sheet .window-content img[data-edit] {
+  cursor: var(--cursor-pointer);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content prose-mirror button.toggle {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: var(--form-field-height);
+  height: var(--form-field-height);
+  line-height: var(--form-field-height);
+  margin: 0 1px;
+  padding: 0;
+  background: rgba(255, 255, 240, 0.8);
+  border: 1px solid var(--color-border-light-primary);
+  border-radius: 3px;
+  font-size: var(--font-size-14);
+  font-family: var(--font-primary);
+  cursor: pointer;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h1,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h2,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h3,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h4 {
+  margin: 0 0 0.5rem;
+  padding: 0;
+  font-weight: normal;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h1 {
+  font-size: 2em;
+  border-bottom: 2px solid var(--color-underline-header);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--color-underline-header);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h3 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--color-underline-header);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content :is(h1, h2, h3, h4, h5, h6):is(.noborder, .divider) {
+  border: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a {
+  cursor: var(--cursor-pointer);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a[href] {
+  color: var(--color-text-hyperlink);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a:hover {
+  text-shadow: 0 0 8px var(--color-shadow-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a[disabled] {
+  pointer-events: none;
+  cursor: inherit;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.content-link,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.inline-roll {
+  background: #DDD;
+  padding: 1px 4px;
+  border: 1px solid var(--color-border-dark-tertiary);
+  border-radius: 2px;
+  white-space: nowrap;
+  word-break: break-all;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.content-link i,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.inline-roll i {
+  color: var(--color-text-dark-inactive);
+  margin-right: 0.25em;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.content-link.playing i:before,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.inline-roll.playing i:before {
+  content: "\f0c8";
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.content-link.disabled,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.inline-roll.disabled {
+  cursor: var(--cursor-default);
+  color: var(--color-text-dark-inactive);
+  border-color: var(--color-border-light-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.content-link.disabled:hover,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.inline-roll.disabled:hover {
+  text-shadow: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.content-link.broken {
+  cursor: var(--cursor-default);
+  background: rgba(255, 0, 0, 0.05);
+  border: 1px dashed red;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.inline-roll.gmroll {
+  background: var(--color-whisper-bg);
+  border-color: var(--color-whisper-border);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content a.inline-roll.blindroll {
+  background: var(--color-blind-bg);
+  border-color: var(--color-blind-border);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content p {
+  margin: 0.5em 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content p:empty {
+  min-height: 1rem;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content img.centered {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content ul.plain,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content ol.plain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content dl {
+  margin: 0.5em 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content dt {
+  font-weight: bold;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content dd {
+  padding-left: 5px;
+  margin: 3px 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content hr {
+  border: none;
+  border-top: 1px solid var(--color-border-light-primary);
+  border-bottom: 1px solid var(--color-border-light-highlight);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button[hidden] {
+  display: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content blockquote {
+  margin: 0.5em 0 0.5em 10px;
+  padding: 0 0 0 20px;
+  border-left: 3px solid var(--color-border-light-tertiary);
+  font-style: italic;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content blockquote em {
+  font-style: normal;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content i.tip {
+  font-size: var(--font-size-12);
+  color: var(--color-text-dark-5);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content span.reference {
+  display: inline-block;
+  padding: 0.25rem;
+  color: #c5dbe3;
+  border: 1px solid #def7ff;
+  border-radius: 3px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(0, 0, 0, 0.05);
+  border-top: 1px solid var(--color-border-light-tertiary);
+  border-bottom: 1px solid var(--color-border-light-tertiary);
+  margin: 0.5em 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content table thead {
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-text-light-highlight);
+  text-shadow: 1px 1px var(--color-shadow-dark);
+  border-bottom: 1px solid var(--color-border-dark);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content table td:first-child {
+  padding-left: 2px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content table td,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content table th {
+  padding: 0.25em 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content img {
+  box-sizing: border-box;
+  border: 1px solid var(--color-border-dark);
+  border-radius: 2px;
+  max-width: 100%;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content img.noborder {
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content figure {
+  margin: 1rem 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content figure img {
+  display: block;
+  margin: 0 auto;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content figure figcaption {
+  margin-top: 0.5rem;
+  padding: 0 1rem;
+  text-align: center;
+  font-weight: bold;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form).standard-form {
+  gap: 0;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group,
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group-stacked {
+  clear: both;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 3px 0;
+  align-items: center;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group > * {
+  flex: 3;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group > label {
+  flex: 2;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group label {
+  line-height: var(--form-field-height);
+  cursor: var(--cursor-default);
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields > * {
+  flex: 1;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields > label {
+  flex: 0;
+  padding: 0 4px;
+  text-align: center;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields > label.checkbox {
+  flex: none;
+  padding: 0;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields > input[type="checkbox"] {
+  flex: 0 0 20px;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields button {
+  flex: 0;
+  line-height: calc(var(--form-field-height) - 4px);
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields span.sep {
+  flex: none;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group span.units {
+  flex: 0;
+  line-height: 28px;
+  font-size: var(--font-size-12);
+  color: var(--color-text-dark-secondary);
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group-stacked > *,
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group.stacked > * {
+  flex: 0 0 100%;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group.slim .form-fields {
+  flex: 1;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group.slim .form-fields > label {
+  flex: none;
+  font-size: var(--font-size-12);
+  color: var(--color-text-dark-secondary);
+  text-align: right;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group.slim .form-fields > input[type="number"],
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group.slim .form-fields > input[type="text"] {
+  flex: 0 0 50px;
+  padding: 0;
+  text-align: center;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group.hidden {
+  display: none;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) h1.form-header,
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) h2.form-header,
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) h3.form-header {
+  margin: 0 0 5px;
+  padding: 3px 0;
+  color: var(--color-text-dark-header);
+  border-top: 1px solid var(--color-border-light-primary);
+  border-bottom: 1px solid var(--color-border-light-primary);
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .notes,
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .hint {
+  flex: 0 0 100%;
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-16);
+  color: var(--color-text-dark-secondary);
+  margin: 3px 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input:focus {
+  outline: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="text"],
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="number"],
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="password"],
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="date"],
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="time"],
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="search"] {
+  width: calc(100% - 2px);
+  min-width: 20px;
+  height: var(--form-field-height);
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1px 3px;
+  margin: 0;
+  color: var(--color-text-dark-primary);
+  font-family: inherit;
+  font-size: inherit;
+  text-align: inherit;
+  line-height: inherit;
+  border: 1px solid var(--color-border-light-tertiary);
+  border-radius: 3px;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="text"]:focus,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="number"]:focus,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="password"]:focus,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="date"]:focus,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="time"]:focus,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="search"]:focus {
+  box-shadow: 0 0 5px var(--color-shadow-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="number"]::-webkit-inner-spin-button,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="number"] {
+  -moz-appearance: textfield;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 0.5rem;
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 43%, #333 45%, #333 55%, rgba(0, 0, 0, 0) 57%, rgba(0, 0, 0, 0) 100%), linear-gradient(135deg, transparent 0%, transparent 43%, #333 45%, #333 55%, transparent 57%, transparent 100%);
+  cursor: var(--cursor-pointer);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="checkbox"] {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  margin: 3px 5px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="radio"] {
+  position: relative;
+  top: 2px;
+  margin: 0 0 0 5px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="checkbox"]:checked,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="radio"]:checked {
+  accent-color: var(--color-checkbox-checked);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="checkbox"]:focus-visible,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="radio"]:focus-visible {
+  box-shadow: 0 0 5px var(--color-shadow-primary);
+  outline: 1px solid transparent;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.placeholder-fa-solid::placeholder {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--font-awesome);
+  font-weight: 900;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content label.checkbox {
+  flex: auto;
+  padding: 0;
+  margin: 0;
+  height: 22px;
+  line-height: 22px;
+  font-size: var(--font-size-11);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content label.checkbox > input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0 3px;
+  position: relative;
+  top: 4px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content label.checkbox.right > input[type="checkbox"] {
+  margin: 0 0 0 2px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content select {
+  height: calc(var(--form-field-height) + 1px);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border-light-tertiary);
+  border-radius: 3px;
+  padding: 0 3px;
+  text-overflow: ellipsis;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content select:focus {
+  box-shadow: 0 0 5px var(--color-shadow-primary);
+  outline: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content select[multiple] {
+  height: auto;
+  padding: 3px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content option,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content optgroup {
+  font-family: inherit;
+  background: var(--color-select-option-bg);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content textarea {
+  width: 100%;
+  min-height: 50px;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 3px;
+  color: var(--color-text-dark-primary);
+  font-family: var(--font-monospace);
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content textarea:focus {
+  box-shadow: 0 0 6px var(--color-shadow-primary);
+  outline: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content textarea:read-only {
+  color: var(--color-text-dark-secondary);
+  box-shadow: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button {
+  width: 100%;
+  margin: 0 1px;
+  background: rgba(255, 255, 240, 0.8);
+  border: 1px solid var(--color-border-light-primary);
+  border-radius: 3px;
+  font-size: var(--font-size-14);
+  line-height: 28px;
+  font-family: var(--font-primary);
+  cursor: var(--cursor-pointer);
+  color: revert;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button > i {
+  margin-right: 3px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button > * {
+  cursor: inherit;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button:hover,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button:focus {
+  outline: none;
+  box-shadow: 0 0 5px var(--color-shadow-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button:disabled {
+  color: var(--color-text-dark-secondary);
+  box-shadow: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button.hidden {
+  display: none;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) button {
+  background: rgba(0, 0, 0, 0.1);
+  border: 2px groove var(--color-border-light-highlight);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input:disabled {
+  border: none;
+  color: var(--color-text-dark-secondary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input:disabled:hover {
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input::placeholder {
+  color: var(--color-text-dark-secondary);
+  opacity: 1;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="text"].color {
+  flex: 1.45;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="color"][data-edit] {
+  height: var(--form-field-height);
+  background: transparent;
+  border: 2px groove var(--color-border-light-highlight);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="color"][data-edit][data-edit] {
+  margin-left: 5px;
+  flex: 1.45;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button.file-picker {
+  flex: 0 0 24px;
+  line-height: 24px;
+  margin: -1px 0 -1px 4px;
+  order: 99;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button.file-picker + input[type="text"] {
+  height: 28px;
+  margin-right: 5px !important;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range] {
+  -webkit-appearance: none;
+  background: transparent;
+  height: 20px;
+  margin: 0;
+  width: 100%;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  cursor: var(--cursor-pointer);
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #999999;
+  border-radius: 3px;
+  border: 1px solid #111;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid var(--color-border-dark);
+  height: 12px;
+  width: 12px;
+  border-radius: 2px;
+  background: #c85019;
+  cursor: var(--cursor-pointer);
+  -webkit-appearance: none;
+  margin-top: -4px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  cursor: var(--cursor-pointer);
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #999999;
+  border-radius: 3px;
+  border: 1px solid var(--color-border-dark-1);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid var(--color-border-dark);
+  height: 12px;
+  width: 12px;
+  border-radius: 2px;
+  background: #c85019;
+  cursor: var(--cursor-pointer);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]::-ms-track {
+  width: 100%;
+  height: 6px;
+  cursor: var(--cursor-pointer);
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]::-ms-fill-lower {
+  background: #8c8c8c;
+  border: 1px solid var(--color-border-dark-1);
+  border-radius: 6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]::-ms-fill-upper {
+  background: #999999;
+  border: 1px solid var(--color-border-dark-1);
+  border-radius: 6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid var(--color-border-dark);
+  height: 12px;
+  width: 12px;
+  border-radius: 2px;
+  background: #c85019;
+  cursor: var(--cursor-pointer);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]:focus::-ms-fill-lower {
+  background: #999999;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=range]:focus::-ms-fill-upper {
+  background: #a6a6a6;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"] + .range-value {
+  display: block;
+  flex: 0 1 48px;
+  text-align: center;
+  border: 1px solid var(--color-border-light-primary);
+  padding: 2px;
+  margin-left: 10px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:disabled {
+  filter: grayscale(1) opacity(0.33);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:disabled + .range-value {
+  opacity: 0.67;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:disabled:hover {
+  text-shadow: none;
+  cursor: var(--cursor-default);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:disabled::-moz-range-thumb,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"].disabled::-webkit-slider-thumb {
+  background-color: var(--color-text-dark-4);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:focus {
+  outline: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: #a6a6a6;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:focus::-moz-range-track {
+  background: #a6a6a6;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:focus::-webkit-slider-runnable-track {
+  box-shadow: 0 0 5px var(--color-shadow-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:focus::-moz-range-track {
+  box-shadow: 0 0 5px var(--color-shadow-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 5px var(--color-shadow-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="range"]:focus::-moz-range-thumb {
+  box-shadow: 0 0 5px var(--color-shadow-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range:focus {
+  --color-thumb: #ffffff;
+  --gradient: linear-gradient(to right, #ff0000 0%, #ffff00 16.667%, #00ff00 33.333%, #00ffff 50%, #0000ff 66.667%, #ff00ff 83.333%, #ff0000 100%);
+  appearance: none;
+  height: 1.6em;
+  width: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range::-webkit-slider-thumb,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range:focus::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  cursor: var(--cursor-pointer);
+  height: 18px;
+  width: 18px;
+  margin-top: -4px;
+  background: var(--color-thumb);
+  border-radius: 15%;
+  border: 1px solid var(--color-border-dark-1);
+  box-shadow: 1px 1px 1px var(--color-border-dark-2), 1px 1px 0px var(--color-border-dark-3);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range::-webkit-slider-thumb:hover,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range:focus::-webkit-slider-thumb:hover {
+  height: 24px;
+  width: 24px;
+  margin-top: -7px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range::-moz-range-thumb,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range:focus::-moz-range-thumb {
+  cursor: var(--cursor-pointer);
+  height: 18px;
+  width: 18px;
+  background: var(--color-thumb);
+  border-radius: 15%;
+  border: 1px solid var(--color-border-dark-1);
+  box-shadow: 1px 1px 1px var(--color-border-dark-2), 1px 1px 0px var(--color-border-dark-3);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range::-moz-range-thumb:hover,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range:focus::-moz-range-thumb:hover {
+  height: 24px;
+  width: 24px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range::-webkit-slider-runnable-track,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range:focus::-webkit-slider-runnable-track {
+  cursor: var(--cursor-pointer);
+  height: 12px;
+  width: 100%;
+  background: var(--gradient);
+  border-radius: 6px;
+  border: 1px solid var(--color-border-dark-1);
+  box-shadow: 1px 1px 1px var(--color-border-dark-2), 1px 1px 2px var(--color-border-dark-3);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range::-moz-range-track,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input.color-range:focus::-moz-range-track {
+  cursor: var(--cursor-pointer);
+  height: 12px;
+  width: 100%;
+  background: var(--gradient);
+  border-radius: 6px;
+  border: 1px solid var(--color-border-dark-1);
+  box-shadow: 1px 1px 1px var(--color-border-dark-2), 1px 1px 2px var(--color-border-dark-3);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[disabled].color-range {
+  --gradient: linear-gradient(to right, #454545 0%, #bbbbbb 50%, #454545 100%);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[disabled].color-range::-webkit-slider-thumb {
+  cursor: var(--cursor-default);
+  opacity: 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[disabled].color-range::-moz-range-thumb {
+  cursor: var(--cursor-default);
+  opacity: 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[disabled].color-range::-webkit-slider-runnable-track {
+  cursor: var(--cursor-default);
+  opacity: 0.5;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[disabled].color-range::-moz-range-track {
+  cursor: var(--cursor-default);
+  opacity: 0.5;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="text"].color {
+  flex: 1.45;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="color"][data-edit] {
+  height: var(--form-field-height);
+  background: transparent;
+  border: 2px groove var(--color-border-light-highlight);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type="color"][data-edit][data-edit] {
+  margin-left: 5px;
+  flex: 1.45;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button.file-picker {
+  flex: 0 0 24px;
+  line-height: 24px;
+  margin: -1px 0 -1px 4px;
+  order: 99;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button.file-picker + input[type="text"] {
+  height: 28px;
+  margin-right: 5px !important;
+}
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields string-tags > button,
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields document-tags > button,
+body.game :is(form.application.noc.sheet > .window-content, .application.nocDialog .window-content form) .form-group .form-fields file-picker > button {
+  flex: 0 0 36px;
+  line-height: var(--form-field-height);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .editor {
+  position: relative;
+  max-height: 100%;
+  max-width: 100%;
+  overflow: auto;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .editor-content * {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .editor-edit {
+  display: none;
+  font-size: 1.25em;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(187, 187, 187, 0.75);
+  border: 1px solid var(--color-border-dark-1);
+  border-radius: 4px;
+  padding: 1px 2px;
+  box-shadow: 0 0 1px var(--color-shadow-dark);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .editor:hover .editor-edit {
+  display: block;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) {
+  line-height: normal;
+  background: url("/ui/denim075.png") repeat;
+  border-radius: 5px;
+  color: var(--color-text-light-highlight);
+  font-size: var(--font-size-14);
+  backdrop-filter: unset;
+  -webkit-backdrop-filter: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) {
+  border: unset;
+  color-scheme: var(--color-scheme);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content > * {
+  flex: 1;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content {
+  background: url("/ui/parchment.jpg") repeat;
+  padding: 8px;
+  color: var(--color-text-dark-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content > * {
+  flex: 1;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .flexrow {
+  align-items: initial;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .scrollable {
+  margin-right: unset;
+  padding-right: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h1,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h2,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h3,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h4,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h5,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h6 {
+  font-family: var(--font-primary);
+  font-weight: normal;
+  line-height: unset;
+  color: inherit;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content h4 {
+  font-size: revert;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content :is(h1, h2, h3, h4).border {
+  text-indent: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content :is(h1, h2, h3, h4).border::before {
+  content: unset;
+  position: unset;
+  border-bottom: unset;
+  mask-image: unset;
+  -webkit-mask-image: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content hr {
+  margin: unset;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content ul li,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content ol li {
+  margin: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content figure {
+  width: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content figure img {
+  margin: unset;
+  box-shadow: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .flexcol > * {
+  flex: 1;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button {
+  display: unset;
+  height: unset;
+  min-height: unset;
+  padding: revert;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button:hover {
+  --button-hover-text-color: var(--button-text-color);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content button.icon {
+  font-family: var(--font-awesome);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content file-picker > button {
+  margin: -2px 0;
+  padding: 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content label.checkbox {
+  display: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=checkbox],
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=radio] {
+  appearance: revert;
+  -webkit-appearance: revert;
+  -moz-appearance: revert;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=checkbox]::before,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=radio]::before,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=checkbox]::after,
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=radio]::after {
+  content: unset;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content input[type=file] {
+  width: revert;
+  height: revert;
+  line-height: revert;
+  padding: revert;
+  background: revert;
+  border: revert;
+  border-radius: revert;
+  outline: revert;
+  color: revert;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content select {
+  width: auto;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .tabs {
+  align-items: center;
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0;
+  line-height: unset;
+  justify-content: space-around;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .tabs.sheet-tabs {
+  margin: 4px 0;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .tabs.sheet-tabs [data-tab] {
+  padding: 8px 12px;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .tabs:not(.sheet-tabs) {
+  border: none;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content .tabs > [data-tab].active {
+  text-shadow: 0 0 10px var(--color-shadow-primary);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content nav.list-filters {
+  display: flex;
+  justify-content: end;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content nav.list-filters label {
+  font-weight: bold;
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content nav.list-filters a.filter {
+  flex: none;
+  margin-left: 10px;
+  border-bottom: 2px solid var(--color-underline-inactive);
+}
+body.game :is(.application.noc.sheet, .application.nocDialog) .window-content nav.list-filters a.filter.active {
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-underline-active);
+}
+}
