@@ -42,11 +42,28 @@ export function htmlCabale(rollData) {
         <span>${echapper(a.label)} : +1</span> <span class="ligne-grise">(${a.restant} point${a.restant > 1 ? "s" : ""} sur ${a.points})</span>${condition}</label>`;
     }
   }
-  const caseReserve = (id, texte, n) => `<label class="case-option ${n ? "" : "indisponible"}"><input type="checkbox" id="${id}" ${rollData[id] ? "checked" : ""} ${n ? "" : "disabled"}/>
-    <span>${texte}</span> <span class="ligne-grise">(${n} disponible${n > 1 ? "s" : ""})</span></label>`;
-  html += caseReserve("useEspoirCabale", "1 point d'Espoir de la cabale (+3 dés)", Number(c.espoir) || 0);
-  html += caseReserve("useVecuCabale", "1 point de Vécu de la cabale (+1 niveau de talent)", Number(c.vecu) || 0);
   return html + "</div>";
+}
+
+/**
+ * Bloc des dépenses du jet : 1 point d'Espoir (+3 dés) ou de Vécu (+1 niveau),
+ * pris au Héros ou à sa cabale (un seul des deux par ligne).
+ */
+export function htmlDepenses(rollData) {
+  const c = rollData.cabaleData;
+  const caseDepense = (id, n) => {
+    n = Number(n) || 0;
+    return `<label class="depense-case ${n ? "" : "indisponible"}" data-tooltip="${n ? pluriel(n, "point") + " disponible" + (n > 1 ? "s" : "") : "aucun point disponible"}">
+      <input type="checkbox" id="${id}" ${rollData[id] ? "checked" : ""} ${n ? "" : "disabled"}/><span class="depense-reste">${n}</span></label>`;
+  };
+  const ligne = (nom, effet, idHeros, nHeros, idCabale, nCabale) => `<div class="depense-ligne">
+      <span class="depense-nom">${nom} <em>${effet}</em></span>
+      ${caseDepense(idHeros, nHeros)}${c ? caseDepense(idCabale, nCabale) : ""}</div>`;
+  return `<div class="depenses-jet ${c ? "avec-cabale" : ""}">
+    <div class="depense-entete"><span>Dépenser 1 point</span><span>Héros</span>${c ? "<span>Cabale</span>" : ""}</div>
+    ${ligne("Espoir", "+3 dés", "useEspoir", rollData.espoir, "useEspoirCabale", c?.espoir)}
+    ${ligne("Vécu", "+1 niveau de talent", "useVecu", rollData.vecu, "useVecuCabale", c?.vecu)}
+  </div>`;
 }
 
 /** Délégation d'évènements : gestionnaire(ev, élément correspondant au sélecteur) */
@@ -65,6 +82,7 @@ export class nocRollDialog extends foundry.applications.api.DialogV2 {
   /* -------------------------------------------- */
   static async create(actor, rollData) {
     rollData.cabaleHtml = htmlCabale(rollData);
+    rollData.depensesHtml = htmlDepenses(rollData);
     // Flux d'un Seuil (réglé par le MJ) : jusqu'à Domaine + Flux dés de domaine
     if (rollData.flux === undefined) Object.assign(rollData, fluxPourJet());
     const domaineDes = Number(rollData.domaine?.value) || 0;
@@ -72,6 +90,7 @@ export class nocRollDialog extends foundry.applications.api.DialogV2 {
     rollData.maxDesDomaine = domaineDes + (rollData.fluxActif ? rollData.flux : 0);
     const html = await foundry.applications.handlebars.renderTemplate('systems/noc/templates/window_app/dialog-roll-generic.hbs', rollData);
     delete rollData.cabaleHtml;
+    delete rollData.depensesHtml;
     return new nocRollDialog(actor, rollData, html);
   }
 
@@ -137,12 +156,12 @@ export class nocRollDialog extends foundry.applications.api.DialogV2 {
     this.updateNiveauFinal();
 
     // un seul point d'Espoir et un seul point de Vécu par jet : celui du Héros ou celui de la cabale
-    sur('#useEspoir', 'change', ev => {
-      r.useEspoir = ev.currentTarget.checked;
+    deleguer(html, 'change', '#useEspoir', (ev, el) => {
+      r.useEspoir = el.checked;
       if (r.useEspoir) { r.useEspoirCabale = false; const c = un('#useEspoirCabale'); if (c) c.checked = false; }
     });
-    sur('#useVecu', 'change', ev => {
-      r.useVecu = ev.currentTarget.checked;
+    deleguer(html, 'change', '#useVecu', (ev, el) => {
+      r.useVecu = el.checked;
       if (r.useVecu) { r.useVecuCabale = false; const c = un('#useVecuCabale'); if (c) c.checked = false; }
     });
     sur('#cibleAuSol', 'change', ev => {
@@ -188,6 +207,8 @@ export class nocRollDialog extends foundry.applications.api.DialogV2 {
     const rafraichir = () => {
       const bloc = html.querySelector('.bloc-cabale');
       if (bloc) bloc.innerHTML = htmlCabale(r);
+      const depenses = html.querySelector('.bloc-depenses');
+      if (depenses) depenses.innerHTML = htmlDepenses(r);
       this.setPosition({ height: "auto" });
     };
     deleguer(html, 'change', '#cabaleChoice', (ev, el) => {

@@ -4038,3 +4038,78 @@
     line-height: 1.2;
     padding: 4px 6px;
 }
+
+// Fenêtre de jet : dépenses d'Espoir et de Vécu (Héros ou cabale), en tableau
+.nocDialog .skill-roll-dialog .depenses-jet {
+    display: grid;
+    grid-template-columns: 1fr 64px;
+    margin: 8px 0 6px;
+    background: rgba(255, 255, 255, 0.45);
+    box-shadow: 0 -5px 15px rgba(128, 128, 128, 0.5) inset;
+
+    &.avec-cabale {
+        grid-template-columns: 1fr 64px 64px;
+    }
+
+    .depense-entete,
+    .depense-ligne {
+        display: contents;
+    }
+
+    .depense-entete > span {
+        padding: 4px 8px 2px;
+        font-size: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #4b4a44;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+        &:not(:first-child) {
+            text-align: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .depense-nom {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        padding: 5px 8px;
+        font-weight: bold;
+
+        em {
+            font-weight: normal;
+            font-size: 11px;
+            color: #5a4c40;
+        }
+    }
+
+    .depense-ligne:not(:last-child) > * {
+        border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
+    }
+
+    label.depense-case {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        cursor: pointer;
+
+        .depense-reste {
+            min-width: 1.4em;
+            padding: 0 4px;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        &.indisponible {
+            opacity: 0.4;
+            cursor: default;
+        }
+    }
+}
