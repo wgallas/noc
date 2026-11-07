@@ -4114,8 +4114,8 @@
     }
 }
 
-// Jauges de perdition des personnages : puces sur deux lignes de 5
-.noc.sheet.actor.personnage section.window-content .reserve.perdition {
+// Réserves et jauges de perdition des personnages : puces sur deux lignes de 5
+.noc.sheet.actor.personnage section.window-content .tab.principal .reserve {
     display: grid;
     grid-template-columns: repeat(5, 12px);
     justify-content: center;
