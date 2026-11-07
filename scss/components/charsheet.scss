@@ -4113,3 +4113,24 @@
         }
     }
 }
+
+// Jauges de perdition des personnages : puces sur deux lignes de 5
+.noc.sheet.actor.personnage section.window-content .reserve.perdition {
+    display: grid;
+    grid-template-columns: repeat(5, 12px);
+    justify-content: center;
+    gap: 2px 1px;
+    padding-left: 6px;
+    padding-right: 6px;
+
+    > h4,
+    > .statut {
+        grid-column: 1 / -1;
+    }
+
+    > input[type="checkbox"] {
+        width: 12px;
+        max-width: 12px;
+        height: 12px;
+    }
+}
