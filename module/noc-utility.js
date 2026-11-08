@@ -5,6 +5,7 @@ import { totalBonusEquipement } from "./stratagemes.mjs";
 import { fielDesDes } from "./fiel/gouttes.mjs";
 import { depenserCabale, bonusCabale } from "./cabale.mjs";
 import { activerBoutonsReserves } from "./reserves-jeu.mjs";
+import { changerEtendue, repartirMarge } from "./combat-marge.mjs";
 /* -------------------------------------------- */
 
 /* -------------------------------------------- */
@@ -51,6 +52,16 @@ export class nocUtility {
 
     // Singularité contre le Fiel, Espoir contre les perditions, Perdre Espoir
     activerBoutonsReserves(html);
+    // marge d'une attaque : points déplacés entre Précision et Étendue
+    html.querySelectorAll("a.marge-etendue").forEach(el => {
+      if (el.dataset.nocLie) return;
+      el.dataset.nocLie = "1";
+      el.addEventListener("click", ev => {
+        ev.preventDefault();
+        const message = game.messages.get(nocUtility.findChatMessageId(ev.currentTarget));
+        if (message) changerEtendue(message, Number(ev.currentTarget.dataset.ecart) || 0);
+      });
+    });
 
     // soin / apaisement / purification depuis le message d'un jet
     html.querySelectorAll('a.appliquer-soin').forEach((element) => {
@@ -214,7 +225,8 @@ export class nocUtility {
     rollData.energieNoire = en?.actif ? Number(en.valeur) || 0 : 0;
     rollData.reduitParLumiere = !!rollData.quantique || rollData.energieNoire > 0;
     rollData.degatsTotaux = rollData.degatsArme + (rollData.quantique?.succes ?? 0) + rollData.energieNoire;
-    rollData.traitsCombat = traitsEnCombat(sys.traitsArme);
+    // marge : Précision par défaut, Étendue (arme Multiple) au choix de l'attaquant
+    repartirMarge(rollData);
     // cibles visées : Blessures calculées (et reportées une seule fois)
     if (!rollData.blessuresAppliquees) {
       rollData.cibles ??= ciblesActuelles();
@@ -261,7 +273,10 @@ export class nocUtility {
     if (aAppliquer) rollData.blessuresAppliquees = true;
     msg.setFlag("world", "rolldata", rollData)
     // pas de report automatique : le MJ reporte les Blessures (panneau du MJ)
-    if (aAppliquer) await messageMJCibles(rollData);
+    if (aAppliquer) {
+      const mj = await messageMJCibles(rollData);
+      if (mj) { rollData.messageMJ = mj.id; await msg.setFlag("world", "rolldata", rollData); }
+    }
 
     if (rollData.useEspoir && !rollData.espoirApplied) {
       rollData.espoirApplied = true

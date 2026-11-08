@@ -138,6 +138,16 @@
         <p class="marge-combat {{#if isReussite}}reussite{{else}}echec{{/if}}">{{#if isReussite}}Marge de succès : {{margin}}{{else}}Marge d'échec : {{margin}}{{/if}}</p>
 
         {{#if isReussite}}
+          {{#if choixMarge}}
+            <div class="repartition-marge">
+              <span class="marge-part" data-tooltip="+1 point de Blessures par niveau, sur la 1re touche">Précision <strong>{{precision}}</strong></span>
+              <a class="marge-etendue" data-ecart="-1" data-tooltip="1 point de marge en Précision"><i class="fa-solid fa-arrow-left"></i></a>
+              <a class="marge-etendue" data-ecart="1" data-tooltip="1 point de marge en Étendue"><i class="fa-solid fa-arrow-right"></i></a>
+              <span class="marge-part" data-tooltip="+1 à la valeur X du trait Multiple par niveau">Étendue <strong>{{etendue}}</strong> → Multiple ({{multipleTotal}})</span>
+            </div>
+          {{else}}{{#if margin}}
+            <p class="note-combat">Précision : +{{margin}} point{{#ifgt margin 1}}s{{/ifgt}} de Blessures (marge)</p>
+          {{/if}}{{/if}}
           {{#if quantique}}
             <p class="titre-bloc-combat">Effet quantique ({{quantique.nbDes}} dé{{#ifequal quantique.nbDes 1}}{{else}}s{{/ifequal}}) : +{{quantique.succes}}</p>
             <div class="dicesResults flexrow">

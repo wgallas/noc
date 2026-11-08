@@ -958,3 +958,31 @@ li.chat-message .nocRoll {
         }
     }
 }
+
+// Message d'attaque : répartition de la marge entre Précision et Étendue
+li.chat-message .nocRoll .resultat-combat .repartition-marge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 4px 0;
+    font-size: 12px;
+
+    .marge-part strong {
+        display: inline-block;
+        min-width: 1.4em;
+        padding: 0 4px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    a.marge-etendue {
+        padding: 1px 6px;
+        border-radius: 9px;
+        color: white;
+        background: #935e4b;
+        text-shadow: none;
+        cursor: pointer;
+    }
+}

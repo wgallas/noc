@@ -24,7 +24,8 @@ function armureDe(actor) {
 export function calculerBlessures(rollData, cibles) {
   const traits = rollData.arme?.system?.traitsArme ?? {};
   const surnaturel = nombre(rollData.quantique?.succes) + nombre(rollData.energieNoire);
-  const nbTouches = traits.multiple?.actif ? Math.max(1, nombre(traits.multiple.valeur)) : 1;
+  // Multiple (X), augmenté par l'Étendue choisie sur la marge
+  const nbTouches = traits.multiple?.actif ? Math.max(1, nombre(traits.multiple.valeur)) + nombre(rollData.etendue) : 1;
   // sans Multiple, l'attaque ne touche que la première cible
   const touchees = cibles.slice(0, nbTouches);
   return touchees.map((c, i) => {
@@ -39,7 +40,8 @@ export function calculerBlessures(rollData, cibles) {
       return r;
     }
     const arme = nombre(rollData.degatsArme);
-    const marge = i === 0 ? Math.max(0, nombre(rollData.margin)) : 0;
+    // Précision : la part de la marge non utilisée en Étendue, sur la 1re touche seulement
+    const marge = i === 0 ? Math.max(0, rollData.precision ?? nombre(rollData.margin)) : 0;
     // Perforant / Tranchant : le minimum s'applique avant l'ajout de la marge
     const brut = arme - r.cons - r.armure;
     let base = brut;
@@ -52,7 +54,7 @@ export function calculerBlessures(rollData, cibles) {
     }
     const physique = Math.max(0, base + marge);
     r.lignes.push(`Dégâts ${arme} (arme) − ${signe(r.cons)} (Const.) − ${r.armure} (Armure) = ${signe(brut)}${releve}`
-      + (marge ? ` + ${marge} (marge) = ${physique}` : (!releve && brut < 0 ? ` → ${physique}` : "")));
+      + (marge ? ` + ${marge} (Précision) = ${physique}` : (!releve && brut < 0 ? ` → ${physique}` : "")));
     let total = physique;
     if (surnaturel > 0) {
       const reduit = Math.max(0, surnaturel - r.lumiere);
@@ -75,12 +77,21 @@ export function calculerBlessures(rollData, cibles) {
 export async function messageMJCibles(rollData) {
   const gms = ChatMessage.getWhisperRecipients("GM");
   if (!gms.length) return;
+  return ChatMessage.create({
+    content: contenuMJCibles(rollData),
+    whisper: gms.map(u => u.id),
+    speaker: ChatMessage.getSpeaker({ alias: "Loi" })
+  });
+}
+
+/** Contenu du message de la Loi (recalculé quand l'attaquant répartit sa marge) */
+export function contenuMJCibles(rollData) {
   let lignes;
   if (!rollData.blessures?.length) {
     // personne n'a été ciblé : dégâts bruts de l'arme, à réduire par la Loi
     const parts = [`${Number(rollData.degatsArme) || 0} (arme)`];
-    const marge = Math.max(0, Number(rollData.margin) || 0);
-    if (marge) parts.push(`${marge} (marge)`);
+    const marge = Math.max(0, rollData.precision ?? (Number(rollData.margin) || 0));
+    if (marge) parts.push(`${marge} (Précision)`);
     const surnaturel = nombre(rollData.quantique?.succes) + nombre(rollData.energieNoire);
     lignes = `<li><span style="font-weight:bold">Cible inconnue</span><br>Dégâts ${parts.join(" + ")} − Const. − Armure`
       + (surnaturel ? `<br>Quantique/Énergie noire ${surnaturel} − Lumière` : "") + `</li>`;
@@ -90,11 +101,8 @@ export async function messageMJCibles(rollData) {
       + b.lignes.map(l => `<br>${l}`).join("") + `</li>`).join("");
   }
   const attaquant = rollData.alias || game.actors.get(rollData.actorId)?.name || "";
-  await ChatMessage.create({
-    content: `<div class="nocRoll"><h4>${attaquant} — ${rollData.arme?.name ?? ""}</h4><ul class="cibles-mj">${lignes}</ul></div>`,
-    whisper: gms.map(u => u.id),
-    speaker: ChatMessage.getSpeaker({ alias: "Loi" })
-  });
+  const marge = rollData.choixMarge ? `<p class="note-combat">Marge : Précision ${rollData.precision}, Étendue ${rollData.etendue} (Multiple ${rollData.multipleTotal})</p>` : "";
+  return `<div class="nocRoll"><h4>${attaquant} — ${rollData.arme?.name ?? ""}</h4>${marge}<ul class="cibles-mj">${lignes}</ul></div>`;
 }
 
 /** Cibles actuelles de l'utilisateur (jetons ciblés) */
