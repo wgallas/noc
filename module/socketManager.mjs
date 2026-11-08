@@ -36,6 +36,16 @@ export class SocketManager {
                 this.launchSocket("dispayDroplet", {})
                 ui.compteur.gouttePlus(socketMsg.data.qt)
                 break;
+            case "goutteMoins":
+                if (!game.users.activeGM?.isSelf) return;
+                ui.compteur?.goutteMoins(Number(socketMsg.data.qt) || 1);
+                break;
+            case "marquerMessage": {
+                if (!game.users.activeGM?.isSelf) return;
+                const message = game.messages.get(socketMsg.data.messageId);
+                if (message) await message.update({ [`flags.noc.${socketMsg.data.chemin}`]: socketMsg.data.valeur });
+                break;
+            }
             case "goutteHostile":
                 await retirerGouttesHostiles(socketMsg.data.qt, socketMsg.data.nom);
                 break;

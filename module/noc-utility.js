@@ -4,6 +4,7 @@ import { traitsEnCombat } from "./armes.mjs";
 import { totalBonusEquipement } from "./stratagemes.mjs";
 import { fielDesDes } from "./fiel/gouttes.mjs";
 import { depenserCabale, bonusCabale } from "./cabale.mjs";
+import { activerBoutonsReserves } from "./reserves-jeu.mjs";
 /* -------------------------------------------- */
 
 /* -------------------------------------------- */
@@ -47,6 +48,9 @@ export class nocUtility {
 
   /* -------------------------------------------- */
   static async chatListeners(html) {
+
+    // Singularité contre le Fiel, Espoir contre les perditions, Perdre Espoir
+    activerBoutonsReserves(html);
 
     // soin / apaisement / purification depuis le message d'un jet
     html.querySelectorAll('a.appliquer-soin').forEach((element) => {
@@ -243,6 +247,8 @@ export class nocUtility {
       await this.resoudreAttaque(rollData, actor);
     }
 
+    // gouttes de Fiel du jet (dés de destin et dés quantiques) : annulables avec la Singularité
+    rollData.nbFielTotal = (Number(rollData.nbFiel) || 0) + (Number(rollData.quantique?.fiel) || 0);
     let msg = await this.createChatWithRollMode(rollData.alias, {
       content: await foundry.applications.handlebars.renderTemplate(`systems/noc/templates/chat/chat-generic-result.hbs`, rollData)
     });

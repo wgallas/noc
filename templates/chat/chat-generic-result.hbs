@@ -101,6 +101,7 @@
         <li>Un point de Vécu de la cabale a été utilisé</li>
       {{/if}}
       {{#if rouageHostile}}{{#if nbFiel}}<li>Rouage hostile, dés à 1 : {{nbFiel}} (le Fiel baisse d'autant)</li>{{/if}}{{else}}<li>Gouttes de Fiel ajoutées : {{nbFiel}}</li>{{/if}}
+      {{#unless rouageHostile}}{{#if nbFielTotal}}<li><a class="singularite-fiel" data-max="{{nbFielTotal}}" data-tooltip="Un Héros dépense 1 point de Singularité pour empêcher l'ajout d'une goutte de Fiel (une fois par 1 obtenu)"><i class="fa-solid fa-atom"></i> Annuler une goutte (1 Singularité)</a></li>{{/if}}{{/unless}}
       <li style="font-weight: bold; color: var(--color-text);">Nombre de succès : {{nbSuccess}}</li>
       <li class="rollResult">Niveau final obtenu : <strong>{{niveauFinal}}</strong></li>
 

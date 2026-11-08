@@ -12,6 +12,7 @@ import { ouvrirBibliothequeFiel } from "./fiel/editeur-bibliotheque.mjs";
 import { plancherFiel, traqueCabales, infligerCabale } from "./cabale.mjs";
 import { avancerTemps, dateHorloge, herosDuTemps, QUARTS } from "./temps.mjs";
 import { ouvrirHistorique, passageOuvert } from "./progression.mjs";
+import { proposerResistance } from "./reserves-jeu.mjs";
 import { avancerLibre, cloreLePassage, debutDeScenario, debutDeSeance, finDeScenario, momentDeCalme } from "./rythme.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -96,6 +97,7 @@ export async function activerEffet(niveau, effet, heros) {
       const avant = new Map(heros.map(a => [a, nombre(a.system.perditions?.[imm.cle]?.value)]));
       for (const a of heros) lignes.push(await modifierPerdition(a, imm.cle, Math.abs(nombre(imm.valeur)), { soigner: nombre(imm.valeur) < 0, reduire: imm.reduction !== false }));
       if (imm.cle === "traque" && nombre(imm.valeur) > 0) lignes.push(...await traqueCabales(variations(avant, "traque")));
+      if (nombre(imm.valeur) > 0) await proposerResistance(imm.cle, avant);
     } else if (imm.type === "reserve") {
       for (const a of heros) {
         const r = a.system.reserves?.[imm.cle];
@@ -446,6 +448,8 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
     // Traque subie par la moitié au moins des membres d'une cabale : la cabale en encaisse autant
     if (perdition === "traque" && !soigner) lignes.push(...await traqueCabales(variations(avant, "traque")));
     await message(`${soigner ? "Soins" : "Perdition"} : ${PERDITIONS[perdition].label} ${soigner ? "−" : "+"}${points}`, lignes);
+    // Héros touchés : résister avec l'Espoir
+    if (!soigner) await proposerResistance(perdition, avant);
     this.render();
   }
 

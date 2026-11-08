@@ -907,3 +907,54 @@ li.chat-message .nocRoll.message-progression {
         }
     }
 }
+
+// Boutons de réserves dans les messages : Singularité contre le Fiel, Espoir contre une
+// perdition, Perdre Espoir
+li.chat-message .nocRoll {
+    a.singularite-fiel,
+    a.resister-espoir,
+    a.perdre-espoir {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 1px 8px;
+        border-radius: 9px;
+        font-size: 11px;
+        font-weight: bold;
+        color: white;
+        text-shadow: none;
+        cursor: pointer;
+
+        &.utilise {
+            opacity: 0.4;
+            pointer-events: none;
+            text-decoration: line-through;
+        }
+    }
+
+    a.singularite-fiel {
+        background: #2c4a6b;
+    }
+
+    a.resister-espoir {
+        flex: 0 0 auto;
+        background: #2f6b2f;
+    }
+
+    a.perdre-espoir {
+        background: #6b1414;
+    }
+
+    &.resistance-espoir ul {
+        list-style: none;
+        padding: 0;
+        margin: 4px 0 0;
+
+        li {
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+    }
+}

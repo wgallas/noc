@@ -10,6 +10,7 @@
  * Concerne les personnages, et les rouages dont les jauges sont sur 10.
  */
 import { NOC } from "./helpers/config.mjs";
+import { boutonPerdreEspoir } from "./reserves-jeu.mjs";
 
 const nombre = v => Number(v) || 0;
 const SEUILS = [5, 8, 10];
@@ -86,6 +87,7 @@ export function valeursAvant(actor) {
 export async function seuilsFranchis(actor, avant) {
   if (actor.type !== "personnage" || !avant) return;
   const lignes = [];
+  const boutons = [];
   const majMin = {};
   for (const [cle, p] of Object.entries(actor._source.system?.perditions ?? {})) {
     const ancien = nombre(avant[cle]);
@@ -96,6 +98,8 @@ export async function seuilsFranchis(actor, avant) {
       const def = NOC.effetsPerditions?.[cle]?.[seuil];
       if (!def) continue;
       lignes.push(`<strong>${def.label ? def.label.charAt(0).toUpperCase() + def.label.slice(1) : ""}</strong> (${p.label ?? cle} ${seuil}) : ${def.description ?? ""}`);
+      // dixième point : le Héros peut perdre Espoir pour revenir à 9 (livre p. 252)
+      if (seuil === 10) boutons.push(boutonPerdreEspoir(actor, cle));
       // séquelle : un point devient permanent (le minimum de la jauge monte de 1)
       if (def.sequelle) majMin[`system.perditions.${cle}.min`] = Math.min(nouveau, nombre(majMin[`system.perditions.${cle}.min`] ?? p.min) + 1);
       if (def.trait) {
@@ -109,7 +113,7 @@ export async function seuilsFranchis(actor, avant) {
   if (lignes.length) {
     const destinataires = game.users.filter(u => u.isGM || actor.testUserPermission(u, "OWNER")).map(u => u.id);
     await ChatMessage.create({
-      content: `<div class="nocRoll"><h4>${actor.name}</h4>${lignes.map(l => `<p>${l}</p>`).join("")}</div>`,
+      content: `<div class="nocRoll"><h4>${actor.name}</h4>${lignes.map(l => `<p>${l}</p>`).join("")}${boutons.join("")}</div>`,
       whisper: destinataires,
       speaker: ChatMessage.getSpeaker({ actor })
     });
