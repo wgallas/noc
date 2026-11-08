@@ -1,6 +1,7 @@
 import { NocFicheActeur } from "./fiche-acteur.mjs";
 import { confirmer, donneesGlisser, ecouter } from "../v2-outils.mjs";
 import { ATOUTS, RESERVES_CABALE, JAUGES_CABALE, TYPES_MEMBRES_CABALE, membresCabale, rouagesCabale, infligerCabale } from "../../cabale.mjs";
+import { ZONES_ALLIES, ajouterAllie, alliesCabale, consulterFichier, etudierFragments, recherchesCabale, retirerAllie } from "../../cabale-ressources.mjs";
 import { assistantCreation, apportHeros, retirerApport, modifierApport, apportsCabale, entretien, semainesSansNoirceur, espritDeCorps, depenserProgression, donProgression, intermede } from "../../cabale-gestion.mjs";
 
 const nombre = v => Number(v) || 0;
@@ -34,7 +35,16 @@ export class nocActorSheetCabale extends NocFicheActeur {
     if (!data) return;
     const allowed = Hooks.call("dropActorSheetData", this.actor, this, data);
     if (allowed === false) return;
-    if (data.type === "Actor") return this._nocDeposerActeur(event, data);
+    if (data.type !== "Actor") return;
+    // onglet Ressources : Personnel ou Experts
+    const zone = event.target.closest?.("[data-zone]")?.dataset.zone;
+    if (zone && ZONES_ALLIES[zone]) {
+      if (!this.isEditable) return;
+      const acteur = await Actor.implementation.fromDropData(data);
+      await ajouterAllie(this.actor, zone, acteur);
+      return;
+    }
+    return this._nocDeposerActeur(event, data);
   }
 
   async _nocDeposerActeur(ev, data) {
@@ -57,6 +67,9 @@ export class nocActorSheetCabale extends NocFicheActeur {
   _preparePersonnageData(context) {
     context.members = membresCabale(this.actor);
     context.rouagesMembres = rouagesCabale(this.actor);
+    // onglet Ressources : Personnel, Experts, Fichier et Fragments de vérité
+    context.allies = alliesCabale(this.actor);
+    context.recherches = recherchesCabale(this.actor);
     const s = this.actor.system;
     // domaines et leurs atouts
     context.domainesCabale = Object.entries(s.domaines ?? {}).map(([cle, d]) => ({
@@ -119,6 +132,15 @@ export class nocActorSheetCabale extends NocFicheActeur {
       this.render();
     });
     ecouter(html, ".display-actor", ev => game.actors.get(ev.currentTarget.dataset.actorId)?.sheet.render(true));
+    // recherches des Atouts Fichier et Fragments de vérité (tout membre peut les lancer)
+    ecouter(html, "button[data-recherche=fichier]", () => consulterFichier(this.actor));
+    ecouter(html, "button[data-recherche=fragments]", () => etudierFragments(this.actor));
+    if (this.isEditable) {
+      ecouter(html, "a.retirer-allie", ev => {
+        const { zone, actorId } = ev.currentTarget.dataset;
+        retirerAllie(this.actor, zone, actorId);
+      });
+    }
     if (this.isEditable) {
       // niveau d'un Atout (−1 donne une faille) et score d'un Domaine
       ecouter(html, ".atout-ctrl a", ev => this._modifier(ev, "talents", -1));

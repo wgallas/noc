@@ -308,6 +308,8 @@
         "reserves",
         "perditions"
       ],
+      "personnel": [],
+      "experts": [],
       "talents": {
         "erudition": {
           "bibliotheque": {

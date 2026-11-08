@@ -21,6 +21,7 @@
 		<a class="item" data-tab="gestion">Gestion</a>
 		<a class="item" data-tab="description">Description</a>
 		<a class="item" data-tab="members">Membres</a>
+		<a class="item" data-tab="ressources">Ressources</a>
 	</nav>
 
 	<section class="sheet-body">
@@ -213,6 +214,64 @@
 				<h3>Description</h3>
 				{{nocEditeur "system.description"}}
 			</div>
+		</div>
+
+		{{!-- Ressources : Personnel, Experts, Fichier et Fragments de vérité --}}
+		<div class="tab ressources flexcol" data-group="primary" data-tab="ressources">
+			<div class="allies-grille">
+				{{#each allies as |groupe|}}
+					<section class="zone-allies" data-zone="{{groupe.zone}}">
+						<h3 class="flexrow">
+							<span>{{groupe.label}}</span>
+							<span class="capacite {{#if groupe.exces}}alerte{{/if}}" data-tooltip="{{groupe.parNiveau}} {{groupe.unite}}{{#ifgt groupe.parNiveau 1}}s{{/ifgt}} par niveau de l'Atout {{groupe.label}} ({{groupe.niveau}})">{{groupe.liste.length}} / {{groupe.places}}</span>
+						</h3>
+						<p class="hint">{{#ifequal groupe.zone "personnel"}}Sympathisants fidèles : Rouages mineurs, un Talent à 1.{{else}}Experts fidèles : Rouages majeurs, un Talent à 1 et un second à 2.{{/ifequal}} Glissez des Rouages ici depuis l'onglet Acteurs.</p>
+						<ul class="liste-allies">
+							{{#each groupe.liste as |allie|}}
+								<li class="allie flexrow">
+									<img src="{{allie.img}}" alt="">
+									<div class="allie-infos">
+										<a class="display-actor allie-nom" data-actor-id="{{allie.id}}">{{allie.nom}}</a>
+										<span class="allie-rang">{{allie.rang}}</span>
+										{{#if allie.talents}}<span class="allie-talents">{{allie.talents}}</span>{{/if}}
+									</div>
+									{{#if @root.editable}}
+										<a class="fas fa-user-minus retirer-allie" data-zone="{{groupe.zone}}" data-actor-id="{{allie.id}}" data-tooltip="retirer de la liste"></a>
+									{{/if}}
+								</li>
+							{{else}}
+								<li class="vide">{{#if groupe.places}}Aucun {{groupe.unite}} pour l'instant.{{else}}Atout {{groupe.label}} au niveau 0 : aucune place.{{/if}}</li>
+							{{/each}}
+						</ul>
+					</section>
+				{{/each}}
+			</div>
+
+			<section class="recherches-cabale">
+				<h3>Recherches</h3>
+				{{#if recherches.inutilisables}}<p class="alerte">Dégradation 5 ou plus : les Atouts ne servent plus jusqu'à réparation.</p>{{/if}}
+				{{#if recherches.fichier}}
+					<div class="recherche flexrow">
+						<div class="recherche-texte">
+							<strong>Fichier ({{recherches.fichier.niveau}})</strong>
+							<span>Une heure dans les archives de la cabale pour trouver des informations sur un citoyen du Bloc : {{recherches.fichier.niveau}} dé{{#ifgt recherches.fichier.niveau 1}}s{{/ifgt}} de Destin, une donnée personnelle par succès.</span>
+						</div>
+						<button type="button" data-recherche="fichier" {{#if recherches.inutilisables}}disabled{{/if}}><i class="fa-solid fa-folder-open"></i> Consulter le Fichier</button>
+					</div>
+				{{/if}}
+				{{#if recherches.fragments}}
+					<div class="recherche flexrow">
+						<div class="recherche-texte">
+							<strong>Fragments de vérité ({{recherches.fragments.niveau}})</strong>
+							<span>Face à un élément étrange ou occulte : {{#ifgt recherches.fragments.niveau 1}}de 1 à {{recherches.fragments.niveau}} dés{{else}}1 dé{{/ifgt}} de Destin, une information de la Loi par succès.</span>
+						</div>
+						<button type="button" data-recherche="fragments" {{#if recherches.inutilisables}}disabled{{/if}}><i class="fa-solid fa-eye"></i> Étudier les fragments</button>
+					</div>
+				{{/if}}
+				{{#unless recherches.fichier}}{{#unless recherches.fragments}}
+					<p class="hint">Les Atouts Fichier (Érudition) et Fragments de vérité (Âme), au niveau 1 ou plus, donnent ici accès à leurs recherches.</p>
+				{{/unless}}{{/unless}}
+			</section>
 		</div>
 
 		<div class="tab members flexcol" data-group="primary" data-tab="members">
