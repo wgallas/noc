@@ -63,8 +63,10 @@ export function calculerBlessures(rollData, cibles) {
     }
     // Multiple sur une seule cible : touches suivantes
     if (nbTouches > 1 && cibles.length === 1) {
+      // la Précision ne s'applique qu'à la 1re touche ; les suivantes perdent 1 point chacune
+      const sansPrecision = total - marge;
       const touches = [total];
-      for (let k = 1; k < nbTouches && total - k >= 1; k++) touches.push(total - k);
+      for (let k = 1; k < nbTouches && sansPrecision - k >= 1; k++) touches.push(sansPrecision - k);
       if (touches.length > 1) r.lignes.push(`Multiple : touches ${touches.join(", ")}`);
     } else if (nbTouches > 1 && i > 0) {
       r.lignes.push(`Multiple : touche n° ${i + 1} (1 point de moins par touche précédente)`);
