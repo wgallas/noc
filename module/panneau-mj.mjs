@@ -4,12 +4,15 @@
  */
 
 import { contexteFlux, descriptionFlux, modifierFlux, valeurFlux } from "./flux.mjs";
-import { cycleCourant, documentsEnVigueur, donneesPapier, nouveauCycle } from "./documents-administratifs.mjs";
+import { cycleCourant, documentsEnVigueur, donneesPapier } from "./documents-administratifs.mjs";
 import { ouvrirPapier } from "./bureau.mjs";
 import { raisonSommeil, reveiller } from "./sommeil.mjs";
 import { bibliotheque, effetParId, effetsActifs } from "./fiel/bibliotheque.mjs";
 import { ouvrirBibliothequeFiel } from "./fiel/editeur-bibliotheque.mjs";
-import { plancherFiel, traqueCabales, infligerCabale, rechargerCabales } from "./cabale.mjs";
+import { plancherFiel, traqueCabales, infligerCabale } from "./cabale.mjs";
+import { avancerTemps, dateHorloge, herosDuTemps, QUARTS } from "./temps.mjs";
+import { ouvrirHistorique, passageOuvert } from "./progression.mjs";
+import { avancerLibre, cloreLePassage, debutDeScenario, debutDeSeance, finDeScenario, momentDeCalme } from "./rythme.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -259,7 +262,14 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       arreterEffet: PanneauMJ.#onArreterEffet,
       bibliotheque: () => ouvrirBibliothequeFiel(),
       leverEtat: PanneauMJ.#onLeverEtat,
-      etapeMJ: PanneauMJ.#onEtapeMJ,
+      avancer: async function (event, target) { await avancerTemps(Number(target.dataset.quarts) || 0); },
+      avancerLibre: async function () { await avancerLibre(); this.render(); },
+      calme: async function () { await momentDeCalme(); this.render(); },
+      seance: async function () { await debutDeSeance(); this.render(); },
+      scenario: async function () { await debutDeScenario(); this.render(); },
+      finScenario: async function () { await finDeScenario(); this.render(); },
+      clorePassage: async function () { await cloreLePassage(); this.render(); },
+      historique: (event, target) => { const a = game.actors.get(target.dataset.id); if (a) ouvrirHistorique(a); },
       toutCocher: PanneauMJ.#onToutCocher,
       reveiller: PanneauMJ.#onReveiller,
       nouveauCycle: PanneauMJ.#onNouveauCycle,
@@ -282,7 +292,7 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
   categorie = "";
   /** liste des personnages en sommeil dépliée ? */
   sommeilOuvert = false;
-  /** onglet affiché : "individus" ou "fiel" */
+  /** onglet affiché : "individus", "fiel", "temps" ou "bureau" */
   onglet = "individus";
 
   /** Personnages actifs (hors sommeil) */
@@ -371,6 +381,14 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
       categories,
       categorie: this.categorie,
       flux: contexteFlux(),
+      horloge: dateHorloge(),
+      quarts: QUARTS,
+      passage: passageOuvert(),
+      herosTemps: herosDuTemps().map(a => ({
+        id: a.id, nom: a.name, img: a.img, sommeil: !!raisonSommeil(a),
+        progression: nombre(a.system.progression), mois: nombre(a.system.moisVecus),
+        regressions: nombre(a.system.regressionsDues), peutDepenser: nombre(a.system.progression) >= 3
+      })),
       onglet: this.onglet
     };
   }
@@ -438,26 +456,6 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
-  static async #onEtapeMJ(event, target) {
-    const etape = target.dataset.etape;
-    const g = etatFiel().gouttes;
-    const cible = { calme: g - 1, seance: g - 5, scenario: 0 }[etape];
-    const titres = { calme: "Moment de calme", seance: "Début de séance", scenario: "Début de scénario" };
-    const { avant, apres } = await fixerFiel(cible);
-    const lignes = [`Gouttes : ${avant.gouttes} → ${apres.gouttes}`, `Menace : ${avant.menace} → ${apres.menace}`];
-    // début de scénario : dés de Domaine, points d'Atouts et réserves des cabales rechargés
-    if (etape === "scenario") lignes.push(...await rechargerCabales());
-    // début de scénario : les excès (Fortune −1) sont levés
-    if (etape === "scenario") {
-      for (const a of game.actors.filter(x => x.type === "personnage" && x.flags?.noc?.exces)) {
-        await a.unsetFlag("noc", "exces");
-        lignes.push(`${a.name} : excès levé (Fortune rétablie)`);
-      }
-    }
-    await message(`${titres[etape]} (Loi)`, lignes);
-    this.render();
-  }
-
   static #onTirerEffet(event, target) {
     const n = target.dataset.niveau;
     const candidats = bibliotheque().filter(e => !this.categorie || (e.categorie || "Sans catégorie") === this.categorie);
@@ -496,8 +494,9 @@ export class PanneauMJ extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
+  /** Bureau : le cycle suivant, c'est l'horloge du Bloc qui avance d'un cycle */
   static async #onNouveauCycle() {
-    await nouveauCycle();
+    await avancerTemps(QUARTS.cycle, { raison: "nouveau cycle" });
     this.render();
   }
 

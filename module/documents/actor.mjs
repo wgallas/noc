@@ -469,8 +469,15 @@ export class nocActor extends Actor {
    * - seance   : Singularité au maximum ; Vécu +1 (sans dépasser le maximum)
    * - scenario : Espoir au maximum ; faveurs des contacts rendues à la réserve
    */
-  async etapeDeJeu(etape) {
-    if (this.type !== "personnage") return;
+  /**
+   * @param {object} [options]
+   * @param {boolean} [options.message=true]  message de chat propre (sinon : lignes renvoyées)
+   * @param {number}  [options.bonusEspoir=0] moment de calme : Espoir en plus (Refuge de la cabale)
+   * @param {boolean} [options.sansEspoir]    moment de calme : pas d'Espoir (faille Angoissante)
+   * @param {boolean} [options.sansTraque]    moment de calme : pas de Traque récupérée (faille Visible)
+   */
+  async etapeDeJeu(etape, { message = true, bonusEspoir = 0, sansEspoir = false, sansTraque = false } = {}) {
+    if (this.type !== "personnage") return [];
     const s = this.system;
     const maj = {};
     const lignes = [];
@@ -488,6 +495,10 @@ export class nocActor extends Actor {
           lignes.push(`${p.label} : pas de récupération — ${raison}`);
           continue;
         }
+        if (perd === "traque" && sansTraque && nombre(p.value) > nombre(p.min)) {
+          lignes.push(`${p.label} : pas de récupération — locaux de la cabale surveillés (faille Visible)`);
+          continue;
+        }
         const valeur = nombre(p.value);
         const nouvelle = Math.max(nombre(p.min), valeur - 1);
         if (nouvelle !== valeur) {
@@ -500,8 +511,9 @@ export class nocActor extends Actor {
         lignes.push("Fatigue : levée");
       }
       const espoir = s.reserves.espoir;
-      const gain = bloques.has("espoir") ? 0 : Math.max(0, 1 + nombre(s.talents?.ame?.extase?.niveau));
+      const gain = (bloques.has("espoir") || sansEspoir) ? 0 : Math.max(0, 1 + nombre(s.talents?.ame?.extase?.niveau) + nombre(bonusEspoir));
       if (bloques.has("espoir")) lignes.push(`Espoir : pas de récupération — ${raison}`);
+      else if (sansEspoir) lignes.push("Espoir : pas de récupération — locaux de la cabale angoissants (faille Angoissante)");
       const nouvelEspoir = Math.min(nombre(espoir.max), nombre(espoir.value) + gain);
       if (nouvelEspoir !== nombre(espoir.value)) {
         maj["system.reserves.espoir.value"] = nouvelEspoir;
@@ -540,6 +552,7 @@ export class nocActor extends Actor {
 
     const titres = { calme: "Moment de calme", seance: "Début de séance", scenario: "Début de scénario" };
     if (Object.keys(maj).length) await this.update(maj);
+    if (!message) return lignes;
     return ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       content: `<h3>${titres[etape]}</h3>` + (lignes.length

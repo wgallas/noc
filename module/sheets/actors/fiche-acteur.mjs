@@ -10,6 +10,7 @@ import { TYPES_GABARIT, gabaritDe, resumeGabarit } from "../../gabarits.mjs";
 import { outilUtilisableCommeArme } from "../../stratagemes.mjs";
 import { TYPES_ACHETABLES, acquisitionObjet, basculerExces, transaction } from "../../fortune.mjs";
 import { choisirQualite, descriptionQualite, enregistrerQualite } from "../../qualites.mjs";
+import { appliquerRegression, corrigerProgression, depenserProgressionHeros, ouvrirHistorique, passageOuvert } from "../../progression.mjs";
 import {
   activerOnglets, changerImage, confirmer, donneesGlisser, ecouter, echapper, enrichirChamps,
   formulaire, lierGlisser, memoriserDefilement, rendreModele, restaurerDefilement
@@ -107,6 +108,12 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.cabales = (this.actor.cabalesActeurs ?? []).map(c => ({
       id: c.id, nom: c.name, bloc: c.system.bloc, coordonnes: c.system.coordonnes, societe: c.system.societeEcran
     }));
+    const pts = Number(this.actor.system.progression) || 0;
+    context.progressionHeros = {
+      passage: passageOuvert(),
+      peutDepenser: passageOuvert() && pts >= 3,
+      regressions: Number(this.actor.system.regressionsDues) || 0
+    };
     context.qualite = descriptionQualite(this.actor.system.qualites, "qualite");
     context.defaut = descriptionQualite(this.actor.system.defauts, "defaut");
   }
@@ -173,7 +180,10 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
     ecouter(html, ".reserve input", this.changeReserve.bind(this));
     ecouter(html, ".reserve a.setMax", this.onClickMaxReserve.bind(this));
     ecouter(html, "a.unassignCabale", this.leaveCabale.bind(this));
-    ecouter(html, "button.etape-jeu", ev => this.actor.etapeDeJeu(ev.currentTarget.dataset.etape));
+    // progression : Passage (3 points), Régressions dues, historique
+    ecouter(html, "a.progresser", () => depenserProgressionHeros(this.actor));
+    ecouter(html, "a.appliquer-regression", () => appliquerRegression(this.actor));
+    ecouter(html, "a.historique-progression", () => ouvrirHistorique(this.actor));
     // Fortune : transaction (bien ou service) ; le MJ signale ou lève un excès
     ecouter(html, "a.transaction-fortune", ev => { ev.preventDefault(); ev.stopPropagation(); transaction(this.actor); });
     ecouter(html, ".basculer-exces", ev => { ev.preventDefault(); ev.stopPropagation(); basculerExces(this.actor); });
@@ -535,9 +545,9 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
     return this.actor.update({ "system.quantars": valeur });
   }
 
+  /** Correction manuelle du compteur (consignée dans l'historique) */
   async changerProgression(ecart) {
-    const valeur = Math.max(0, (Number(this.actor._source.system.progression) || 0) + ecart);
-    return this.actor.update({ "system.progression": valeur });
+    return corrigerProgression(this.actor, ecart);
   }
 
   async openCabale(ev) {

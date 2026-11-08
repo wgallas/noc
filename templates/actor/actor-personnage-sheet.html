@@ -328,6 +328,17 @@
 								</span>
 							</span>
 						</h3>
+						<div class="progression-actions flexrow">
+							{{#if progressionHeros.peutDepenser}}
+								<a class="progresser" data-tooltip="Passage : dépenser 3 points de progression"><i class="fa-solid fa-arrow-up"></i> Progresser</a>
+							{{else if progressionHeros.passage}}
+								<span class="passage-info" data-tooltip="La progression se dépense par tranche de 3 points">Passage ouvert</span>
+							{{/if}}
+							{{#if progressionHeros.regressions}}
+								<a class="appliquer-regression" data-tooltip="Six mois vécus : retirer 1 niveau à un Talent à 1 ou plus"><i class="fa-solid fa-arrow-down"></i> Régression ({{progressionHeros.regressions}})</a>
+							{{/if}}
+							<a class="historique-progression" data-tooltip="Historique de progression"><i class="fa-solid fa-scroll"></i></a>
+						</div>
 
 					</div>
 
@@ -335,14 +346,6 @@
 
 			</div>
 			<!-- étapes de jeu -->
-			<div class="etapes-jeu flexrow">
-				<button type="button" class="etape-jeu" data-etape="calme"
-					data-tooltip="Blessures, Trauma, Traque et Noirceur -1 ; Espoir +1 + Extase (dans la limite du maximum)">Moment de calme</button>
-				<button type="button" class="etape-jeu" data-etape="seance"
-					data-tooltip="Singularité au maximum ; Vécu +1 (dans la limite du maximum)">Début de séance</button>
-				<button type="button" class="etape-jeu" data-etape="scenario"
-					data-tooltip="Espoir au maximum ; les faveurs placées sur les contacts reviennent dans la réserve">Début de scénario</button>
-			</div>
 		</div>
 
 		{{!-- signalement+cabale+contacts --}}

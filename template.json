@@ -298,6 +298,9 @@
       },
       "progression": 0,
       "regressions": [],
+      "moisVecus": 0,
+      "regressionsDues": 0,
+      "historiqueProgression": [],
       "quantars": 0,
       "traits": []
     },

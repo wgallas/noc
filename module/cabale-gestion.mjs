@@ -454,20 +454,24 @@ export async function donProgression(cabale) {
   const dispo = nombre(heros?._source.system.progression);
   const n = Math.min(dispo, Math.max(1, nombre(f.points)));
   if (!heros || n < 1) return;
-  await heros.update({ "system.progression": dispo - n });
+  const { ajouterProgression } = await import("./progression.mjs");
+  await ajouterProgression(heros, -n, `Don à la cabale ${cabale.name}`, "don");
   await cabale.update({ "system.progression": nombre(cabale._source.system.progression) + n });
   await annoncer(cabale, "don de progression", [`${echapper(heros.name)} donne ${n} point${n > 1 ? "s" : ""} de progression à la cabale.`]);
 }
 
-/** Intermède : 1 point de progression par mois, une régression tous les 6 mois */
-export async function intermede(cabale) {
+/**
+ * Intermède : 1 point de progression par mois, une régression tous les 6 mois.
+ * Appelé par l'horloge du Bloc avec le nombre de mois écoulés.
+ */
+export async function intermede(cabale, moisEcoules = 0) {
   const s = cabale._source.system;
   const f = await formulaire(`Intermède : ${cabale.name}`, `
-    <p class="notes">La cabale gagne 1 point de progression par mois écoulé entre deux aventures et subit une régression tous les 6 mois (${nombre(s.moisEcoules)} mois écoulés jusqu'ici).</p>
-    <div class="form-group"><label>Mois écoulés</label><input type="number" name="mois" value="1" min="1" max="60"></div>
+    <p class="notes">${moisEcoules ? `${moisEcoules} mois écoulé${moisEcoules > 1 ? "s" : ""} : ` : ""}la cabale gagne 1 point de progression par mois et subit une régression tous les 6 mois (${nombre(s.moisEcoules)} mois écoulés jusqu'ici).</p>
+    ${moisEcoules ? "" : `<div class="form-group"><label>Mois écoulés</label><input type="number" name="mois" value="1" min="1" max="60"></div>`}
     <div class="form-group"><label><input type="checkbox" name="entretien"> Locaux laissés sans entretien : +1 Dégradation par mois</label></div>`);
   if (!f) return;
-  const mois = Math.max(1, nombre(f.mois));
+  const mois = Math.max(1, moisEcoules || nombre(f.mois));
   const avant = nombre(s.moisEcoules);
   const total = avant + mois;
   const nbRegressions = Math.floor(total / 6) - Math.floor(avant / 6);

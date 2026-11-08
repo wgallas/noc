@@ -295,6 +295,28 @@ export function documentsRecus(actor) {
 }
 
 /** MJ : passe au cycle suivant et signale les documents qui viennent d'expirer */
+/**
+ * Le Bureau passe au cycle donné (horloge du Bloc) : documents arrivés à expiration
+ * entre l'ancien cycle et le nouveau.
+ * @returns {Promise<string[]>} lignes du récapitulatif
+ */
+export async function expirationsBureau(cycle) {
+  if (!game.user.isGM) return [];
+  const ancien = cycleCourant();
+  if (cycle <= ancien) return [];
+  await game.settings.set("noc", "cycleCourant", cycle);
+  const expires = documentsDelivres().filter(d => !estPermanent(d)).filter(d => {
+    const fin = nombre(d.system.delivre?.cycle) + Math.max(1, nombre(d.system.duree) || 1);
+    return fin > ancien && fin <= cycle;
+  });
+  if (!expires.length) return [`Bureau : cycle ${cycle}, aucun document n'arrive à expiration.`];
+  return expires.map(d => {
+    const rappel = d.system.formulaire === "requisition"
+      ? " — à restituer (sinon 1 séquelle de Traque par tranche de 2 niveaux de valeur perdus)" : "";
+    return `Bureau — <strong>${d.name}</strong> (${d.system.numero || "—"}), détenu par ${d.actor?.name ?? "?"}, a expiré${rappel}`;
+  });
+}
+
 export async function nouveauCycle() {
   if (!game.user.isGM) return;
   const cycle = cycleCourant() + 1;

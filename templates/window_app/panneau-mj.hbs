@@ -3,6 +3,7 @@
   <nav class="onglets-mj flexrow">
     <a class="onglet-lien {{#if (eq onglet "individus")}}actif{{/if}}" data-onglet="individus"><i class="fa-solid fa-users"></i> Individus et perditions</a>
     <a class="onglet-lien {{#if (eq onglet "fiel")}}actif{{/if}}" data-onglet="fiel"><i class="fa-solid fa-droplet"></i> Menace et effets de Fiel</a>
+    <a class="onglet-lien {{#if (eq onglet "temps")}}actif{{/if}}" data-onglet="temps"><i class="fa-solid fa-hourglass-half"></i> Temps et progression</a>
     <a class="onglet-lien {{#if (eq onglet "bureau")}}actif{{/if}}" data-onglet="bureau"><i class="fa-solid fa-stamp"></i> Bureau</a>
   </nav>
 
@@ -87,11 +88,7 @@
       <button type="button" data-action="fiel" data-delta="1">+1</button>
       <button type="button" data-action="fiel" data-delta="5">+5</button>
     </div>
-    <div class="etapes-mj flexrow">
-      <button type="button" data-action="etapeMJ" data-etape="calme" data-tooltip="Fiel −1">Moment de calme</button>
-      <button type="button" data-action="etapeMJ" data-etape="seance" data-tooltip="Menace −1 (Fiel −5)">Début de séance</button>
-      <button type="button" data-action="etapeMJ" data-etape="scenario" data-tooltip="Fiel et Menace à 0">Début de scénario</button>
-    </div>
+    <p class="aide">Moment de calme, début de séance et début de scénario : onglet « Temps et progression ».</p>
   </section>
 
   <!-- FLUX D'UN SEUIL -->
@@ -158,6 +155,55 @@
       <button type="button" data-action="leverEtat" data-etat="fatigue">Lever la fatigue</button>
       <button type="button" data-action="leverEtat" data-etat="bouleversement">Lever l'ancien bouleversement</button>
     </div>
+  </section>
+  </div>
+  <div class="onglet-mj {{#if (eq onglet "temps")}}actif{{/if}}" data-onglet="temps">
+  <!-- HORLOGE DU BLOC -->
+  <section class="bloc horloge-bloc">
+    <h3>Horloge du Bloc</h3>
+    <div class="horloge-date flexrow">
+      <span class="horloge-texte"><i class="fa-solid fa-clock"></i> {{horloge.texte}}</span>
+      <span class="horloge-cycle" data-tooltip="cycle du Bureau (validité des documents)">cycle {{horloge.cycleBureau}} du Bureau</span>
+    </div>
+    <div class="horloge-boutons flexrow">
+      <button type="button" data-action="avancer" data-quarts="1">+1 quart</button>
+      <button type="button" data-action="avancer" data-quarts="{{quarts.cycle}}">+1 cycle</button>
+      <button type="button" data-action="avancer" data-quarts="{{quarts.mois}}">+1 mois</button>
+      <button type="button" data-action="avancerLibre"><i class="fa-solid fa-forward"></i> Avancer…</button>
+    </div>
+    <p class="aide">1 cycle = 7 quarts de 7 heures ; 1 mois = 14 cycles. Chaque cycle : documents du Bureau ; chaque mois : +1 point de progression par Héros, Régression tous les 6 mois vécus, intermède des cabales.</p>
+  </section>
+
+  <!-- RYTHME DE JEU -->
+  <section class="bloc rythme-jeu">
+    <h3>Rythme de jeu</h3>
+    <div class="rythme-boutons">
+      <button type="button" data-action="calme" data-tooltip="Fiel −1, récupération des Héros, horloge +1 quart (par défaut)"><i class="fa-solid fa-mug-hot"></i> Moment de calme…</button>
+      <button type="button" data-action="seance" data-tooltip="Menace −1 (Fiel −5), Singularité au maximum, Vécu +1"><i class="fa-solid fa-dice"></i> Début de séance</button>
+      <button type="button" data-action="scenario" data-tooltip="Fiel à 0, Espoir au maximum, faveurs rendues, cabales rechargées, excès levés ; clôt le Passage"><i class="fa-solid fa-book-open"></i> Début de scénario</button>
+      <button type="button" data-action="finScenario" data-tooltip="Points de progression des Héros, intermède, ouverture du Passage"><i class="fa-solid fa-flag-checkered"></i> Fin de scénario…</button>
+    </div>
+  </section>
+
+  <!-- PROGRESSION -->
+  <section class="bloc progression-mj">
+    <h3 class="flexrow">
+      <span>Progression des Héros</span>
+      {{#if passage}}<span class="passage-etat ouvert">Passage ouvert</span><button type="button" data-action="clorePassage" data-tooltip="Chaque Héros garde au plus 2 points">Clore le passage</button>{{else}}<span class="passage-etat">Pas de Passage en cours</span>{{/if}}
+    </h3>
+    <table class="table-progression">
+      <tr><th></th><th>Héros</th><th>Points</th><th>Mois vécus</th><th>Régressions</th><th></th></tr>
+      {{#each herosTemps as |h|}}
+      <tr class="{{#if h.sommeil}}sommeil{{/if}}">
+        <td><img src="{{h.img}}" alt=""></td>
+        <td>{{h.nom}}{{#if h.sommeil}} <small>(en réserve)</small>{{/if}}</td>
+        <td class="nombre {{#if h.peutDepenser}}{{#if @root.passage}}a-depenser{{/if}}{{/if}}">{{h.progression}}</td>
+        <td class="nombre">{{h.mois}}</td>
+        <td class="nombre {{#if h.regressions}}alerte{{/if}}">{{h.regressions}}</td>
+        <td><a data-action="historique" data-id="{{h.id}}" data-tooltip="historique de progression"><i class="fa-solid fa-scroll"></i></a></td>
+      </tr>
+      {{/each}}
+    </table>
   </section>
   </div>
   <div class="onglet-mj {{#if (eq onglet "bureau")}}actif{{/if}}" data-onglet="bureau">

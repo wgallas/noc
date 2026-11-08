@@ -2101,18 +2101,6 @@
         min-height: 0;
     }
 
-    > .etapes-jeu {
-        flex: 0 0 auto;
-        gap: 6px;
-        padding: 4px 8px 6px;
-        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
-
-        button.etape-jeu {
-            flex: 1 1 0;
-            margin: 0;
-            line-height: 2em;
-        }
-    }
 }
 
 
@@ -4303,5 +4291,217 @@ li.chat-message .nocRoll.recherche-cabale {
         padding-top: 4px;
         text-align: center;
         border-top: 1px solid rgba(0, 0, 0, 0.3);
+    }
+}
+
+
+// Fiche de personnage : actions de progression (Passage, Régression, historique)
+.noc.sheet.actor.personnage .progression-actions {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+    margin: 2px 0 4px;
+    font-size: 11px;
+
+    a.progresser,
+    a.appliquer-regression {
+        flex: 0 0 auto;
+        padding: 1px 8px;
+        border-radius: 9px;
+        color: white;
+        font-weight: bold;
+    }
+
+    a.progresser {
+        background: #2f6b2f;
+        box-shadow: 0 0 6px rgba(47, 107, 47, 0.8);
+    }
+
+    a.appliquer-regression {
+        background: #8a1c1c;
+    }
+
+    .passage-info {
+        font-style: italic;
+        color: #2f6b2f;
+    }
+
+    a.historique-progression {
+        flex: 0 0 auto;
+        margin-left: auto;
+        color: #4b4a44;
+    }
+}
+
+// Fenêtre d'historique de progression
+.application.nocDialog.fenetre-historique .historique-progression {
+    max-height: 60vh;
+    overflow-y: auto;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+    }
+
+    th {
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    }
+
+    td {
+        padding: 3px 4px;
+        vertical-align: top;
+        border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
+
+        small {
+            color: #5a4c40;
+        }
+
+        &.points {
+            text-align: right;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+    }
+
+    tr.type-depense td.points:first-of-type,
+    tr.type-perte td,
+    tr.type-regression td {
+        color: #8a1c1c;
+    }
+
+    tr.type-gain td.points,
+    tr.type-temps td.points {
+        color: #2f6b2f;
+    }
+}
+
+// Panneau du MJ : onglet Temps et progression
+.panneau-mj {
+    .horloge-date {
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 6px;
+
+        .horloge-texte {
+            flex: 1 1 auto;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .horloge-cycle {
+            flex: 0 0 auto;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+    }
+
+    .horloge-boutons {
+        gap: 6px;
+
+        button {
+            flex: 1 1 0;
+        }
+    }
+
+    .rythme-boutons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+
+        button {
+            margin: 0;
+        }
+    }
+
+    .progression-mj {
+        h3 {
+            align-items: center;
+            gap: 8px;
+
+            > span:first-child {
+                flex: 1 1 auto;
+            }
+
+            .passage-etat {
+                flex: 0 0 auto;
+                font-size: 0.75em;
+                font-weight: normal;
+
+                &.ouvert {
+                    padding: 0 8px;
+                    border-radius: 9px;
+                    background: #2f6b2f;
+                    color: white;
+                }
+            }
+
+            button {
+                flex: 0 0 auto;
+                font-size: 0.75em;
+            }
+        }
+    }
+
+    table.table-progression {
+        width: 100%;
+        border-collapse: collapse;
+
+        th {
+            text-align: left;
+            font-size: 0.85em;
+        }
+
+        td {
+            padding: 2px 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+            img {
+                width: 28px;
+                height: 28px;
+                object-fit: cover;
+                border: none;
+            }
+
+            &.nombre {
+                text-align: center;
+            }
+
+            &.a-depenser {
+                font-weight: bold;
+                color: #7ccf7c;
+            }
+
+            &.alerte {
+                font-weight: bold;
+                color: #ff8a8a;
+            }
+        }
+
+        tr.sommeil {
+            opacity: 0.6;
+        }
+    }
+}
+
+// Fenêtres du rythme de jeu (moment de calme, fin de scénario)
+.application.nocDialog {
+    .ligne-heros-calme,
+    .ligne-heros-progression {
+        align-items: center;
+
+        input[type="number"] {
+            flex: 0 0 48px;
+            width: 48px;
+            text-align: center;
+        }
+
+        .refuge-part {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
     }
 }

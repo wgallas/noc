@@ -1,10 +1,15 @@
 
 import { enregistrerReglageFlux } from "./flux.mjs";
+import { enregistrerReglageHorloge } from "./temps.mjs";
+import { enregistrerReglagePassage } from "./progression.mjs";
 
 export function registerNocSettings() {
 
     // Flux d'un Seuil (effet d'environnement réglé dans le panneau du MJ)
     enregistrerReglageFlux();
+    // horloge du Bloc (en quarts) et Passage de fin de scénario
+    enregistrerReglageHorloge();
+    enregistrerReglagePassage();
 
     // version de la conversion des archétypes et thèmes déjà appliquée au monde
     game.settings.register("noc", "migrationPerditions", {
