@@ -191,7 +191,6 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
     ecouter(html, ".deleteQuality", this.deleteQuality.bind(this));
 
     ecouter(html, ".unassignContact", this.unassignContact.bind(this));
-    ecouter(html, ".faveurContact", this._onClickFaveur.bind(this));
     ecouter(html, "#resetFaveurs", this._onResetFaveurs.bind(this));
     ecouter(html, ".contact i.createContact", this.createContact.bind(this));
 
@@ -364,10 +363,35 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
     if ((this.actor.system.reserves.faveurs.value || 0) >= this.actor.system.reserves.faveurs.max) {
       return ui.notifications.warn(`${this.actor.name} n'a plus de faveur disponibles`);
     }
-    contactList[contactIndex].faveurs = (contactList[contactIndex].faveurs || 0) + 1;
+    // déposer un jeton sur un contact, c'est solliciter ce contact : le point est dépensé
+    const contact = contactList[contactIndex];
+    contact.faveurs = (Number(contact.faveurs) || 0) + 1;
+    contact.usedFaveurs = (Number(contact.usedFaveurs) || 0) + 1;
     await this.actor.update({
       "system.contacts": contactList,
       "system.reserves.faveurs.value": this.actor.system.reserves.faveurs.value + 1
+    });
+    return this.annoncerFaveur(contact, Number(contactIndex));
+  }
+
+  /**
+   * Message de chat d'une faveur sollicitée. Les jetons déposés à la suite sur le même
+   * contact (moins de 2 minutes) mettent à jour le même message au lieu d'en créer un autre.
+   */
+  async annoncerFaveur(contact, contactIndex) {
+    const total = Number(contact.usedFaveurs) || 0;
+    const contenu = `<div class="nocRoll faveur-chat"><h4>${echapper(this.actor.name)} sollicite ${echapper(contact.nom)}</h4>
+      <p><strong>${total} point${total > 1 ? "s" : ""} de faveur</strong> dépensé${total > 1 ? "s" : ""} auprès de ce contact pour ce scénario.</p></div>`;
+    const dernier = game.messages.contents.at(-1);
+    const repere = dernier?.flags?.noc?.faveur;
+    if (repere && dernier.isAuthor && repere.acteur === this.actor.id && repere.contact === contactIndex
+      && Date.now() - (dernier.timestamp ?? 0) < 120000) {
+      return dernier.update({ content: contenu });
+    }
+    return ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: contenu,
+      flags: { noc: { faveur: { acteur: this.actor.id, contact: contactIndex } } }
     });
   }
 
@@ -423,35 +447,6 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (await confirmer("Réinitialiser les faveurs", "<p>Êtes-vous sûr de vouloir réinitialiser les faveurs ?</p>")) {
       return this.actor.resetContactFaveurs();
     }
-  }
-
-  async _onClickFaveur(ev) {
-    const contactIndex = ev.currentTarget.closest(".contact").dataset.contactIndex;
-    const contact = this.actor.system.contacts[contactIndex];
-    if (!contact) return;
-    const contenu = await rendreModele("systems/noc/templates/window_app/dialog-faveur.hbs", contact);
-    const valeurs = await formulaire(`Demander une faveur à ${contact.nom}`, contenu);
-    if (!valeurs) return;
-    const points = Number(valeurs.faveursInUse) || 0;
-    if (!points) return;
-    await this.faveurToChat(contact, points);
-    await this.applyFaveurs(contactIndex, points);
-  }
-
-  async faveurToChat(contact, value) {
-    return ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<h2>${echapper(this.actor.name)} utilise des faveurs</h2><p>${value} points dépensés auprès de ${echapper(contact.nom)}</p>`
-    });
-  }
-
-  async applyFaveurs(contactIndex, value) {
-    const contactList = foundry.utils.deepClone(this.actor.system.contacts);
-    const contact = contactList[contactIndex];
-    if (!contact) return;
-    const used = (Number(contact.usedFaveurs) || 0) + (Number(value) || 0);
-    contact.usedFaveurs = Math.min(used, contact.faveurs || 0);
-    await this.actor.update({ "system.contacts": contactList });
   }
 
   async deleteQuality(ev) {

@@ -1,0 +1,56 @@
+name: 'Autorisation de port : Tenue de combat'
+type: document administratif
+img: systems/noc/asset/default_icons/document_administratif.webp
+system:
+  description: '<p>Autorisation de port d''armure permanente, possédée dès la création
+    du personnage. Armure autorisée : Tenue de combat (Limité 2).</p>'
+  formulaire: port
+  beneficiaires:
+  - ''
+  - ''
+  duree: 1
+  permanent: true
+  rangFixe: 2
+  rangSup: 0
+  port:
+    objet: Tenue de combat
+    bonusX: 0
+  acces:
+    zone: 1
+    motif: ''
+    nonLimite: false
+    sansSurveillance: false
+  sortie:
+    zone: 3
+    duree: formulaire
+    motif: ''
+    exoneration: false
+  requisition:
+    mode: objet
+    detail: ''
+  mandat:
+    sujet: ''
+    secteur: ''
+    bonusAutorite: 0
+    bonusCitoyens: 0
+  signalement:
+    cible: ''
+    bonusStatut: false
+    priseRapide: false
+  statut: brouillon
+  numero: ''
+  deverrouille: false
+  tempsObtention: 3
+  effetsDeBureau: ''
+  rangNecessaire: 2
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '13.351'
+_id: xTZZxGlkitHA32j1
+folder: Wxx7PChXhsx2I0MQ
+sort: 300000
+ownership:
+  default: 0
+_key: '!items!xTZZxGlkitHA32j1'

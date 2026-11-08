@@ -67,7 +67,7 @@ export async function arreterEffet(niveau, raison = "") {
   const actif = effetsActifs().find(e => e.niveau === Number(niveau));
   if (!actif) return;
   await enregistrerEffetsActifs(liste => { delete liste[`niveau${niveau}`]; });
-  await message(`Fin de l'effet de Fiel : ${actif.effet.nom}`, [], { public: true, texte: raison });
+  await messageFiel({ fin: true, niveau: actif.niveau, nom: actif.effet.nom, texte: raison });
 }
 
 /** Arrête les effets dont le niveau dépasse la Menace actuelle */
@@ -125,7 +125,7 @@ export async function activerEffet(niveau, effet, heros) {
       lignes.push(`Menace : ${avant.menace} → ${apres.menace}`);
     }
   }
-  await message(`Effet de Fiel (Menace ${niveau}) : ${copie.nom}`, lignes, { public: true, texte: copie.description });
+  await messageFiel({ niveau: Number(niveau), nom: copie.nom, texte: copie.description, lignes });
   if (copie.notes) await message(`Notes pour la Loi : ${copie.nom}`, [copie.notes]);
 }
 
@@ -153,6 +153,40 @@ export function appliquerEtats(actor) {
 /* -------------------------------------------- */
 /*  Messages                                     */
 /* -------------------------------------------- */
+
+const echapperHtml = t => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/**
+ * Message public d'un effet de Fiel (début ou fin) : bandeau Fiel avec le niveau de
+ * Menace, nom et description de l'effet, conséquences immédiates regroupées par Héros
+ * (ou cabale), rappel de la durée.
+ */
+async function messageFiel({ fin = false, niveau, nom, texte = "", lignes = [] }) {
+  // « Nom — détail » : regroupé par nom ; les autres lignes (Menace…) à part
+  const groupes = new Map();
+  const autres = [];
+  for (const ligne of lignes.filter(Boolean)) {
+    const i = ligne.indexOf(" — ");
+    if (i > 0) {
+      const qui = ligne.slice(0, i);
+      if (!groupes.has(qui)) groupes.set(qui, []);
+      groupes.get(qui).push(ligne.slice(i + 3));
+    } else autres.push(ligne);
+  }
+  const consequences = [...groupes].map(([qui, details]) =>
+    `<li><strong>${qui}</strong> : ${details.join(" ; ")}</li>`).concat(autres.map(l => `<li>${l}</li>`)).join("");
+  const contenu = `<div class="nocRoll message-fiel${fin ? " fin" : ""}">
+    <div class="fiel-bandeau flexrow">
+      <span class="fiel-titre"><i class="fa-solid fa-droplet"></i> ${fin ? "Fin de l'effet de Fiel" : "Effet de Fiel"}</span>
+      <span class="fiel-menace">Menace ${niveau}</span>
+    </div>
+    <h3 class="fiel-nom">${echapperHtml(nom)}</h3>
+    ${texte ? `<p class="fiel-description">${texte}</p>` : ""}
+    ${consequences ? `<p class="fiel-sous-titre">Conséquences immédiates</p><ul class="fiel-consequences">${consequences}</ul>` : ""}
+    ${fin ? "" : `<p class="fiel-duree">Actif tant que la Menace reste au niveau ${niveau} ou plus, ou jusqu'à ce que la Loi y mette fin.</p>`}
+  </div>`;
+  return ChatMessage.create({ speaker: { alias: "La Loi" }, content: contenu });
+}
 
 async function message(titre, lignes, { public: estPublic = false, texte = "" } = {}) {
   const contenu = `<h3>${titre}</h3>${texte ? `<p>${texte}</p>` : ""}`

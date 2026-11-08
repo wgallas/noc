@@ -1,0 +1,56 @@
+name: 'Autorisation de port : Masque à gaz (L''Extérieur)'
+type: document administratif
+img: systems/noc/asset/default_icons/document_administratif.webp
+system:
+  description: '<p>Autorisation de port d''équipement permanente, possédée dès la
+    création du personnage. Outil autorisé : Masque à gaz (L''Extérieur) (Limité 1).</p>'
+  formulaire: port
+  beneficiaires:
+  - ''
+  - ''
+  duree: 1
+  permanent: true
+  rangFixe: 1
+  rangSup: 0
+  port:
+    objet: Masque à gaz (L'Extérieur)
+    bonusX: 0
+  acces:
+    zone: 1
+    motif: ''
+    nonLimite: false
+    sansSurveillance: false
+  sortie:
+    zone: 3
+    duree: formulaire
+    motif: ''
+    exoneration: false
+  requisition:
+    mode: objet
+    detail: ''
+  mandat:
+    sujet: ''
+    secteur: ''
+    bonusAutorite: 0
+    bonusCitoyens: 0
+  signalement:
+    cible: ''
+    bonusStatut: false
+    priseRapide: false
+  statut: brouillon
+  numero: ''
+  deverrouille: false
+  tempsObtention: 3
+  effetsDeBureau: ''
+  rangNecessaire: 1
+effects: []
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '13.351'
+_id: rHZPcAvfMVJKpFb4
+folder: UWOYKT8aI7W773Ue
+sort: 2000000
+ownership:
+  default: 0
+_key: '!items!rHZPcAvfMVJKpFb4'

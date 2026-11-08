@@ -398,7 +398,7 @@
 													@index}}
 													faveur-used
 													{{/ifgt}}"
-											data-tooltip="faites glisser ce jeton sur un contact"
+											data-tooltip="faites glisser ce jeton sur le contact sollicité : le point est dépensé"
 										>
 										</div>
 									{{/repeat}}
@@ -421,15 +421,9 @@
 							>
 								<h3 class="flexrow">
 									<span>{{contact.nom}}</span>
-									<div class="faveurList flexrow">
+									<div class="faveurList flexrow" {{#if contact.faveurs}}data-tooltip="{{contact.faveurs}} point{{#ifgt contact.faveurs 1}}s{{/ifgt}} de faveur dépensé{{#ifgt contact.faveurs 1}}s{{/ifgt}} auprès de ce contact"{{/if}}>
 										{{#repeat contact.faveurs}}
-											<div class="faveurContact
-														{{#ifgt contact.usedFaveurs
-														@index}}
-														faveur-used
-														{{/ifgt}}
-														">
-											</div>
+											<div class="faveurContact"></div>
 										{{/repeat}}
 									</div>
 									<div class="contactControls">

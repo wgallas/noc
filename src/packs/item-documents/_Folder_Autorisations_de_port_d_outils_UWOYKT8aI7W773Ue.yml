@@ -1,0 +1,13 @@
+name: Autorisations de port d'outils
+type: Item
+description: ''
+folder: null
+sorting: a
+sort: 0
+color: null
+flags: {}
+_stats:
+  systemId: noc
+  coreVersion: '13.351'
+_id: UWOYKT8aI7W773Ue
+_key: '!folders!UWOYKT8aI7W773Ue'
