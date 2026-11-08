@@ -97,10 +97,29 @@ export async function clorePassage() {
 
 const LIBELLES_PERDITIONS = { blessures: "Blessures", trauma: "Trauma", noirceur: "Noirceur", traque: "Traque" };
 
+/** Libellé normalisé (minuscules, sans accents ni espaces superflus) */
+const normaliser = t => String(t ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+
+/** Trait de Traque du Héros : "ennemi public", "criminel" ou "" */
+function traitTraque(traits) {
+  const labels = (Array.isArray(traits) ? traits : Object.values(traits ?? {})).map(t => normaliser(t?.label ?? t?.name ?? t));
+  if (labels.some(l => l.includes("ennemi public"))) return "ennemi public";
+  if (labels.some(l => l.includes("criminel"))) return "criminel";
+  return "";
+}
+
 /** Choix offerts par un Passage pour ce Héros */
 function choixDepense(actor) {
   const s = actor.system, src = actor._source.system;
-  const options = [];
+  const options = [`<option value="" selected>— choisir une amélioration —</option>`];
+  // trait Criminel (ou Ennemi public → Criminel) : coûte aussi 1 niveau d'un Talent de Statut ; proposé en tête
+  const trait = traitTraque(src.traits);
+  const titre = trait === "ennemi public" ? "Ennemi public → Criminel" : trait === "criminel" ? "Lever le trait Criminel" : "";
+  const statut = Object.entries(s.talents?.statut ?? {}).filter(([, t]) => nombre(t.niveau) > -1);
+  if (titre && statut.length) {
+    options.push(`<optgroup label="${titre} (−1 définitif à un Talent de Statut)">${statut.map(([tal, t]) =>
+      `<option value="criminel:${tal}">${titre} en sacrifiant ${echapper(t.label)} (${nombre(t.niveau)} → ${nombre(t.niveau) - 1})</option>`).join("")}</optgroup>`);
+  }
   const domaines = Object.entries(s.domaines ?? {}).map(([cle, d]) =>
     `<option value="domaine:${cle}">${echapper(d.label)} (${nombre(d.value)} → ${nombre(d.value) + 1})</option>`).join("");
   options.push(`<optgroup label="Domaine +1">${domaines}</optgroup>`);
@@ -114,14 +133,6 @@ function choixDepense(actor) {
   if (sequelles) options.push(`<optgroup label="Guérir une Séquelle">${sequelles}</optgroup>`);
   const vecu = nombre(src.reserves?.vecu?.max);
   options.push(`<optgroup label="Réserve"><option value="vecu">Vécu : réserve ${vecu} → ${vecu + 1}</option></optgroup>`);
-  // trait Criminel (ou Ennemi public → Criminel) : coûte aussi 1 niveau d'un Talent de Statut
-  const traits = (src.traits ?? []).map(t => t?.label);
-  const titre = traits.includes("ennemi public") ? "Ennemi public → Criminel" : traits.includes("criminel") ? "Lever le trait Criminel" : "";
-  const statut = Object.entries(s.talents?.statut ?? {}).filter(([, t]) => nombre(t.niveau) > -1);
-  if (titre && statut.length) {
-    options.push(`<optgroup label="${titre} (−1 définitif à un Talent de Statut)">${statut.map(([tal, t]) =>
-      `<option value="criminel:${tal}">en sacrifiant ${echapper(t.label)} (${nombre(t.niveau)} → ${nombre(t.niveau) - 1})</option>`).join("")}</optgroup>`);
-  }
   return options.join("");
 }
 
@@ -161,15 +172,15 @@ export async function depenserProgressionHeros(actor) {
     detail = `Réserve de Vécu : ${max} → ${max + 1}`;
   } else if (genre === "criminel") {
     f.statut = cle;
-    const traits = [...(src.traits ?? [])];
-    const i = traits.findIndex(t => t?.label === "ennemi public");
+    const traits = [...(Array.isArray(src.traits) ? src.traits : Object.values(src.traits ?? {}))];
+    const i = traits.findIndex(t => normaliser(t?.label ?? t?.name ?? t).includes("ennemi public"));
     let texte;
     if (i >= 0) {
       const { NOC } = await import("./helpers/config.mjs");
       traits.splice(i, 1, NOC.traitsPerditions.traque.criminel);
       texte = "Trait Ennemi public devenu Criminel";
     } else {
-      const j = traits.findIndex(t => t?.label === "criminel");
+      const j = traits.findIndex(t => normaliser(t?.label ?? t?.name ?? t).includes("criminel"));
       if (j >= 0) traits.splice(j, 1);
       texte = "Trait Criminel levé";
     }
