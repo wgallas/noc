@@ -4509,3 +4509,16 @@ li.chat-message .nocRoll.recherche-cabale {
         }
     }
 }
+
+// Fiche de personnage : imposer un trait (MJ)
+.noc.sheet.actor.personnage section.window-content .traits ul li.ajouter-trait {
+    background: none;
+    padding: 0;
+    text-align: right;
+
+    a.add-trait {
+        font-size: 10px;
+        color: #4b4a44;
+        text-shadow: none;
+    }
+}

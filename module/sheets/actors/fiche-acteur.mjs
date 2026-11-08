@@ -210,6 +210,7 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
     ecouter(html, ".talent-control a", this.updateTalent.bind(this));
     ecouter(html, ".domaine-control a", this.updateDomaine.bind(this));
     ecouter(html, ".delete-trait", this.deleteTrait.bind(this));
+    ecouter(html, "a.add-trait", this.ajouterTrait.bind(this));
   }
 
   /* -------------------------------------------- */
@@ -408,6 +409,46 @@ export class NocFicheActeur extends HandlebarsApplicationMixin(ActorSheetV2) {
   /* -------------------------------------------- */
   /*  Actions                                      */
   /* -------------------------------------------- */
+
+  /** La Loi impose un trait : Traque, Noirceur ou trait libre */
+  async ajouterTrait(ev) {
+    ev.preventDefault();
+    if (!game.user.isGM) return;
+    const { NOC } = await import("../../helpers/config.mjs");
+    const presents = new Set((this.actor.system.traits ?? []).map(t => t?.label));
+    const groupes = { traque: "Traque", noirceur: "Noirceur" };
+    const options = Object.entries(groupes).map(([g, titre]) => {
+      const opts = Object.entries(NOC.traitsPerditions?.[g] ?? {}).filter(([, t]) => !presents.has(t.label))
+        .map(([cle, t]) => `<option value="${g}.${cle}">${echapper(t.label)}</option>`).join("");
+      return opts ? `<optgroup label="${titre}">${opts}</optgroup>` : "";
+    }).join("");
+    const valeurs = await formulaire(`Imposer un trait : ${this.actor.name}`, `
+      <div class="form-group"><label>Trait</label><select name="trait">${options}<option value="libre">Autre trait (libre)…</option></select></div>
+      <div class="form-group"><label>Nom <em>(trait libre)</em></label><input type="text" name="nom"></div>
+      <div class="form-group"><label>Description <em>(trait libre)</em></label><textarea name="description" rows="3"></textarea></div>`,
+      { valider: "Imposer", icone: "fas fa-plus" });
+    if (!valeurs?.trait) return;
+    let trait;
+    if (valeurs.trait === "libre") {
+      const nom = valeurs.nom?.trim();
+      if (!nom) return ui.notifications.warn("Donnez un nom au trait.");
+      trait = { label: nom, description: valeurs.description?.trim() ?? "" };
+    } else {
+      const [g, cle] = valeurs.trait.split(".");
+      trait = foundry.utils.deepClone(NOC.traitsPerditions?.[g]?.[cle]);
+    }
+    if (!trait) return;
+    let traits = [...(this.actor._source.system.traits ?? [])].filter(t => t?.label !== trait.label);
+    // Ennemi public remplace Criminel
+    if (trait.label === "ennemi public") traits = traits.filter(t => t?.label !== "criminel");
+    traits.push(trait);
+    await this.actor.update({ "system.traits": traits });
+    return ChatMessage.create({
+      whisper: game.users.filter(u => u.isGM || this.actor.testUserPermission(u, "OWNER")).map(u => u.id),
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<div class="nocRoll"><h4>${echapper(this.actor.name)}</h4><p>Nouveau trait : <strong>${echapper(trait.label)}</strong>${trait.description ? ` — ${echapper(trait.description)}` : ""}</p></div>`
+    });
+  }
 
   async deleteTrait(ev) {
     await this.actor.removeTrait(ev.currentTarget.dataset.traitLabel);
