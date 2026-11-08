@@ -1,6 +1,6 @@
 import { NocFicheActeur } from "./fiche-acteur.mjs";
 import { confirmer, donneesGlisser, ecouter } from "../v2-outils.mjs";
-import { ATOUTS, RESERVES_CABALE, JAUGES_CABALE, membresCabale, infligerCabale } from "../../cabale.mjs";
+import { ATOUTS, RESERVES_CABALE, JAUGES_CABALE, TYPES_MEMBRES_CABALE, membresCabale, rouagesCabale, infligerCabale } from "../../cabale.mjs";
 import { assistantCreation, apportHeros, retirerApport, modifierApport, apportsCabale, entretien, semainesSansNoirceur, espritDeCorps, depenserProgression, donProgression, intermede } from "../../cabale-gestion.mjs";
 
 const nombre = v => Number(v) || 0;
@@ -28,7 +28,7 @@ export class nocActorSheetCabale extends NocFicheActeur {
   /** La cabale n'a pas de vue limitée (comme avant) */
   get estLimitee() { return false; }
 
-  /** @override : seuls des personnages se déposent sur une cabale */
+  /** @override : seuls des personnages et des Rouages se déposent sur une cabale */
   async _onDrop(event) {
     const data = donneesGlisser(event);
     if (!data) return;
@@ -40,14 +40,14 @@ export class nocActorSheetCabale extends NocFicheActeur {
   async _nocDeposerActeur(ev, data) {
     const dropActor = await Actor.implementation.fromDropData(data);
     if (!dropActor) return false;
-    if (dropActor.type != "personnage") {
-      return ui.notifications.warn("Vous ne pouvez ajouter que des personnages aux cabales");
+    if (!TYPES_MEMBRES_CABALE.includes(dropActor.type)) {
+      return ui.notifications.warn("Vous ne pouvez ajouter que des personnages et des Rouages aux cabales");
     }
-    // un personnage du monde (pas une copie de compendium ni un jeton non lié)
+    // un acteur du monde (pas une copie de compendium) ; un jeton non lié renvoie à son acteur
     const membre = game.actors.get(dropActor.id);
-    if (!membre) return ui.notifications.warn("Glissez un personnage depuis l'onglet Acteurs.");
+    if (!membre) return ui.notifications.warn("Glissez un personnage ou un Rouage depuis l'onglet Acteurs.");
     if (!this.actor.isOwner || !membre.isOwner) {
-      return ui.notifications.warn("Vous n'avez pas de droits sur ce personnage ; demandez à la Loi de l'ajouter.");
+      return ui.notifications.warn(`Vous n'avez pas de droits sur ${membre.name} ; demandez à la Loi de l'ajouter.`);
     }
     await membre.setCabale(this.actor);
     return this.render();
@@ -56,6 +56,7 @@ export class nocActorSheetCabale extends NocFicheActeur {
   /* -------------------------------------------- */
   _preparePersonnageData(context) {
     context.members = membresCabale(this.actor);
+    context.rouagesMembres = rouagesCabale(this.actor);
     const s = this.actor.system;
     // domaines et leurs atouts
     context.domainesCabale = Object.entries(s.domaines ?? {}).map(([cle, d]) => ({

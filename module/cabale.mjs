@@ -221,9 +221,22 @@ export function preparerCabale(actor) {
 /*  Membres                                      */
 /* -------------------------------------------- */
 
-/** Membres de la cabale (personnages du monde) */
-export function membresCabale(cabale, { actifs = false } = {}) {
-  return game.actors.filter(a => a.type === "personnage" && a.cabaleIds?.includes(cabale.id) && (!actifs || !raisonSommeil(a)));
+/** Types d'acteurs qui peuvent rejoindre une cabale et puiser dans ses ressources */
+export const TYPES_MEMBRES_CABALE = ["personnage", "rouage"];
+
+/**
+ * Membres de la cabale (acteurs du monde). Par défaut les seuls Héros (personnages),
+ * qui comptent pour la Traque, la Noirceur et la gestion ; rouages = true ajoute les
+ * Rouages membres.
+ */
+export function membresCabale(cabale, { actifs = false, rouages = false } = {}) {
+  const types = rouages ? TYPES_MEMBRES_CABALE : ["personnage"];
+  return game.actors.filter(a => types.includes(a.type) && a.cabaleIds?.includes(cabale.id) && (!actifs || !raisonSommeil(a)));
+}
+
+/** Rouages membres de la cabale */
+export function rouagesCabale(cabale) {
+  return game.actors.filter(a => a.type === "rouage" && a.cabaleIds?.includes(cabale.id));
 }
 
 /* -------------------------------------------- */
@@ -259,9 +272,9 @@ function ressourcesPourJet(cabale, domaineId, talentId) {
   };
 }
 
-/** Cabales d'un personnage, avec ce qu'elles offrent pour ce jet */
+/** Cabales d'un personnage ou d'un Rouage membre, avec ce qu'elles offrent pour ce jet */
 export function cabalesPourJet(actor, domaineId, talentId) {
-  if (actor.type !== "personnage") return [];
+  if (!TYPES_MEMBRES_CABALE.includes(actor.type)) return [];
   return (actor.cabalesActeurs ?? []).map(c => ressourcesPourJet(c, domaineId, talentId));
 }
 

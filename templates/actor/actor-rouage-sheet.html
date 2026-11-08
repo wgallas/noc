@@ -80,6 +80,16 @@
       {{#if @root.themesDisponibles}}{{#if @root.editable}}<a class="fas fa-rotate changerTheme" data-tooltip="Changer de thème"></a>{{/if}}{{/if}}
     </div>
     {{/each}}
+    {{#if cabales.length}}
+    <div class="archetype-rouage cabales-rouage flexrow">
+      <span class="libelle">Cabale{{#ifgt cabales.length 1}}s{{/ifgt}} :</span>
+      {{#each cabales as |cabale|}}
+      <span class="item-name">{{cabale.nom}}</span>
+      <a class="fas fa-edit openCabale" data-cabale-id="{{cabale.id}}" data-tooltip="Ouvrir la fiche de cabale"></a>
+      {{#if @root.editable}}<a class="fas fa-user-minus unassignCabale" data-cabale-id="{{cabale.id}}" data-tooltip="Quitter cette cabale"></a>{{/if}}
+      {{/each}}
+    </div>
+    {{/if}}
     <div class="tab principal ">
       <div class="stats rouage">
 

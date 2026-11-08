@@ -9,7 +9,7 @@
 				<span><strong>Archétype :</strong> {{#if actor.system.archetype}}{{actor.system.archetype}}{{else}}— <em>(onglet Gestion : assistant de création)</em>{{/if}}</span>
 				<span class="{{#if depassement}}alerte{{/if}}" data-tooltip="Nombre d'Atouts différents au niveau 1 ou plus, sans compter le Standing : Standing + 3"><strong>Atouts possédés :</strong> {{atoutsPossedes}} / {{limiteAtouts}} (Standing {{standing}})</span>
 				<span><strong>Progression :</strong> {{actor.system.progression}} point{{#ifgt actor.system.progression 1}}s{{/ifgt}}</span>
-				<span><strong>Membres :</strong> {{members.length}}</span>
+				<span><strong>Membres :</strong> {{members.length}}{{#if rouagesMembres.length}} + {{rouagesMembres.length}} Rouage{{#ifgt rouagesMembres.length 1}}s{{/ifgt}}{{/if}}</span>
 			</div>
 			{{#if atoutsInutilisables}}<div class="alerte">Dégradation 5 ou plus : Atouts et réserves inutilisables jusqu'à réparation</div>{{/if}}
 		</div>
@@ -216,7 +216,8 @@
 		</div>
 
 		<div class="tab members flexcol" data-group="primary" data-tab="members">
-			<p class="members-hint">Glissez ici un personnage depuis l'onglet Acteurs pour l'ajouter à la cabale.</p>
+			<p class="members-hint">Glissez ici un personnage ou un Rouage depuis l'onglet Acteurs pour l'ajouter à la cabale. Les Rouages membres puisent dans la cabale comme les Héros (dés, Atouts, Espoir, Vécu).</p>
+			{{#if rouagesMembres.length}}<h3 class="titre-membres">Héros</h3>{{/if}}
 			<ul class="item-list">
 				{{#each members as |member key|}}
 					<li class="item" data-actor-id="{{member._id}}">
@@ -236,6 +237,28 @@
 					</li>
 				{{/each}}
 			</ul>
+			{{#if rouagesMembres.length}}
+				<h3 class="titre-membres">Rouages</h3>
+				<ul class="item-list membres-rouages">
+					{{#each rouagesMembres as |member key|}}
+						<li class="item" data-actor-id="{{member._id}}">
+							<div class="item-summary flexrow">
+								<div class="img">
+									<img src="{{member.img}}" alt="image de {{member.name}}">
+								</div>
+								<h4 class="item-name">
+									<span>
+										<a class="display-actor" data-actor-id="{{member._id}}">{{member.name}}</a>
+									</span>
+									{{#if member.isOwner}}
+										<a class="fas fa-user-minus remove-member" data-actor-id="{{member._id}}" data-tooltip="retirer de la cabale"></a>
+									{{/if}}
+								</h4>
+							</div>
+						</li>
+					{{/each}}
+				</ul>
+			{{/if}}
 
 		</div>
 
