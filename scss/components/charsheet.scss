@@ -4522,3 +4522,25 @@ li.chat-message .nocRoll.recherche-cabale {
         text-shadow: none;
     }
 }
+
+// Domaine Statut : cercle de Fortune comme les autres Talents, cadre élargi pour les
+// boutons Transaction et Excès
+.noc.sheet.actor.personnage section.window-content section.sheet-body div.tab.principal .stats .domaine {
+    span.talent-niveau {
+        flex: 0 0 20px;
+        width: 20px;
+    }
+
+    &.statut {
+        justify-self: center;
+        width: calc(100% + 40px);
+
+        a.roll-talent {
+            flex: 0 1 auto;
+        }
+
+        a.transaction-fortune {
+            margin-left: auto;
+        }
+    }
+}
