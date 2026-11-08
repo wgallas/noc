@@ -114,15 +114,15 @@ function choixDepense(actor) {
   if (sequelles) options.push(`<optgroup label="Guérir une Séquelle">${sequelles}</optgroup>`);
   const vecu = nombre(src.reserves?.vecu?.max);
   options.push(`<optgroup label="Réserve"><option value="vecu">Vécu : réserve ${vecu} → ${vecu + 1}</option></optgroup>`);
+  // trait Criminel (ou Ennemi public → Criminel) : coûte aussi 1 niveau d'un Talent de Statut
   const traits = (src.traits ?? []).map(t => t?.label);
-  if (traits.includes("ennemi public")) options.push(`<optgroup label="Traits"><option value="criminel">Ennemi public → Criminel (sacrifie 1 niveau de Statut)</option></optgroup>`);
-  else if (traits.includes("criminel")) options.push(`<optgroup label="Traits"><option value="criminel">Se débarrasser du trait Criminel (sacrifie 1 niveau de Statut)</option></optgroup>`);
+  const titre = traits.includes("ennemi public") ? "Ennemi public → Criminel" : traits.includes("criminel") ? "Lever le trait Criminel" : "";
+  const statut = Object.entries(s.talents?.statut ?? {}).filter(([, t]) => nombre(t.niveau) > -1);
+  if (titre && statut.length) {
+    options.push(`<optgroup label="${titre} (−1 définitif à un Talent de Statut)">${statut.map(([tal, t]) =>
+      `<option value="criminel:${tal}">en sacrifiant ${echapper(t.label)} (${nombre(t.niveau)} → ${nombre(t.niveau) - 1})</option>`).join("")}</optgroup>`);
+  }
   return options.join("");
-}
-
-function optionsStatut(actor) {
-  return Object.entries(actor.system.talents?.statut ?? {}).filter(([, t]) => nombre(t.niveau) > -1)
-    .map(([tal, t]) => `<option value="${tal}">${echapper(t.label)} (${nombre(t.niveau)})</option>`).join("");
 }
 
 /** Dépense de 3 points de progression (Passage ouvert, compteur à 3 ou plus) */
@@ -130,11 +130,9 @@ export async function depenserProgressionHeros(actor) {
   if (!passageOuvert()) return ui.notifications.warn("La progression se dépense lors d'un Passage, en fin de scénario.");
   const dispo = nombre(actor._source.system.progression);
   if (dispo < COUT_PASSAGE) return ui.notifications.warn(`Il faut ${COUT_PASSAGE} points de progression.`);
-  const statut = optionsStatut(actor);
   const f = await formulaire(`Passage : ${actor.name}`, `
     <p class="notes">${dispo} points de progression. Chaque amélioration coûte ${COUT_PASSAGE} points ; à la fin du Passage, ${RESTE_MAX} points au plus sont conservés.</p>
     <div class="form-group"><label>Amélioration</label><select name="choix">${choixDepense(actor)}</select></div>
-    <div class="form-group"><label>Statut sacrifié <em>(traits Criminel / Ennemi public)</em></label><select name="statut">${statut || `<option value="">—</option>`}</select></div>
     <div class="form-group"><label>Explication</label><input type="text" name="explication" placeholder="facultatif (obligatoire pour une Séquelle)"></div>`,
     { valider: `Dépenser ${COUT_PASSAGE} points`, icone: "fa-solid fa-arrow-up" });
   if (!f?.choix) return;
@@ -162,7 +160,7 @@ export async function depenserProgressionHeros(actor) {
     maj["system.reserves.vecu.max"] = max + 1;
     detail = `Réserve de Vécu : ${max} → ${max + 1}`;
   } else if (genre === "criminel") {
-    if (!f.statut) return ui.notifications.warn("Tous les Talents de Statut sont déjà à −1 : impossible.");
+    f.statut = cle;
     const traits = [...(src.traits ?? [])];
     const i = traits.findIndex(t => t?.label === "ennemi public");
     let texte;
