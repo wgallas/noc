@@ -4544,3 +4544,25 @@ li.chat-message .nocRoll.recherche-cabale {
         }
     }
 }
+
+// Fiche de signalement : bouton « + » d'ajout de contact, cercle régulier et centré
+.noc.sheet.actor.personnage section.window-content h3.empty-contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    i.createContact {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 1.9em;
+        height: 1.9em;
+        padding: 0;
+        line-height: 1;
+        font-size: 0.85em;
+        border: 1px solid white;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+}
