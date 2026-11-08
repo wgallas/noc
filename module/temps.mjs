@@ -104,6 +104,16 @@ export async function avancerTemps(n, { message = true, raison = "" } = {}) {
   return lignes;
 }
 
+/** Avance l'horloge sans rien appliquer (mise à l'heure de la campagne) ; le cycle du Bureau suit */
+export async function reglerDate(n) {
+  if (!game.user.isGM) return;
+  const q1 = quartsEcoules() + Math.max(0, Math.round(nombre(n)));
+  await game.settings.set("noc", "horloge", q1);
+  await game.settings.set("noc", "cycleCourant", Math.floor(q1 / QUARTS.cycle));
+  ui.notifications.info(`Horloge réglée : ${dateHorloge(q1).texte}`);
+  rafraichirTemps();
+}
+
 /** Redessine le panneau du MJ et les fiches de personnage ouvertes */
 export function rafraichirTemps() {
   for (const app of foundry.applications.instances?.values?.() ?? []) {

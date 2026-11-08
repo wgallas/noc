@@ -3,7 +3,7 @@
  * moment de calme, début de séance, début de scénario, fin de scénario (Passage).
  * Chaque étape s'applique à tous les Héros concernés et produit un seul message.
  */
-import { avancerTemps, dateHorloge, QUARTS } from "./temps.mjs";
+import { avancerTemps, dateHorloge, QUARTS, reglerDate } from "./temps.mjs";
 import { ajouterProgression, clorePassage, ouvrirPassage, passageOuvert } from "./progression.mjs";
 import { raisonSommeil } from "./sommeil.mjs";
 import { formulaire } from "./sheets/v2-outils.mjs";
@@ -181,9 +181,12 @@ export async function avancerLibre() {
     <div class="form-group"><label>Mois</label><input type="number" name="mois" value="0" min="0" max="60"></div>
     <div class="form-group"><label>Cycles</label><input type="number" name="cycles" value="0" min="0" max="100"></div>
     <div class="form-group"><label>Quarts</label><input type="number" name="quarts" value="0" min="0" max="100"></div>
-    <div class="form-group"><label>Raison</label><input type="text" name="raison" placeholder="facultatif"></div>`,
+    <div class="form-group"><label>Raison</label><input type="text" name="raison" placeholder="facultatif"></div>
+    <div class="form-group"><label><input type="checkbox" name="sansEffet"> Régler la date seulement (sans progression, documents ni intermède)</label></div>`,
     { valider: "Avancer", icone: "fa-solid fa-forward" });
   if (!f) return;
   const q = nombre(f.mois) * QUARTS.mois + nombre(f.cycles) * QUARTS.cycle + nombre(f.quarts);
-  if (q > 0) return avancerTemps(q, { raison: f.raison?.trim() ?? "" });
+  if (q <= 0) return;
+  if (f.sansEffet) return reglerDate(q);
+  return avancerTemps(q, { raison: f.raison?.trim() ?? "" });
 }
