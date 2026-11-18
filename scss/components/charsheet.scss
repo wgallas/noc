@@ -4566,3 +4566,47 @@ li.chat-message .nocRoll.recherche-cabale {
         box-sizing: border-box;
     }
 }
+
+// Éditeurs de texte riche (ProseMirror) des fiches et fenêtres : bouton d'édition discret,
+// en haut à droite, visible au survol (comme sur les anciennes fiches)
+.application.noc.sheet,
+.application.nocDialog {
+    prose-mirror button.toggle {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 24px;
+        height: 24px;
+        min-height: 0;
+        line-height: 22px;
+        margin: 0;
+        padding: 0;
+        font-size: 12px;
+        color: #191813;
+        text-shadow: none;
+        background: rgba(255, 255, 240, 0.85);
+        border: 1px solid #7a7971;
+        border-radius: 3px;
+        box-shadow: none;
+    }
+}
+
+// Rouages, Autres, créatures : description de l'en-tête à hauteur de l'image, qui défile
+.noc.sheet.actor:is(.rouage, .autre, .creature) section.window-content header .description {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 240px;
+
+    prose-mirror,
+    .editor {
+        flex: 1 1 auto;
+        min-height: 120px;
+        overflow-y: auto;
+    }
+
+    prose-mirror .editor-content {
+        position: static;
+        inset: auto;
+    }
+}
